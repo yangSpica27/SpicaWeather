@@ -6,11 +6,16 @@ import android.graphics.Canvas
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.RectF
+import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import timber.log.Timber
 import java.util.*
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 
 private const val MINIMAL_TRACK_RADIUS_PX = 300 // 半圆轨迹最小半径
@@ -73,7 +78,7 @@ class SunriseView : View {
     }
 
 
-    fun startAnim() {
+    private fun startAnim() {
         if (sunriseAnim.isRunning) {
             sunriseAnim.cancel()
         }
@@ -81,7 +86,9 @@ class SunriseView : View {
         // 开始动画
         sunriseAnim = ValueAnimator.ofFloat(0F, fraction)
         sunriseAnim.addUpdateListener {
-            invalidate()
+            postOnAnimation {
+                invalidate()
+            }
         }
         sunriseAnim.start()
     }
@@ -131,5 +138,53 @@ class SunriseView : View {
             false, solidLinePaint
         ) //绘制圆弧
 
+        canvas.drawText(" ${50}",50.dp-10.dp,
+            getCurrentY(50.dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+
+        canvas.drawText(" ${200}", (-200).dp-10.dp,
+            getCurrentY((-200).dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+
+        canvas.drawText(" ${100}", (-100).dp-10.dp,
+            getCurrentY((-100).dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+
+        canvas.drawText(" ${140}", (-140).dp-10.dp,
+            getCurrentY((-140).dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+
+        canvas.drawText(" ${0}", (0).dp-10.dp,
+            getCurrentY((0).dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+
+        canvas.drawText(" ${100}", (100).dp-10.dp,
+            getCurrentY((100).dp),
+            TextPaint().apply {
+                textSize = 20.dp
+            })
+        Log.e("point","${5.dp}/${getCurrentY(5.dp)}")
+
     }
+
+
+    private fun getCurrentY(x: Float): Float {
+
+        val a = (width/2F-4.dp).pow(2)
+
+        val b = (height/2F-4.dp).pow(2)
+
+        return -(b-b*x*x/a).pow(1F/2F)+10.dp
+    }
+
 }
