@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="me.spica.weather">
+
+    <!-- 网络权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 手机状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 获取当前位置，帮助商户填写默认定位，必选 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 获取当前位置，帮助商户填写默认定位，必选 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 允许写入扩展存储，将照片存储到sd卡公共目录，必选 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许读设备等信息，用于问题排查，必选 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 拍商铺照片，必选 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 允许app联网，必选 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许获取网络状态，必选 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许获取wifi状态改变，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+
+
+    <application
+        android:theme="@style/Theme.SpicaWeather"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:name=".App"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true">
+
+        <!-- 已适配存储分区特性 -->
+        <meta-data
+            android:name="ScopedStorage"
+            android:value="true" />
+
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+        <!-- 用于初始化 -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="me.spica.weather.initializer.HeInitializer"
+                android:value="androidx.startup" />
+
+            <meta-data
+                android:name="me.spica.weather.initializer.TimberInitializer"
+                android:value="androidx.startup" />
+
+            <meta-data
+                android:name="me.spica.weather.initializer.CoilInitializer"
+                android:value="androidx.startup" />
+
+        </provider>
+        <!-- 结束 -->
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="d4a154db3cd20aafff317224e9e5b680" />
+
+        <service
+            android:foregroundServiceType="location"
+            android:name="com.amap.api.location.APSService" />
+
+    </application>
+
+</manifest>

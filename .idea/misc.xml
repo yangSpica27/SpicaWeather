@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home_selected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home_unselected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_local_selected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_local_unselected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material_selected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material_unselected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_menu.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_plus.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_home.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_location.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_material.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/activity_main.xml" value="0.2037037037037037" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/card_weather.xml" value="0.26927083333333335" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/card_wind.xml" value="0.26927083333333335" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/fragment_home.xml" value="0.26927083333333335" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/fragment_main.xml" value="0.26927083333333335" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.26927083333333335" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

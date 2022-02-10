@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="14dp"
+    android:layout_marginEnd="14dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_wind_pa"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="风速" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_speed_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="@id/tv_wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed"
+            android:text="0m/h" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_pa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_water"
+            app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
+            android:text="气压" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_pa_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="@id/tv_wind_pa"
+            app:layout_constraintEnd_toEndOf="@id/tv_wind_pa"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_pa"
+            android:text="0m/h" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_water"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_wind_pa"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="湿度" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_water_value"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed"
+            android:text="0m/h" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
