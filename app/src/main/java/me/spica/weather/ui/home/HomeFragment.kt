@@ -15,6 +15,9 @@ import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
 import me.spica.weather.tools.initDailyLineChart
 import me.spica.weather.ui.main.MainViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * 主页
@@ -25,6 +28,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
     private val viewModel: MainViewModel by activityViewModels()
 
+
+    // 2022-02-14T16:42+08:00
+    private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
+
+    //12:00
+    private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
     private val tipAdapter by lazy {
         TipAdapter()
@@ -57,7 +66,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         lifecycleScope.launch {
             viewModel.nowWeatherFlow.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {
-                    viewBinding.cardNowWeather.tvUpdateTime.text = "刚刚更新"
+                    val updateDate = sdf.parse(it.now.obsTime) ?: Date()
+                    viewBinding.cardNowWeather.tvUpdateTime.text =
+                        sdfAfter.format(updateDate)
                     viewBinding.cardNowWeather.tvTemp.text = it.now.temp + "℃"
                     viewBinding.cardNowWeather.tvNow.text = "早上好！"
                     viewBinding.cardNowWeather.tvWeather.text = it.now.text
