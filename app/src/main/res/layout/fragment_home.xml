@@ -37,6 +37,7 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/weather_chart"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="225dp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -65,12 +66,12 @@
                     android:id="@+id/rv_tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:orientation="vertical"
                     tools:listitem="@layout/item_tips"
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_marginEnd="14dp" />
+                    android:layout_marginEnd="12dp" />
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
