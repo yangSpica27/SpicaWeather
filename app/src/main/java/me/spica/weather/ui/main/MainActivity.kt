@@ -9,16 +9,17 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.commit
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
-import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.qweather.sdk.view.QWeather
 import kotlinx.coroutines.runBlocking
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
+import me.spica.weather.ui.city.CityFragment
+import me.spica.weather.ui.home.HomeFragment
 import timber.log.Timber
 
 
@@ -43,6 +44,15 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
     private var isNeedCheck = true
 
 
+    private val homeFragment by lazy {
+        HomeFragment()
+    }
+
+    private val cityFragment by lazy {
+        CityFragment()
+    }
+
+
     private val locationClient by lazy {
         AMapLocationClient(applicationContext).apply {
             val option = AMapLocationClientOption()
@@ -59,21 +69,47 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     override fun initializer() {
 
+        supportFragmentManager.commit {
+            replace(viewBinding.fragmentContainerView.id, homeFragment)
+        }
+
         // 监听点击底栏
         viewBinding.rgBottom.setOnCheckedChangeListener { _, id ->
             runBlocking {
                 if (id == viewBinding.btnHome.id) {
-                    // 点击了主页
+                    // 点击主页
+                    if (viewBinding.btnHome.isSelected) {
+                        return@runBlocking
+                    }
+
+                    supportFragmentManager.commit {
+                        replace(viewBinding.fragmentContainerView.id, homeFragment)
+                    }
+
                     viewBinding.toolbar.root.show()
-                } else {
-                    viewBinding.toolbar.root.hide()
                 }
 
                 if (id == viewBinding.btnLocation.id) {
                     // 点击了地区
+                    if (viewBinding.btnLocation.isSelected) {
+                        return@runBlocking
+                    }
+
+                    supportFragmentManager.commit {
+                        // 点击了。。。
+                        replace(viewBinding.fragmentContainerView.id, cityFragment)
+                    }
+
+                    viewBinding.toolbar.root.hide()
+
                 }
                 if (id == viewBinding.btnMd.id) {
-                    // 点击了收藏
+                    if (viewBinding.btnMd.isSelected) {
+                        return@runBlocking
+                    }
+
+                    viewBinding.toolbar.root.hide()
+
                 }
 
             }
@@ -84,8 +120,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             viewBinding.btnPlus.isSelected = !viewBinding.btnPlus.isSelected
             if (viewBinding.btnPlus.isSelected) {
                 viewBinding.btnPlus.animate().rotation(135f)
+                viewBinding.viewMenu.animate().scaleX(1F).scaleY(1F).alpha(1F)
             } else {
                 viewBinding.btnPlus.animate().rotation(0f)
+                viewBinding.viewMenu.animate().scaleX(0F).scaleY(0F).alpha(0F)
             }
 
         }

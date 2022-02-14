@@ -2,23 +2,22 @@ package me.spica.weather.widget
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.DashPathEffect
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
-import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import me.spica.weather.R
 import me.spica.weather.tools.dp
-import timber.log.Timber
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.pow
-import kotlin.math.roundToInt
 
-
-private const val MINIMAL_TRACK_RADIUS_PX = 300 // 半圆轨迹最小半径
 
 // 日出view
 class SunriseView : View {
@@ -29,7 +28,7 @@ class SunriseView : View {
             strokeWidth = 4.dp
             color = context.getColor(R.color.line_divider)
             style = Paint.Style.STROKE
-            pathEffect = DashPathEffect(floatArrayOf(6.dp, 2.dp), 0F);
+            pathEffect = DashPathEffect(floatArrayOf(6.dp, 2.dp), 0F)
         }
     }
 
@@ -39,8 +38,23 @@ class SunriseView : View {
             strokeWidth = 4.dp
             color = context.getColor(R.color.line_default)
             style = Paint.Style.STROKE
+
         }
     }
+
+
+    private var sunBitmap: Bitmap?
+
+
+//    // 用于绘制文本
+//    private val textPaint: TextPaint by lazy {
+//        TextPaint().apply {
+//            color = context.getColor(R.color.textColorPrimaryHintLight)
+//            textSize = 18.dp
+//            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+//            textSkewX = -0.5F
+//        }
+//    }
 
 
     private val oval: RectF = RectF()
@@ -57,16 +71,17 @@ class SunriseView : View {
             = 0
     private var srcH //控件高度
             = 0
-    private val startAngle = 180f //圆弧起始角度
+    private val startAngle = 200f //圆弧起始角度
 
-    private val sweepAngle = 180f //圆弧所占度数
-
-    private val airValue = 66f
+    private val sweepAngle = 160f //圆弧所占度数
 
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    private var bitmapMatrix = Matrix()
 
+
+    init {
+        sunBitmap =
+            ContextCompat.getDrawable(context, R.drawable.ic_clear_day)?.toBitmap()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -120,71 +135,49 @@ class SunriseView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val r: Float = srcH / 2 - 1.dp * 0.5f
-        //移动中心
-        //移动中心
+        val r: Float = srcH / 2F
+        // 移动中心
         canvas.translate(centerX.toFloat(), centerY.toFloat())
-        oval.left = 0F - width / 2 + dottedLinePaint.strokeWidth //左边
-        oval.top = -r + dottedLinePaint.strokeWidth //上边
-        oval.right = width.toFloat() / 2 - dottedLinePaint.strokeWidth //右边
+        oval.left = 0F - width / 2 + dottedLinePaint.strokeWidth - width / 9F//左边
+        oval.top = -r + dottedLinePaint.strokeWidth + 30.dp //上边
+        oval.right = width.toFloat() / 2 - dottedLinePaint.strokeWidth + width / 9F //右边
         oval.bottom = r - dottedLinePaint.strokeWidth  //下边
         canvas.drawArc(
             oval, startAngle, sweepAngle,
             false, dottedLinePaint
-        ) //绘制圆弧
+        ) // 绘制圆弧
 
         canvas.drawArc(
             oval, startAngle, sweepAngle - 100F,
             false, solidLinePaint
-        ) //绘制圆弧
+        ) // 绘制圆弧
 
-        canvas.drawText(" ${50}",50.dp-10.dp,
-            getCurrentY(50.dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
 
-        canvas.drawText(" ${200}", (-200).dp-10.dp,
-            getCurrentY((-200).dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
-
-        canvas.drawText(" ${100}", (-100).dp-10.dp,
-            getCurrentY((-100).dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
-
-        canvas.drawText(" ${140}", (-140).dp-10.dp,
-            getCurrentY((-140).dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
-
-        canvas.drawText(" ${0}", (0).dp-10.dp,
-            getCurrentY((0).dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
-
-        canvas.drawText(" ${100}", (100).dp-10.dp,
-            getCurrentY((100).dp),
-            TextPaint().apply {
-                textSize = 20.dp
-            })
-        Log.e("point","${5.dp}/${getCurrentY(5.dp)}")
+        sunBitmap?.let {
+            canvas.drawBitmap(
+                it,
+                (-40).dp,// x 坐标
+                getCurrentY(40.dp)
+                        -it.height / 2F,// y 坐标
+                solidLinePaint
+            )
+        }
 
     }
 
 
     private fun getCurrentY(x: Float): Float {
 
-        val a = (width/2F-4.dp).pow(2)
+        val a = (oval.width()/4).pow(2)
 
-        val b = (height/2F-4.dp).pow(2)
+        val b = (oval.height()/4).pow(2)
 
-        return -(b-b*x*x/a).pow(1F/2F)+10.dp
+        return -abs((b - b * x * x / a).pow(1F / 2F))+5.dp
     }
 
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        sunBitmap?.recycle()
+    }
 }

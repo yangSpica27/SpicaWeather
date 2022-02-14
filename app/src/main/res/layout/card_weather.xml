@@ -7,21 +7,33 @@
     android:layout_marginStart="14dp"
     android:layout_marginEnd="14dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#5C6BC0">
+    app:cardBackgroundColor="#7986CB">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp">
+        android:layout_height="wrap_content">
+
+        <com.scwang.wave.MultiWaveHeader
+            android:id="@+id/waveHeader"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:mwhWaveHeight="40dp"
+            app:mwhIsRunning="true"
+            app:mwhProgress="1"
+            app:mwhVelocity="6"
+            app:mwhStartColor="#5C6BC0"
+            app:mwhCloseColor="#3F51B5"
+            app:mwhColorAlpha=".45"
+            android:rotation="180"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ic_weather"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@color/window_background"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_clear_day"
+            app:layout_constraintBottom_toBottomOf="@id/tv_temp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -31,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textColor="@color/white"
+            android:layout_marginStart="14dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintTop_toBottomOf="@id/ic_weather"
             android:text="小雨转中雨" />
@@ -41,6 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textColor="@color/white"
+            android:layout_marginStart="14dp"
+            android:paddingBottom="20dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             app:layout_constraintTop_toBottomOf="@id/tv_weather"
             android:text="早上好鸭！" />
@@ -50,6 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:paddingTop="20dp"
+            android:layout_marginEnd="14dp"
             android:text="29℃"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="体感温度 30℃"
+            android:layout_marginEnd="14dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_weather" />

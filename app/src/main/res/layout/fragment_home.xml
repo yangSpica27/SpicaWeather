@@ -22,10 +22,15 @@
 
         <me.spica.weather.widget.SunriseView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="80dp"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="40dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/weather_chart"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
 
     </LinearLayout>
 

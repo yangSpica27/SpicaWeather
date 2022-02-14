@@ -44,8 +44,6 @@ abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(), Life
 
     abstract fun init()
 
-    val Int.dp: Int
-        get() = (this * resources.displayMetrics.density + 0.5F).toInt()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun clearViewBinding() {
