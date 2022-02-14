@@ -45,20 +45,19 @@
             android:textColor="@color/white"
             android:layout_marginStart="14dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            app:layout_constraintTop_toBottomOf="@id/ic_weather"
-            android:text="小雨转中雨" />
+            app:layout_constraintTop_toBottomOf="@id/ic_weather" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_now"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textColor="@color/white"
             android:layout_marginStart="14dp"
             android:paddingBottom="20dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            app:layout_constraintTop_toBottomOf="@id/tv_weather"
-            android:text="早上好鸭！" />
+            app:layout_constraintTop_toBottomOf="@id/tv_weather" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_temp"
@@ -67,19 +66,30 @@
             android:textColor="@color/white"
             android:paddingTop="20dp"
             android:layout_marginEnd="14dp"
-            android:text="29℃"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_feel_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="体感温度 30℃"
             android:layout_marginEnd="14dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_weather" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_update_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:text="获取中"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

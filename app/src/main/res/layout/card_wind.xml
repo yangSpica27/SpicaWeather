@@ -35,8 +35,7 @@
             android:layout_marginTop="12dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="@id/tv_wind_speed"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed"
-            android:text="0m/h" />
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_wind_pa"
@@ -59,8 +58,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="@id/tv_wind_pa"
             app:layout_constraintEnd_toEndOf="@id/tv_wind_pa"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_pa"
-            android:text="0m/h" />
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_pa" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_water"
@@ -81,8 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed"
-            android:text="0m/h" />
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,18 +6,22 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.view.LayoutInflater
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
-import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.addNewFragment
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
+import me.spica.weather.tools.showOldFragment
 import me.spica.weather.ui.city.CityFragment
 import me.spica.weather.ui.home.HomeFragment
 import timber.log.Timber
@@ -35,8 +39,11 @@ private val needPermissions = arrayOf(
 )
 private const val PERMISSON_REQUESTCODE = 0
 
+@AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
+
+    private val viewModel: MainViewModel by viewModels()
 
     /**
      * 判断是否需要检测，防止不停的弹框
@@ -69,9 +76,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     override fun initializer() {
 
-        supportFragmentManager.commit {
-            replace(viewBinding.fragmentContainerView.id, homeFragment)
-        }
+        initFragment()
 
         // 监听点击底栏
         viewBinding.rgBottom.setOnCheckedChangeListener { _, id ->
@@ -82,9 +87,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
                         return@runBlocking
                     }
 
-                    supportFragmentManager.commit {
-                        replace(viewBinding.fragmentContainerView.id, homeFragment)
-                    }
+                    showOldFragment(homeFragment, listOf(cityFragment))
 
                     viewBinding.toolbar.root.show()
                 }
@@ -97,7 +100,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
                     supportFragmentManager.commit {
                         // 点击了。。。
-                        replace(viewBinding.fragmentContainerView.id, cityFragment)
+                        showOldFragment(cityFragment, listOf(homeFragment))
                     }
 
                     viewBinding.toolbar.root.hide()
@@ -131,23 +134,51 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     }
 
+    private fun initFragment() {
+        addNewFragment(homeFragment, R.id.fragment_container_view)
+        addNewFragment(cityFragment, R.id.fragment_container_view)
+        showOldFragment(homeFragment, listOf(cityFragment))
+    }
+
 
     override fun onResume() {
         super.onResume()
         if (isNeedCheck) {
             checkPermissions()
         }
-        doOnMainThreadIdle({
-            getLocation()
-        })
+        getLocation()
     }
 
 
     private fun getLocation() {
         locationClient.setLocationListener { info ->
             kotlin.run {
-                Timber.e( "${info.longitude},${info.latitude}")
+                Timber.e("${info.longitude},${info.latitude}")
                 locationClient.stopLocation()
+
+                    viewModel.syncNowWeather(
+                        this@MainActivity, Pair(
+                            "${info.longitude}",
+                            "${info.latitude}"
+                        )
+                    )
+
+                    viewModel.sync7DayWeather(
+                        this@MainActivity, Pair(
+                            "${info.longitude}",
+                            "${info.latitude}"
+                        )
+                    )
+
+
+                viewModel.sync1DIndices(
+                    this, Pair(
+                        "${info.longitude}",
+                        "${info.latitude}"
+                    )
+                )
+
+
             }
         }
         locationClient.startLocation()
@@ -265,4 +296,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         super.onDestroy()
         locationClient.onDestroy()
     }
+
+
 }

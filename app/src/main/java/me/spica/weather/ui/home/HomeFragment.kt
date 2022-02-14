@@ -1,26 +1,34 @@
 package me.spica.weather.ui.home
 
-import android.graphics.Typeface
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import me.spica.weather.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
-import me.spica.weather.tools.dp
+import me.spica.weather.tools.initDailyLineChart
+import me.spica.weather.ui.main.MainViewModel
 
 /**
  * 主页
  */
+@AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>() {
+
+
+    private val viewModel: MainViewModel by activityViewModels()
+
+
+    private val tipAdapter by lazy {
+        TipAdapter()
+    }
 
     override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
             FragmentHomeBinding = FragmentHomeBinding.inflate(
@@ -28,98 +36,57 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         false
     )
 
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun init() {
-        initLineChart(viewBinding.weatherChart)
-    }
 
+        viewBinding.rvTip.adapter = tipAdapter
 
-    private fun initLineChart(lineChart: LineChart) {
-        val datas = arrayListOf(
-            Entry(10F, 29F),
-            Entry(20F, 24F),
-            Entry(30F, 23F),
-            Entry(40F, 22F),
-            Entry(50F, 32F),
-        )
-
-        val lineDataSet = LineDataSet(datas, "")
-            .apply {
-                setDrawValues(false)
-                lineWidth = 1.dp
-                setDrawCircleHole(true)
-                setDrawFilled(false)
-                circleRadius = 2.dp
-                circleHoleRadius = 1.dp
-                mode = LineDataSet.Mode.CUBIC_BEZIER
-                setCircleColor(ContextCompat.getColor(requireContext(), R.color.textColorPrimaryHint))
-                color = ContextCompat.getColor(requireContext(), R.color.textColorPrimaryHintLight)
-            }
-
-        val lineData = LineData(lineDataSet).apply {
-
+        //  载入图表数据
+        lifecycleScope.launch {
+            viewModel.dailyWeatherFlow.filterNotNull()
+                .collectLatest {
+                    initDailyLineChart(
+                        viewBinding.weatherChart,
+                        requireContext(),
+                        it
+                    )
+                }
         }
 
-        lineChart.data = lineData
 
-        lineChart.xAxis.setDrawGridLines(true)
-
-        lineChart.xAxis.setDrawAxisLine(false)
-
-        lineChart.axisLeft.setDrawAxisLine(false)
-
-        lineChart.axisLeft.setDrawGridLines(false)
-
-        lineChart.axisLeft.setDrawLabels(false)
-
-
-        lineChart.axisRight.setDrawLabels(false)
-
-        lineChart.axisRight.setDrawAxisLine(false)
-
-        lineChart.axisRight.setDrawGridLines(false)
-
-        lineChart.xAxis.valueFormatter
-
-        lineChart.xAxis.setDrawLabels(true)
-
-        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-
-        lineChart.xAxis.enableGridDashedLine(4.dp, 2.dp, 0f)
-
-        lineChart.xAxis.gridLineWidth = 1.dp / 2F
-
-        lineChart.xAxis.gridColor = ContextCompat.getColor(requireContext(), R.color.textColorPrimaryHintLight)
-
-
-        lineChart.xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.textColorPrimaryHint)
-
-        lineChart.xAxis.typeface = Typeface.DEFAULT_BOLD
-
-        lineChart.xAxis.textSize = 4.dp
-
-        lineChart.legend.isEnabled = false
-
-        lineChart.description.isEnabled = false
-
-        lineChart.xAxis.mLabelHeight = 12.dp.toInt()
-
-        lineChart.minOffset =  12.dp
-
-        lineChart.xAxis.valueFormatter = object : ValueFormatter() {
-
-            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                return "2月${value.toInt()}日"
+        lifecycleScope.launch {
+            viewModel.nowWeatherFlow.filterNotNull().collectLatest {
+                withContext(Dispatchers.Main) {
+                    viewBinding.cardNowWeather.tvUpdateTime.text = "刚刚更新"
+                    viewBinding.cardNowWeather.tvTemp.text = it.now.temp + "℃"
+                    viewBinding.cardNowWeather.tvNow.text = "早上好！"
+                    viewBinding.cardNowWeather.tvWeather.text = it.now.text
+                    viewBinding.cardNowWeather.tvFeelTemp.text = "体感温度" + it.now.feelsLike + "℃"
+                    viewBinding.cardExtraInfo.apply {
+                        tvWaterValue.text = it.now.humidity + "%"
+                        tvWindPaValue.text = it.now.pressure + "hPa"
+                        tvWindSpeedValue.text = it.now.windSpeed + "km/h"
+                    }
+                }
             }
         }
 
-        lineChart.setTouchEnabled(false)
 
-        lineChart.setScaleEnabled(false)
+        lifecycleScope.launch {
+            viewModel.currentIndices.filterNotNull().collectLatest {
+                withContext(Dispatchers.Main) {
+                    tipAdapter.items.clear()
+                    tipAdapter.items.addAll(it)
+                    tipAdapter.notifyDataSetChanged()
+                }
+            }
 
-        lineChart.xAxis.yOffset = 4.dp
-
-        lineChart.invalidate()
+        }
 
     }
+
+
+
+
+
 }

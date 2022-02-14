@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:gravity="center_vertical"
+    tools:ignore="RtlSymmetry">
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:backgroundTint="@color/textColorPrimaryHint"
+        android:background="@drawable/bg_round" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/textColorPrimaryLight"
+        android:lines="1"
+        android:textSize="12sp"
+        android:layout_marginStart="12dp"
+        tools:text="运动指数" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textColor="@color/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textSize="12sp"
+        android:gravity="end"
+        android:layout_marginStart="12dp"
+        tools:text="适宜" />
+
+</LinearLayout>

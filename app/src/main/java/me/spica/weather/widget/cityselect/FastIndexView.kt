@@ -19,7 +19,7 @@ private const val INDEX_NAME = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 class FastIndexView : View {
 
     // 点击监听
-    private var listener: (String) -> Unit = {}
+    var listener: (String) -> Unit = {}
 
     private var cellHeight = -1F
 

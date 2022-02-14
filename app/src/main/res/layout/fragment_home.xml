@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/window_background"
     android:orientation="vertical">
 
@@ -10,15 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-        <include layout="@layout/card_weather" />
+        <include
+            android:id="@+id/card_now_weather"
+            layout="@layout/card_weather" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="12dp" />
 
-        <include layout="@layout/card_wind" />
+        <include
+            android:id="@+id/card_extra_info"
+            layout="@layout/card_wind" />
 
         <me.spica.weather.widget.SunriseView
             android:layout_width="match_parent"
@@ -30,7 +37,42 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/weather_chart"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="225dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="12dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical"
+                    tools:listitem="@layout/item_tips"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_marginEnd="14dp" />
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
