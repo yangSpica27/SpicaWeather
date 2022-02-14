@@ -188,8 +188,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     /**
      * 显示提示信息
-     *
-     * @since 2.5.0
      */
     private fun showMissingPermissionDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -202,7 +200,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         ) { _, _ -> finish() }
         builder.setPositiveButton(
             "设置"
-        ) { dialog, _ ->
+        ) { _, _ ->
             startAppSettings()
         }
         builder.setCancelable(false)
@@ -210,7 +208,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
     }
 
     /**
-     * @since 2.5.0
+     * 检查必要权限是否获取到
      */
     private fun checkPermissions(permissions: Array<String> = needPermissions) {
         val needRequestPermissonList: List<String> = findDeniedPermissions(permissions)

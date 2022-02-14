@@ -39,6 +39,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         TipAdapter()
     }
 
+    private val dailyWeatherAdapter by lazy {
+        DailWeatherAdapter()
+    }
+
     override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
             FragmentHomeBinding = FragmentHomeBinding.inflate(
         inflater, container,
@@ -49,6 +53,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     override fun init() {
 
         viewBinding.rvTip.adapter = tipAdapter
+        viewBinding.rvWeather.adapter = dailyWeatherAdapter
 
         //  载入图表数据
         lifecycleScope.launch {
@@ -59,6 +64,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                         requireContext(),
                         it
                     )
+                    dailyWeatherAdapter.items.clear()
+                    dailyWeatherAdapter.items.addAll(it.daily)
+                    withContext(Dispatchers.Main) {
+                        dailyWeatherAdapter.notifyDataSetChanged()
+                    }
                 }
         }
 
