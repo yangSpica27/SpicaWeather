@@ -59,13 +59,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         lifecycleScope.launch {
             viewModel.dailyWeatherFlow.filterNotNull()
                 .collectLatest {
-                    initDailyLineChart(
-                        viewBinding.weatherChart,
-                        requireContext(),
-                        it
-                    )
                     dailyWeatherAdapter.items.clear()
                     dailyWeatherAdapter.items.addAll(it.daily)
+                    dailyWeatherAdapter.syncTempMaxAndMin()
                     withContext(Dispatchers.Main) {
                         dailyWeatherAdapter.notifyDataSetChanged()
                     }
