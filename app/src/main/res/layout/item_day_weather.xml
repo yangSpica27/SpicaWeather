@@ -13,8 +13,7 @@
         android:text="昨天"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:textColor="@color/textColorPrimary"
-        android:textStyle="bold"
-        android:layout_marginTop="12dp" />
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
