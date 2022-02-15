@@ -1,55 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="75dp"
+    android:gravity="center_horizontal"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <me.spica.weather.widget.LineItem
-        android:id="@+id/item_line"
-        android:layout_width="match_parent"
-        android:layout_height="80dp" />
-
-    <com.google.android.material.card.MaterialCardView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_week"
         android:layout_width="wrap_content"
-        app:contentPadding="12dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="6dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="昨天"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="@color/textColorPrimaryLight"
+        android:layout_marginTop="4dp" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_w_fair" />
+    <me.spica.weather.widget.MaxTempLineItem
+        android:id="@+id/item_line_max"
+        android:layout_height="55dp"
+        android:paddingTop="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:paddingBottom="12dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1/20"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@color/textColorPrimary"
-                android:layout_marginTop="12dp" />
+    <me.spica.weather.widget.MinTempLineItem
+        android:id="@+id/item_line_min"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="昨天"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="@color/textColorPrimaryLight"
-                android:layout_marginTop="12dp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_w_fair" />
 
 </LinearLayout>

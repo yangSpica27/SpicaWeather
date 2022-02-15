@@ -15,11 +15,17 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
-    val sortList = mutableListOf<WeatherDailyBean.DailyBean?>()
+    private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
 
-    private var minTemp = 0
+    private val sortList = mutableListOf<WeatherDailyBean.DailyBean?>()
 
-    private var maxTemp = 0
+    private var minTempTop = 0
+
+    private var maxTempTop = 0
+
+    private var minTempBottom = 0
+
+    private var maxTempBottom = 0
 
     class ViewHolder(val itemDayWeatherBinding: ItemDayWeatherBinding) :
         RecyclerView.ViewHolder(itemDayWeatherBinding.root)
@@ -37,11 +43,13 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
         sortList.sortBy {
             it?.tempMax?.toInt()
         }
-        maxTemp = sortList.last()?.tempMax?.toInt() ?: 0
+        maxTempTop = sortList.last()?.tempMax?.toInt() ?: 0
+        minTempTop = sortList.first()?.tempMax?.toInt() ?: 0
         sortList.sortBy {
             it?.tempMin?.toInt()
         }
-        minTemp = sortList.first()?.tempMin?.toInt() ?: 0
+        maxTempBottom = sortList.last()?.tempMin?.toInt() ?: 0
+        minTempBottom = sortList.first()?.tempMin?.toInt() ?: 0
 
     }
 
@@ -49,34 +57,44 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items[position]?.let {
+
             val date = sdf.parse(it.fxDate) ?: Date()
-            val calendar = Calendar.getInstance()
-            calendar.time = date
-            holder.itemDayWeatherBinding.tvDate.text = "${date.month}/${date.day}"
-            holder.itemDayWeatherBinding.tvDate.text = "星期${calendar.get(Calendar.DAY_OF_WEEK) - 1}"
 
-            holder.itemDayWeatherBinding.itemLine.maxValue = maxTemp
+            holder.itemDayWeatherBinding.tvDate.text = sdf2.format(date)
 
-            holder.itemDayWeatherBinding.itemLine.minValue = minTemp
+            holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
+            holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
+            holder.itemDayWeatherBinding.itemLineMin.maxValue = maxTempBottom
+            holder.itemDayWeatherBinding.itemLineMin.minValue = minTempBottom
 
             if (position == 0) {
-                holder.itemDayWeatherBinding.itemLine.drawLeftLine = false
-
+                holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = false
+                holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = false
             } else {
-                holder.itemDayWeatherBinding.itemLine.drawLeftLine = true
-                holder.itemDayWeatherBinding.itemLine.lastValue =
+                holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = true
+                holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = true
+                holder.itemDayWeatherBinding.itemLineMax.lastValue =
                     items[position - 1]?.tempMax?.toInt() ?: 0
+                holder.itemDayWeatherBinding.itemLineMin.lastValue =
+                    items[position - 1]?.tempMin?.toInt() ?: 0
             }
-            holder.itemDayWeatherBinding.itemLine.currentValue =
+
+            holder.itemDayWeatherBinding.itemLineMax.currentValue =
                 items[position]?.tempMax?.toInt() ?: 0
 
+            holder.itemDayWeatherBinding.itemLineMin.currentValue =
+                items[position]?.tempMin?.toInt() ?: 0
 
             if (position == items.size - 1) {
-                holder.itemDayWeatherBinding.itemLine.drawRightLine = false
+                holder.itemDayWeatherBinding.itemLineMax.drawRightLine = false
+                holder.itemDayWeatherBinding.itemLineMin.drawRightLine = false
             } else {
-                holder.itemDayWeatherBinding.itemLine.drawRightLine = true
-                holder.itemDayWeatherBinding.itemLine.nextValue =
+                holder.itemDayWeatherBinding.itemLineMax.drawRightLine = true
+                holder.itemDayWeatherBinding.itemLineMin.drawRightLine = true
+                holder.itemDayWeatherBinding.itemLineMax.nextValue =
                     items[position + 1]?.tempMax?.toInt() ?: 0
+                holder.itemDayWeatherBinding.itemLineMin.nextValue =
+                    items[position + 1]?.tempMin?.toInt() ?: 0
             }
 
         }

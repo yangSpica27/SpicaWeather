@@ -36,12 +36,13 @@
         app:layout_constraintEnd_toStartOf="@id/btn_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         android:checkedButton="@id/btn_home"
-        android:layout_marginBottom="20dp"
         android:layout_weight="1">
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/btn_home"
             android:layout_width="0dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:layout_height="wrap_content"
             app:buttonTint="@color/nav_select_color"
             android:button="@drawable/selector_home"
@@ -50,6 +51,8 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/btn_location"
             android:layout_width="0dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:layout_height="wrap_content"
             app:buttonTint="@color/nav_select_color"
             android:button="@drawable/selector_location"
@@ -58,6 +61,8 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/btn_md"
             android:layout_width="0dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:layout_height="wrap_content"
             app:buttonTint="@color/nav_select_color"
             android:button="@drawable/selector_material"
@@ -95,6 +100,13 @@
         <include layout="@layout/item_weather_location" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_divider"
+        app:layout_constraintTop_toBottomOf="@id/fragment_container_view" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_plus"
