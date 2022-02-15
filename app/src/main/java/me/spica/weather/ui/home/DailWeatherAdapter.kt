@@ -9,6 +9,15 @@ import me.spica.weather.databinding.ItemDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
+private val dayName = arrayListOf(
+    "周日",
+    "周一",
+    "周二",
+    "周三",
+    "周四",
+    "周五",
+    "周六",
+)
 class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>() {
 
     val items = mutableListOf<WeatherDailyBean.DailyBean?>()
@@ -16,6 +25,8 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
     private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
+
+    private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
 
     private val sortList = mutableListOf<WeatherDailyBean.DailyBean?>()
 
@@ -61,6 +72,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
             val date = sdf.parse(it.fxDate) ?: Date()
 
             holder.itemDayWeatherBinding.tvDate.text = sdf2.format(date)
+            holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(date)
 
             holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
             holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop

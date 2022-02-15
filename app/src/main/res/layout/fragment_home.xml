@@ -25,6 +25,7 @@
 
         <include
             android:id="@+id/card_extra_info"
+            android:visibility="gone"
             layout="@layout/card_wind" />
 
         <me.spica.weather.widget.SunriseView
@@ -34,6 +35,32 @@
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="40dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:text="小时级气象信息" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_hour_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_day_weather"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="12dp" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:text="天级气象信息" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_weather"
@@ -45,11 +72,15 @@
             android:layout_marginTop="12dp" />
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_tip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="12dp"
+            app:cardElevation="8dp"
+            android:translationZ="8dp"
             android:layout_marginBottom="20dp"
             app:cardCornerRadius="12dp">
 
@@ -61,6 +92,8 @@
                     android:id="@+id/rv_tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
                     android:layout_marginStart="12dp"
                     android:orientation="vertical"
                     tools:listitem="@layout/item_tips"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="75dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="14时"
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <me.spica.weather.widget.TempLineItem
+        android:id="@+id/item_line"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:paddingTop="12dp"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="12dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_weather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="晴转多云"
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_percent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="降雨概率\n75%"
+        android:gravity="center" />
+
+</LinearLayout>

@@ -16,7 +16,6 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
             FragmentCityBinding =
         FragmentCityBinding.inflate(inflater, container, false)
 
-
     override fun init() {
 
     }

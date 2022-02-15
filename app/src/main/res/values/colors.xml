@@ -17,6 +17,15 @@
     <color name="textColorPrimaryLight">#de6c6969</color>
     <color name="line_default">#4DB6AC</color>
 
-
     <color name="test">#D1C4E9</color>
+
+    <color name="l8">#f5222d</color>
+    <color name="l7">#ff7875</color>
+    <color name="l6">#fa8c16</color>
+    <color name="l5">#d48806</color>
+    <color name="l4">#ad8b00</color>
+    <color name="l3">#FFD54F</color>
+    <color name="l2">#389e0d</color>
+    <color name="l1">#135200</color>
+
 </resources>

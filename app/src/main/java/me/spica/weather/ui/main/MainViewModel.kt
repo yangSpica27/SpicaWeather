@@ -8,6 +8,7 @@ import com.qweather.sdk.bean.IndicesBean
 import com.qweather.sdk.bean.base.IndicesType
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.weather.WeatherDailyBean
+import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,12 @@ class MainViewModel : ViewModel() {
 
     private val _7dayWeatherFlow: MutableStateFlow<WeatherDailyBean?> =
         MutableStateFlow(null)
+
+    private val _currentDayHourWeather: MutableStateFlow<WeatherHourlyBean?> =
+        MutableStateFlow(null)
+
+    val currentDayHourWeather: StateFlow<WeatherHourlyBean?>
+        get() = _currentDayHourWeather
 
     val dailyWeatherFlow: MutableStateFlow<WeatherDailyBean?>
         get() = _7dayWeatherFlow
@@ -96,6 +103,24 @@ class MainViewModel : ViewModel() {
 
                 }
             )
+        }
+    }
+
+
+    fun sync24hWeather(context: Context, entry: Pair<String, String>) {
+        viewModelScope.launch {
+            QWeather.getWeather24Hourly(context, "${entry.first},${entry.second}",
+                object : QWeather.OnResultWeatherHourlyListener {
+                    override fun onError(error: Throwable) {
+                        errorMessage.value = error.message ?: ""
+                    }
+
+                    override fun onSuccess(result: WeatherHourlyBean) {
+                        Timber.e(gson.toJson(result))
+                        _currentDayHourWeather.value = result
+                    }
+
+                })
         }
     }
 

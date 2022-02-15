@@ -166,6 +166,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             )
         )
 
+        viewModel.sync24hWeather(
+            this@MainActivity, Pair(
+                "118.78",
+                "32.04"
+            )
+        )
 
         viewModel.sync1DIndices(
             this, Pair(

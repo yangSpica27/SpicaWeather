@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
-import me.spica.weather.tools.initDailyLineChart
+import me.spica.weather.tools.show
 import me.spica.weather.ui.main.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +39,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         TipAdapter()
     }
 
+    private val hourWeatherAdapter by lazy {
+        HourWeatherAdapter()
+    }
+
     private val dailyWeatherAdapter by lazy {
         DailWeatherAdapter()
     }
@@ -54,6 +58,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
         viewBinding.rvTip.adapter = tipAdapter
         viewBinding.rvWeather.adapter = dailyWeatherAdapter
+        viewBinding.rvHourWeather.adapter = hourWeatherAdapter
 
         //  载入图表数据
         lifecycleScope.launch {
@@ -84,6 +89,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                         tvWindPaValue.text = it.now.pressure + "hPa"
                         tvWindSpeedValue.text = it.now.windSpeed + "km/h"
                     }
+                    viewBinding.cardExtraInfo.root.show()
                 }
             }
         }
@@ -95,9 +101,20 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     tipAdapter.items.clear()
                     tipAdapter.items.addAll(it)
                     tipAdapter.notifyDataSetChanged()
+                    viewBinding.cardTip.show()
                 }
             }
+        }
 
+        lifecycleScope.launch {
+            viewModel.currentDayHourWeather.filterNotNull().collectLatest {
+                withContext(Dispatchers.Main) {
+                    hourWeatherAdapter.items.clear()
+                    hourWeatherAdapter.items.addAll(it.hourly)
+                    hourWeatherAdapter.sortList()
+                    hourWeatherAdapter.notifyDataSetChanged()
+                }
+            }
         }
 
     }
