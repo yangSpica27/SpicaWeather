@@ -37,6 +37,7 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.26927083333333335" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16296296296296298" />
         <entry key="app/src/main/res/layout/item_day_weather.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/layout/item_hour_temp.xml" value="0.1685185185185185" />
       </map>
     </option>
   </component>

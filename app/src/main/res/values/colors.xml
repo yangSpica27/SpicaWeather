@@ -14,6 +14,7 @@
     <color name="textColorPrimary">#ff000000</color>
     <color name="textColorPrimaryHint">#787474</color>
     <color name="textColorPrimaryHintLight">#80787474</color>
+    <color name="pathBgColor">#26787474</color>
     <color name="textColorPrimaryLight">#de6c6969</color>
     <color name="line_default">#4DB6AC</color>
 

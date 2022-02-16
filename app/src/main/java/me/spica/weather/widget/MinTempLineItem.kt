@@ -1,12 +1,7 @@
 package me.spica.weather.widget
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -28,6 +23,23 @@ class MinTempLineItem : View {
     var nextValue = 0 // 下一个数值
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+//        shader = LinearGradient(
+//            0F,
+//            0F,
+//            0F,
+//            height/2F,
+//            ContextCompat.getColor(
+//                context,
+//                R.color.black
+//            ),
+//            Color.TRANSPARENT,
+//            Shader.TileMode.CLAMP
+//        )
+        color = ContextCompat.getColor(context,R.color.pathBgColor)
+        style = Paint.Style.FILL
+    }
 
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
@@ -111,6 +123,10 @@ class MinTempLineItem : View {
     }
 
 
+    private var pathLeft = Path()
+
+    private var pathRight = Path()
+
     // 绘制折线
     private fun drawGraph(canvas: Canvas) {
         linePaint.pathEffect = null
@@ -135,6 +151,25 @@ class MinTempLineItem : View {
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
                     (pointBottomY - pointTopY)
+
+            pathLeft = Path()
+
+            pathLeft.moveTo(pointX, pointY)
+
+            pathLeft.lineTo(pointX,0F)
+
+            pathLeft.lineTo(0F,0F)
+
+            pathLeft.lineTo(0F, (lastPointY + pointY) / 2F)
+
+            pathLeft.close()
+
+            // 绘制背景
+            canvas.drawPath(
+                pathLeft,
+                pathPaint
+            )
+
             canvas.drawLine(
                 pointX, pointY,
                 0F,
@@ -151,6 +186,19 @@ class MinTempLineItem : View {
             val nextPointY = pointBottomY -
                     ((nextValue * 1f - minValue) / (maxValue - minValue)) *
                     (pointBottomY - pointTopY)
+
+            // 绘制背景
+
+            pathRight = Path()
+            pathRight.moveTo(pointX,pointY)
+            pathRight.lineTo(pointX,0F)
+            pathRight.lineTo(viewWidth.toFloat(),0F)
+            pathRight.lineTo(viewWidth.toFloat(),(pointY + nextPointY) / 2F)
+
+            canvas.drawPath(
+                pathRight,
+                pathPaint
+            )
 
             canvas.drawLine(
                 pointX,
