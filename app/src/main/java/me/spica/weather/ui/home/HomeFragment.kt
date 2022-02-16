@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
+import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.databinding.FragmentHomeBinding
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.show
 import me.spica.weather.ui.main.MainViewModel
 import java.text.SimpleDateFormat
@@ -81,7 +84,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     dailyWeatherAdapter.syncTempMaxAndMin()
                     withContext(Dispatchers.Main) {
                         dailyWeatherAdapter.notifyDataSetChanged()
-
+                        doOnMainThreadIdle({
+                            viewBinding.containerDayWeather.show()
+                        })
                     }
                 }
         }
@@ -104,6 +109,26 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                         tvWindSpeedValue.text = it.now.windSpeed + "km/h"
                     }
                     viewBinding.cardExtraInfo.root.show()
+                    // 主题颜色
+                    val themeColor = WeatherCodeUtils.getThemeColor(
+                        WeatherCodeUtils
+                            .getWeatherCode(it.now.icon)
+                    )
+
+                    viewBinding.cardNowWeather.root.setBackgroundColor(themeColor)
+
+                    viewBinding.cardNowWeather.icWeather.load(
+
+                        WeatherCodeUtils.getWeatherIcon(
+                            WeatherCodeUtils.getWeatherCode(it.now.icon ?: "")
+                        )
+
+                    )
+
+                    doOnMainThreadIdle({
+                        viewBinding.cardNowWeather.root.show()
+                    })
+
 
                 }
             }
@@ -113,10 +138,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         // 载入天气指数数据
         lifecycleScope.launch {
             viewModel.currentIndices.filterNotNull().collectLatest {
+                tipAdapter.items.clear()
+                tipAdapter.items.addAll(it)
                 withContext(Dispatchers.Main) {
-                    tipAdapter.items.clear()
-                    tipAdapter.items.addAll(it)
                     tipAdapter.notifyDataSetChanged()
+                    doOnMainThreadIdle({
+                        viewBinding.containerTips.show()
+                    })
                 }
             }
         }
@@ -124,11 +152,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         // 载入小时天气数据
         lifecycleScope.launch {
             viewModel.currentDayHourWeather.filterNotNull().collectLatest {
+                hourWeatherAdapter.items.clear()
+                hourWeatherAdapter.items.addAll(it.hourly)
+                hourWeatherAdapter.sortList()
                 withContext(Dispatchers.Main) {
-                    hourWeatherAdapter.items.clear()
-                    hourWeatherAdapter.items.addAll(it.hourly)
-                    hourWeatherAdapter.sortList()
                     hourWeatherAdapter.notifyDataSetChanged()
+                    doOnMainThreadIdle({
+                        viewBinding.containerHourWeather.show()
+                    })
                 }
             }
         }

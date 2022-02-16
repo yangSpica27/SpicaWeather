@@ -39,6 +39,6 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_cloudy" />
+        android:src="@drawable/ic_sunny" />
 
 </LinearLayout>

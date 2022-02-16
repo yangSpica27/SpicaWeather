@@ -19,59 +19,85 @@
             android:id="@+id/card_now_weather"
             layout="@layout/card_weather" />
 
-
         <include
             android:id="@+id/card_extra_info"
-            android:visibility="gone"
             layout="@layout/card_wind" />
 
-        <me.spica.weather.widget.SunriseView
+
+
+        <LinearLayout
+            android:id="@+id/container_hour_weather"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="gone"
+            android:animateLayoutChanges="true"
+            android:background="@color/white"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:text="小时级气象信息" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_hour_weather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_day_weather"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="6dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_day_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:animateLayoutChanges="true"
+            android:background="@color/white"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
-            android:layout_marginTop="40dp" />
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            android:text="小时级气象信息" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:text="天级气象信息" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_hour_weather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:listitem="@layout/item_day_weather"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="6dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_weather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_day_weather"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="6dp" />
 
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="6dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            android:text="天级气象信息" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_weather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:listitem="@layout/item_day_weather"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="6dp" />
+        </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/container_tips"
             android:layout_width="match_parent"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
+            android:visibility="gone"
+            android:animateLayoutChanges="true"
             android:layout_marginBottom="20dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp">
@@ -83,8 +109,7 @@
                 android:orientation="vertical"
                 tools:listitem="@layout/item_tips"
                 android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_marginEnd="12dp" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </RelativeLayout>
 
     </LinearLayout>

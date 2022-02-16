@@ -43,9 +43,10 @@
         android:paddingBottom="12dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icon"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:padding="12dp"
-        android:src="@drawable/ic_w_fair" />
+        android:src="@drawable/ic_fog" />
 
 </LinearLayout>

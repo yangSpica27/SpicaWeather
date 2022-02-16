@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.qweather.sdk.bean.weather.WeatherDailyBean
+import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.databinding.ItemDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -98,6 +100,12 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
 
             holder.itemDayWeatherBinding.itemLineMin.currentValue =
                 items[position]?.tempMin?.toInt() ?: 0
+
+            holder.itemDayWeatherBinding.icon.load(
+                WeatherCodeUtils.getWeatherIcon(
+                    WeatherCodeUtils.getWeatherCode(items[position]?.iconDay ?: "")
+                )
+            )
 
             if (position == items.size - 1) {
                 // 末尾item不绘制左半部分

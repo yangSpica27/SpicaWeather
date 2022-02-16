@@ -1,0 +1,15 @@
+package me.spica.weather.common
+
+enum class WeatherType {
+    WEATHER_CLEAR,
+    WEATHER_CLOUDY,
+    WEATHER_CLOUD,
+    WEATHER_RAINY,
+    WEATHER_SNOW,
+    WEATHER_SLEET,
+    WEATHER_FOG,
+    WEATHER_HAZE,
+    WEATHER_HAIL,
+    WEATHER_THUNDER,
+    WEATHER_THUNDERSTORM
+}

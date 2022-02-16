@@ -4,24 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#7986CB"
     android:layout_marginStart="14dp"
     android:layout_marginEnd="14dp">
-
-
-        <com.scwang.wave.MultiWaveHeader
-            android:id="@+id/waveHeader"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:mwhWaveHeight="40dp"
-            app:mwhIsRunning="true"
-            app:mwhProgress="1"
-            app:mwhVelocity="6"
-            app:mwhStartColor="#5C6BC0"
-            app:mwhCloseColor="#3F51B5"
-            app:mwhColorAlpha=".45"
-            android:rotation="180"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ic_weather"
