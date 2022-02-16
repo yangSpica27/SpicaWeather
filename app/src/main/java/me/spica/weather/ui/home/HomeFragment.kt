@@ -87,6 +87,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         }
 
 
+        // 请求当日
         lifecycleScope.launch {
             viewModel.nowWeatherFlow.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {
@@ -109,6 +110,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         }
 
 
+        // 载入天气指数数据
         lifecycleScope.launch {
             viewModel.currentIndices.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {
@@ -119,6 +121,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
             }
         }
 
+        // 载入小时天气数据
         lifecycleScope.launch {
             viewModel.currentDayHourWeather.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {

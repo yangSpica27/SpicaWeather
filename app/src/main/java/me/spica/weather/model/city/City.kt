@@ -6,10 +6,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class City(
-    @Json(name = "lat")
+    @Json(name = "lat")// 经度
     val lat: String,
-    @Json(name = "log")
+    @Json(name = "log")// 纬度
     val log: String,
-    @Json(name = "name")
+    @Json(name = "name")// 名称
     val name: String
 )

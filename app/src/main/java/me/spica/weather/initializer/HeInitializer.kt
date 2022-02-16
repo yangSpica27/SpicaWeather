@@ -15,6 +15,7 @@ import timber.log.Timber
 class HeInitializer : Initializer<Unit> {
 
 
+    // 在此初始化和风天气
     override fun create(context: Context) {
         HeConfig.init(
             "HE2112081349381915",

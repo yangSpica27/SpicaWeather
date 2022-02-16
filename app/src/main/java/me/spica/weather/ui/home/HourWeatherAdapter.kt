@@ -13,15 +13,21 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
     val items = mutableListOf<WeatherHourlyBean.HourlyBean?>()
 
-    private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
+    // 接收的格式
+    private val sdf = SimpleDateFormat(
+        "yyyy-MM-dd'T'mm:HH+08:00",
+        Locale.CHINA
+    )
 
+    // 被格式化的时间格式
     private val sdfAfter = SimpleDateFormat("m时", Locale.CHINA)
 
+    // 用于排序的列表
     private val sortItems = mutableListOf<WeatherHourlyBean.HourlyBean?>()
+
 
     class ViewHolder(val itemHourTempBinding: ItemHourTempBinding) :
         RecyclerView.ViewHolder(itemHourTempBinding.root)
-
 
     private val divisionDate by lazy {
         val calendar = Calendar.getInstance(Locale.CHINA)
@@ -30,8 +36,10 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
         return@lazy calendar
     }
 
+    // 最高温度
     private var maxTemp = 0
 
+    // 最低温度
     private var minTemp = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,10 +54,8 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
         sortItems.sortBy {
             it?.temp.toString()
         }
-
         maxTemp = sortItems.last()?.temp?.toInt() ?: 0
         minTemp = sortItems.first()?.temp?.toInt() ?: 0
-
     }
 
     @SuppressLint("SetTextI18n")

@@ -13,6 +13,7 @@ import me.spica.weather.tools.IndicesUtils
 class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
 
 
+    // 数据
     val items: MutableList<IndicesBean.DailyBean?> = mutableListOf()
 
 

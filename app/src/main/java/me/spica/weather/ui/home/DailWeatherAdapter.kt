@@ -9,33 +9,33 @@ import me.spica.weather.databinding.ItemDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val dayName = arrayListOf(
-    "周日",
-    "周一",
-    "周二",
-    "周三",
-    "周四",
-    "周五",
-    "周六",
-)
+
 class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>() {
 
     val items = mutableListOf<WeatherDailyBean.DailyBean?>()
 
+    // 原始数据
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
+    // 格式化
     private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
 
+    // 格式化为"周几"
     private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
 
+    // 用于排序的列表
     private val sortList = mutableListOf<WeatherDailyBean.DailyBean?>()
 
+    // 最近几日最低气温中最低的
     private var minTempTop = 0
 
+    // 最近几日最低气温中最高的
     private var maxTempTop = 0
 
+    // 最近几日最高气温中最低的
     private var minTempBottom = 0
 
+    // 最近几日最高气温中最高的
     private var maxTempBottom = 0
 
     class ViewHolder(val itemDayWeatherBinding: ItemDayWeatherBinding) :
@@ -48,6 +48,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     }
 
 
+    // 获取最高低期望用于计算折线图对应坐标
     fun syncTempMaxAndMin() {
         sortList.clear()
         sortList.addAll(items)
@@ -80,6 +81,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
             holder.itemDayWeatherBinding.itemLineMin.minValue = minTempBottom
 
             if (position == 0) {
+                // 首个item不绘制左半部分
                 holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = false
                 holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = false
             } else {
@@ -98,6 +100,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
                 items[position]?.tempMin?.toInt() ?: 0
 
             if (position == items.size - 1) {
+                // 末尾item不绘制左半部分
                 holder.itemDayWeatherBinding.itemLineMax.drawRightLine = false
                 holder.itemDayWeatherBinding.itemLineMin.drawRightLine = false
             } else {
