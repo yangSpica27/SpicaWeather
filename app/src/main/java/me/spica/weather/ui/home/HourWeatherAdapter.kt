@@ -15,12 +15,20 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
 
-    private val sdfAfter = SimpleDateFormat("mm:HH", Locale.CHINA)
+    private val sdfAfter = SimpleDateFormat("m时", Locale.CHINA)
 
     private val sortItems = mutableListOf<WeatherHourlyBean.HourlyBean?>()
 
     class ViewHolder(val itemHourTempBinding: ItemHourTempBinding) :
         RecyclerView.ViewHolder(itemHourTempBinding.root)
+
+
+    private val divisionDate by lazy {
+        val calendar = Calendar.getInstance(Locale.CHINA)
+        calendar.set(Calendar.HOUR_OF_DAY, 24)
+        calendar.set(Calendar.MINUTE, 0)
+        return@lazy calendar
+    }
 
     private var maxTemp = 0
 
@@ -46,11 +54,16 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         items[position]?.let {
 
             val date = sdf.parse(it.fxTime) ?: Date()
 
+
             holder.itemHourTempBinding.tvTime.text = sdfAfter.format(date)
+            if (divisionDate.time.before(date)) {
+                holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(date)
+            }
 
             holder.itemHourTempBinding.tvPercent.text = "降雨概率\n${it.pop ?: "0"}%"
 
@@ -61,7 +74,9 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
             if (position == 0) {
                 holder.itemHourTempBinding.itemLine.drawLeftLine = false
+
             } else {
+
                 holder.itemHourTempBinding.itemLine.drawLeftLine = true
                 holder.itemHourTempBinding.itemLine.lastValue =
                     items[position - 1]?.temp?.toInt() ?: 0

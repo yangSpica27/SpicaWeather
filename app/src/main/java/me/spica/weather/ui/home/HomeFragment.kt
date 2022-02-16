@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
 import me.spica.weather.tools.show
@@ -35,6 +37,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     //12:00
     private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
+    //12:00
+    private val sdf2 = SimpleDateFormat("mm:HH", Locale.CHINA)
+
     private val tipAdapter by lazy {
         TipAdapter()
     }
@@ -56,9 +61,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun init() {
 
+        requireContext()
+            .dividerBuilder()
+            .colorRes(R.color.line_divider)
+            .build()
+            .addTo(viewBinding.rvTip)
+
         viewBinding.rvTip.adapter = tipAdapter
         viewBinding.rvWeather.adapter = dailyWeatherAdapter
         viewBinding.rvHourWeather.adapter = hourWeatherAdapter
+
 
         //  载入图表数据
         lifecycleScope.launch {
@@ -69,6 +81,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     dailyWeatherAdapter.syncTempMaxAndMin()
                     withContext(Dispatchers.Main) {
                         dailyWeatherAdapter.notifyDataSetChanged()
+
                     }
                 }
         }
@@ -90,6 +103,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                         tvWindSpeedValue.text = it.now.windSpeed + "km/h"
                     }
                     viewBinding.cardExtraInfo.root.show()
+
                 }
             }
         }
@@ -101,7 +115,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     tipAdapter.items.clear()
                     tipAdapter.items.addAll(it)
                     tipAdapter.notifyDataSetChanged()
-                    viewBinding.cardTip.show()
                 }
             }
         }

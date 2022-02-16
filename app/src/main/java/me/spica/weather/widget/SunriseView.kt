@@ -1,183 +1,188 @@
+@file:Suppress("unused")
 package me.spica.weather.widget
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.DashPathEffect
-import android.graphics.Matrix
 import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.Rect
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.pow
 
 
 // 日出view
+
+private const val sunRiseTitle = "日出"
+private const val sunFallTitle = "日落"
+
 class SunriseView : View {
 
-    // 用于绘制虚线的paint
-    private val dottedLinePaint: Paint by lazy {
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            strokeWidth = 4.dp
-            color = context.getColor(R.color.line_divider)
-            style = Paint.Style.STROKE
-            pathEffect = DashPathEffect(floatArrayOf(6.dp, 2.dp), 0F)
-        }
+
+    private lateinit var iconBitmap: Bitmap
+
+    private var radius = 0F
+
+    private var centerX = 0F
+
+    private var centerY = 0F
+
+    //=========各个文本的bound========
+
+    private val boundSunRise = Rect()
+
+    private val boundSunFall = Rect()
+
+    private val boundSunriseTime = Rect()
+
+    private val boundSunFallTime = Rect()
+
+    //=========各个文本的bound========
+
+    // 升起的时间
+    private lateinit var sunRiseDate: Date
+
+    // 落下的时间
+    private lateinit var sunFallDate: Date
+
+    // 间隔1
+    private val spaceHeight = 4.dp
+
+    // 间隔2
+    private val spaceHeight2 = 4.dp
+
+    // 格式化日期
+    private val sdf = SimpleDateFormat("mm:HH", Locale.CHINA)
+
+
+    private var fraction = 0F // 比例 0 -> 1.0F
+
+    // 绘制日出日落的Paint
+    private val statePaint = TextPaint(Paint.FAKE_BOLD_TEXT_FLAG).apply {
+        textSize = 16.dp
+        color = context.getColor(R.color.textColorPrimaryLight)
     }
 
-    // 用于绘制实线的paint
-    private val solidLinePaint: Paint by lazy {
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            strokeWidth = 4.dp
-            color = context.getColor(R.color.line_default)
-            style = Paint.Style.STROKE
-
-        }
-    }
-
-
-    private var sunBitmap: Bitmap?
-
-
-//    // 用于绘制文本
-//    private val textPaint: TextPaint by lazy {
-//        TextPaint().apply {
-//            color = context.getColor(R.color.textColorPrimaryHintLight)
-//            textSize = 18.dp
-//            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
-//            textSkewX = -0.5F
-//        }
-//    }
-
-
-    private val oval: RectF = RectF()
-
-    // 当前的进度(0.0->1.0)
-    private var fraction = 0.0F
-
-    private var sunriseAnim = ValueAnimator.ofFloat(0F, fraction)
-
-
-    private var centerX //中心X
-            = 0
-    private var centerY //中心Y
-            = 0
-    private var srcH //控件高度
-            = 0
-    private val startAngle = 200f //圆弧起始角度
-
-    private val sweepAngle = 160f //圆弧所占度数
-
-
-    private var bitmapMatrix = Matrix()
-
-
-    init {
-        sunBitmap =
-            ContextCompat.getDrawable(context, R.drawable.ic_clear_day)?.toBitmap()
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        srcH = h
-        centerX = w / 2
-        centerY = h / 2
-        startAnim()
+    // 绘制时间的Paint
+    private val timePaint = TextPaint().apply {
+        textSize = 12.dp
+        color = context.getColor(R.color.textColorPrimary)
     }
 
 
-    private fun startAnim() {
-        if (sunriseAnim.isRunning) {
-            sunriseAnim.cancel()
-        }
-        syncFraction()
-        // 开始动画
-        sunriseAnim = ValueAnimator.ofFloat(0F, fraction)
-        sunriseAnim.addUpdateListener {
-            postOnAnimation {
-                invalidate()
-            }
-        }
-        sunriseAnim.start()
+    private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
+        strokeWidth = 2.dp
+        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
     }
 
+    //是否绘制
+    private var isDraw = false
 
-    private fun syncFraction() {
-        val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        // 获取进度
-        if (currentHour > 18) {
-            fraction = 1F
-        }
-        if (currentHour < 6) {
-            fraction = 0F
-        }
-        if (currentHour in 6..18) {
-            fraction = (currentHour - 6F) / 12F
-        }
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int
+    ) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        initMeasure()
     }
-
-
-    constructor(context: Context?) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) :
-            super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
-            super(context, attrs, defStyleAttr)
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val r: Float = srcH / 2F
-        // 移动中心
-        canvas.translate(centerX.toFloat(), centerY.toFloat())
-        oval.left = 0F - width / 2 + dottedLinePaint.strokeWidth - width / 9F//左边
-        oval.top = -r + dottedLinePaint.strokeWidth + 30.dp //上边
-        oval.right = width.toFloat() / 2 - dottedLinePaint.strokeWidth + width / 9F //右边
-        oval.bottom = r - dottedLinePaint.strokeWidth  //下边
-        canvas.drawArc(
-            oval, startAngle, sweepAngle,
-            false, dottedLinePaint
-        ) // 绘制圆弧
 
-        canvas.drawArc(
-            oval, startAngle, sweepAngle - 100F,
-            false, solidLinePaint
-        ) // 绘制圆弧
-
-
-        sunBitmap?.let {
-            canvas.drawBitmap(
-                it,
-                (-40).dp,// x 坐标
-                getCurrentY(40.dp)
-                        -it.height / 2F,// y 坐标
-                solidLinePaint
-            )
+        if (!isDraw) {
+            return
         }
 
+        canvas.drawArc(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY,
+            0F,
+            180F,
+            false,
+            dottedLinePaint
+        )
+
+    }
+
+    fun showSun(sunriseTime: Date, sunFallTime: Date) {
+        // 载入时间
+        this.sunFallDate = sunFallTime
+        this.sunRiseDate = sunriseTime
+
+        fraction = syncFraction(sunriseTime, sunFallTime)
+
+        // 分别测量其文本 宽度/高度 获取半径数值
+        statePaint.getTextBounds(sunRiseTitle, 0, sunRiseTitle.length, boundSunRise)
+        statePaint.getTextBounds(sunFallTitle, 0, sunFallTitle.length, boundSunFall)
+
+        val sunriseTimeStr = sdf.format(sunriseTime)
+        val sunfallTimeStr = sdf.format(sunFallTime)
+
+        timePaint.getTextBounds(sunriseTimeStr, 0, sunriseTimeStr.length, boundSunriseTime)
+        timePaint.getTextBounds(sunfallTimeStr, 0, sunfallTimeStr.length, boundSunFallTime)
+
+        val max = boundSunFall.width()
+            .coerceAtLeast(boundSunFallTime.width())
+            .coerceAtLeast(boundSunRise.width())
+            .coerceAtLeast(boundSunriseTime.width())
+
+        radius = width / 2F - max
+
+        centerY = height -
+                spaceHeight -
+                spaceHeight2 -
+                boundSunFall.height() -
+                boundSunFallTime.height()
+
+        radius = radius.coerceAtMost(height - centerY)
+
+        isDraw = true
+        invalidate()
+
     }
 
 
-    private fun getCurrentY(x: Float): Float {
+    // 获取当前的进度
+    private fun syncFraction(sunriseTime: Date, sunFallTime: Date): Float {
 
-        val a = (oval.width()/4).pow(2)
+        val currentDate = Date()
+        if (currentDate.before(sunriseTime)) {
+            return 0F
+        }
+        if (currentDate.after(sunFallTime)) {
+            return 1F
+        }
 
-        val b = (oval.height()/4).pow(2)
+        return (currentDate.time - sunriseTime.time) * 1F /
+                (sunFallTime.time - sunriseTime.time)
 
-        return -abs((b - b * x * x / a).pow(1F / 2F))+5.dp
     }
 
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        sunBitmap?.recycle()
+    private fun initMeasure() {
+        centerX = width / 2F
+        centerY = height / 2F
+
     }
+
+
+    // 根据X坐标获取Y轴的坐标
+    private fun getPointY(x: Float) {
+
+    }
+
 }

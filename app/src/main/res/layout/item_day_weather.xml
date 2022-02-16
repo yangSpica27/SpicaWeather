@@ -4,6 +4,10 @@
     android:layout_width="75dp"
     android:gravity="center_horizontal"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingTop="6dp"
+    android:clickable="true"
+    android:paddingBottom="6dp"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView

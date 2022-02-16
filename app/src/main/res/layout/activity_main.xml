@@ -25,6 +25,15 @@
 
     </FrameLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/rg_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/rg_bottom" />
+
     <RadioGroup
         android:id="@+id/rg_bottom"
         android:layout_width="0dp"
@@ -32,6 +41,7 @@
         android:animateLayoutChanges="true"
         android:orientation="horizontal"
         android:layout_marginStart="14dp"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_plus"
         app:layout_constraintBottom_toBottomOf="parent"
