@@ -19,10 +19,13 @@ import timber.log.Timber
 
 class MainViewModel : ViewModel() {
 
+    // 错误信息
     private val errorMessage = MutableStateFlow("")
+
 
     private val gson: Gson = Gson()
 
+    // 即时天气
     private val _nowWeatherFlow: MutableStateFlow<WeatherNowBean?> =
         MutableStateFlow(null)
 

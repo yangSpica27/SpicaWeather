@@ -184,8 +184,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             kotlin.run {
                 Timber.e("${info.longitude},${info.latitude}")
                 locationClient.stopLocation()
-
-
             }
         }
         locationClient.startLocation()
