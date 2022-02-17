@@ -16,6 +16,8 @@ import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getIconRes
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.FragmentHomeBinding
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.show
@@ -110,19 +112,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     }
                     viewBinding.cardExtraInfo.root.show()
                     // 主题颜色
-                    val themeColor = WeatherCodeUtils.getThemeColor(
-                        WeatherCodeUtils
-                            .getWeatherCode(it.now.icon)
-                    )
+                    val themeColor = WeatherCodeUtils
+                        .getWeatherCode(it.now.icon).getThemeColor()
 
                     viewBinding.cardNowWeather.root.setBackgroundColor(themeColor)
 
                     viewBinding.cardNowWeather.icWeather.load(
-
-                        WeatherCodeUtils.getWeatherIcon(
-                            WeatherCodeUtils.getWeatherCode(it.now.icon ?: "")
-                        )
-
+                        WeatherCodeUtils.getWeatherCode(it.now.icon ?: "").getIconRes()
                     )
 
                     doOnMainThreadIdle({

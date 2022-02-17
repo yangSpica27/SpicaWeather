@@ -1,7 +1,5 @@
 package me.spica.weather.common
 
-import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import me.spica.weather.R
 
@@ -62,24 +60,7 @@ object WeatherCodeUtils {
     }
 
 
-    @ColorInt
-    fun getThemeColor(
-        weatherType: WeatherType,
-    ): Int {
 
-        return when (weatherType) {
-            WeatherType.WEATHER_CLOUDY
-            -> Color.rgb(96, 121, 136)
-            WeatherType.WEATHER_CLOUD -> Color.rgb(0, 165, 217)
-            WeatherType.WEATHER_THUNDER -> Color.rgb(43, 29, 69)
-            WeatherType.WEATHER_FOG
-            -> Color.rgb(79, 93, 104)
-            WeatherType.WEATHER_HAZE -> Color.rgb(66, 66, 66)
-            else -> {
-                Color.parseColor("#7986CB")
-            }
-        }
-    }
 
 
     @DrawableRes

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -102,9 +103,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
                 items[position]?.tempMin?.toInt() ?: 0
 
             holder.itemDayWeatherBinding.icon.load(
-                WeatherCodeUtils.getWeatherIcon(
-                    WeatherCodeUtils.getWeatherCode(items[position]?.iconDay ?: "")
-                )
+                WeatherCodeUtils.getWeatherCode(items[position]?.iconDay ?: "").getIconRes()
             )
 
             if (position == items.size - 1) {
