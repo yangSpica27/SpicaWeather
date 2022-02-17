@@ -50,18 +50,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ed_search" />
 
-    <me.spica.weather.widget.cityselect.FastIndexView
-        android:id="@+id/fastIndexView"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:paddingEnd="5dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_search"
-        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_index"
