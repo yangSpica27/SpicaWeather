@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.stuxuhai.jpinyin.PinyinFormat
@@ -55,29 +56,23 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
         )
     }
 
-    private val diffUtil =
-        DiffUtil
-            .calculateDiff(
-                CityAdapter
-                    .CityDiffDUtils(cityAdapter.items, rvItems)
-            )
+
 
     override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
             FragmentCityBinding =
         FragmentCityBinding.inflate(inflater, container, false)
 
     override fun init() {
-
-
         viewBinding.etCityName.addTextChangedListener { et ->
             rvItems.clear()
             rvItems.addAll(
                 cityList.filter {
+                    if (et.isNullOrEmpty()) return@filter true
                     return@filter it.cityName.contains(et.toString(), true) ||
                             it.sortName.contains(et.toString(), true)
                 }
             )
-
+            cityAdapter.diffUtil.submitList(rvItems.toList())
         }
 
         requireContext()
@@ -125,12 +120,9 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
 
             rvItems.addAll(cityList)
 
-            cityAdapter.items.clear()
-
-            cityAdapter.items.addAll(rvItems)
 
             withContext(Dispatchers.Main) {
-                diffUtil.dispatchUpdatesTo(cityAdapter)
+                cityAdapter.diffUtil.submitList(rvItems.toList())
             }
 
         }

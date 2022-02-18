@@ -28,6 +28,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:hint="城市名称"
+            android:lines="1"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:maxLines="1"

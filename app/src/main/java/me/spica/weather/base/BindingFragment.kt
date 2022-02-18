@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.spica.weather.ui.city.CityAdapter
 
 abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(), LifecycleObserver {
 
@@ -71,4 +72,8 @@ abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(), Life
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
 }
