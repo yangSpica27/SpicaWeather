@@ -89,9 +89,9 @@ dependencies {
   // 图片加载
   implementation("io.coil-kt:coil:1.4.0")
 
-  def roomVersion = "2.3.0"
-  implementation("androidx.room:room-runtime:$roomVersion")
-  kapt("androidx.room:room-compiler:$roomVersion")
+//  def roomVersion = "2.3.0"
+//  implementation("androidx.room:room-runtime:$roomVersion")
+//  kapt("androidx.room:room-compiler:$roomVersion")
 
 
   // 协程支持
@@ -114,8 +114,8 @@ dependencies {
   // Timber 日志
   implementation 'com.jakewharton.timber:timber:5.0.1'
 
-  //日期格式化
-  implementation 'org.ocpsoft.prettytime:prettytime:5.0.2.Final'
+//  //日期格式化
+//  implementation 'org.ocpsoft.prettytime:prettytime:5.0.2.Final'
 
   // App startup
   implementation "androidx.startup:startup-runtime:1.1.1"
@@ -133,20 +133,24 @@ dependencies {
 
   //network 网络请求相关
   implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
-  implementation "com.squareup.retrofit2:retrofit:2.9.0"
-  implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+//  implementation "com.squareup.retrofit2:retrofit:2.9.0"
+//  implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
   implementation 'com.github.skydoves:sandwich:1.2.2'
   implementation 'com.google.code.gson:gson:2.8.9'
 
   // 水波纹
   implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-andx'
 
-  // 图表
-  implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
   implementation 'com.github.SilenceDut:jpinyin:v1.0'
 
   implementation "com.github.fondesa:recycler-view-divider:3.5.0"
+
+  def appCenterSdkVersion = '4.3.1'
+  implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+  implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+
 
   //  testImplementation 'junit:junit:4.13.2'
   //  androidTestImplementation 'androidx.test.ext:junit:1.1.3'

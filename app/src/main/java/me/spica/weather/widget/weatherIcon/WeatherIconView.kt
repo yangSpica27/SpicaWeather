@@ -1,3 +1,4 @@
+@file:Suppress("unused")
 package me.spica.weather.widget.weatherIcon
 
 import android.content.Context

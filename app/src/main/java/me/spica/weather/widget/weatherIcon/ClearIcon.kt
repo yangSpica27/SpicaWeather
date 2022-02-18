@@ -6,6 +6,7 @@ import android.view.View
 /**
  * 晴天的图标
  */
+@Suppress("unused")
 class ClearIcon : WeatherIconView.DrawDelegate {
 
 
