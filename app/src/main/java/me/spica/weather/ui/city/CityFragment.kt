@@ -6,13 +6,12 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +27,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 
+@AndroidEntryPoint
 class CityFragment : BindingFragment<FragmentCityBinding>() {
 
     private val viewModel: MainViewModel by activityViewModels()

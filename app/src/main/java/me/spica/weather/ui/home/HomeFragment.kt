@@ -42,8 +42,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     //12:00
     private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
-    //12:00
-    private val sdf2 = SimpleDateFormat("mm:HH", Locale.CHINA)
 
     private val tipAdapter by lazy {
         TipAdapter()
