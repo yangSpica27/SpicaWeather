@@ -12,16 +12,19 @@ import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import me.spica.weather.model.weather.NowWeatherBean
 import me.spica.weather.repository.HeRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class WeatherViewModel @Inject constructor(
     private val repository: HeRepository
 ) : ViewModel() {
 
@@ -29,14 +32,29 @@ class MainViewModel @Inject constructor(
     private val errorMessage = MutableStateFlow("")
 
 
+    private val locationKeys = MutableStateFlow(
+        Pair(
+            "118.78",
+            "32.04"
+        )
+    )
+
     private val gson: Gson = Gson()
 
     // 即时天气
-    private val _nowWeatherFlow: MutableStateFlow<WeatherNowBean?> =
-        MutableStateFlow(null)
+   val nowWeatherFlow: Flow<NowWeatherBean> =
+        locationKeys.flatMapLatest {
+            repository.fetchNowWeather(
+                lon = it.first,
+                lat = it.second,
+                onSuccess = {},
+                onStart = {},
+                onError = {},
+                onComplete = {}
+            )
+        }
 
-    val nowWeatherFlow: StateFlow<WeatherNowBean?>
-        get() = _nowWeatherFlow
+
 
     private val _7dayWeatherFlow: MutableStateFlow<WeatherDailyBean?> =
         MutableStateFlow(null)
@@ -58,19 +76,16 @@ class MainViewModel @Inject constructor(
 
     // 获取现在的天气
     fun syncNowWeather(context: Context, entry: Pair<String, String>) {
-        viewModelScope.launch {
-            QWeather.getWeatherNow(context, "${entry.first},${entry.second}",
-                object : QWeather.OnResultWeatherNowListener {
-                    override fun onError(error: Throwable) {
-                        errorMessage.value = error.message ?: ""
-                    }
 
-                    override fun onSuccess(result: WeatherNowBean) {
-                        Timber.e(gson.toJson(result))
-                        _nowWeatherFlow.value = result
-                    }
-                })
-        }
+        repository.fetchNowWeather(
+            entry.first,
+            entry.second,
+            onComplete = {},
+            onError = {},
+            onStart = {},
+            onSuccess = {}
+        )
+
     }
 
     // 获取一天内的生活指数

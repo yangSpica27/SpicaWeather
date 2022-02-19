@@ -6,6 +6,7 @@ import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
@@ -25,7 +26,7 @@ class HeRepository(private val context: Context) : Repository {
     override fun fetchNowWeather(
         lon: String,
         lat: String,
-        onStart: () -> Unit,
+        onStart: () -> Unit  ,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
         onSuccess: () -> Unit
@@ -46,7 +47,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
             }
         )
-
+        awaitClose {  }
     }.onStart {
         onStart()
     }.onCompletion {
@@ -76,6 +77,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
             })
+        awaitClose {  }
     }.onStart {
         onStart()
     }.onCompletion {
@@ -106,6 +108,7 @@ class HeRepository(private val context: Context) : Repository {
 
             }
         )
+        awaitClose {  }
     }.onStart {
         onStart()
     }.onCompletion {

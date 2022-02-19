@@ -43,7 +43,7 @@ private const val PERMISSON_REQUESTCODE = 0
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: WeatherViewModel by viewModels()
 
     /**
      * 判断是否需要检测，防止不停的弹框

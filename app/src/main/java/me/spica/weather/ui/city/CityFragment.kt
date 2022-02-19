@@ -21,7 +21,7 @@ import me.spica.weather.databinding.FragmentCityBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.city.Province
 import me.spica.weather.tools.dp
-import me.spica.weather.ui.main.MainViewModel
+import me.spica.weather.ui.main.WeatherViewModel
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -30,7 +30,7 @@ import java.io.InputStreamReader
 @AndroidEntryPoint
 class CityFragment : BindingFragment<FragmentCityBinding>() {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: WeatherViewModel by activityViewModels()
 
 
     // 城市列表
