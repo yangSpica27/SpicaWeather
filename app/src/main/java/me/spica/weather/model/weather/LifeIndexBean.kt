@@ -1,7 +1,5 @@
 package me.spica.weather.model.weather
 
-import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import com.qweather.sdk.bean.IndicesBean
 import com.qweather.sdk.bean.base.IndicesType

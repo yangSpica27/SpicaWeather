@@ -9,6 +9,7 @@ import me.spica.weather.model.weather.HourlyWeatherBean
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>() {
 
     val items = mutableListOf<HourlyWeatherBean>()

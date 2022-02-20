@@ -5,20 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
 import me.spica.weather.tools.doOnMainThreadIdle
-import me.spica.weather.tools.show
 import me.spica.weather.ui.main.WeatherViewModel
-import java.util.*
 
 
 /**
@@ -43,7 +39,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
         //  载入图表数据
         lifecycleScope.launch {
-            viewModel.dailyWeatherFlow.filterNotNull()
+            viewModel.dailyWeatherFlow
+                .filterNotNull()
                 .collectLatest {
                     doOnMainThreadIdle({
                         viewBinding.dailyWeatherCard.bindData(it)
