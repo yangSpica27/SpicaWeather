@@ -11,13 +11,16 @@ import me.spica.weather.model.city.CityBean
 class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
 
-    val diffUtil = AsyncListDiffer<CityBean>(this,
+    val diffUtil = AsyncListDiffer(this,
         object : DiffUtil.ItemCallback<CityBean>() {
 
             override fun areItemsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.cityName == newItem.cityName
             override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = true
 
         })
+
+
+    var itemClickListener: (CityBean) -> Unit = {}
 
     class ViewHolder(val itemCityBinding: ItemCityBinding) :
         RecyclerView.ViewHolder(itemCityBinding.root)
@@ -32,26 +35,12 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemCityBinding.tvId.text = diffUtil.currentList[position].sortId
         holder.itemCityBinding.tvCityName.text = diffUtil.currentList[position].cityName
+        holder.itemCityBinding.root.setOnClickListener {
+            itemClickListener(diffUtil.currentList[position])
+        }
     }
 
     override fun getItemCount(): Int = diffUtil.currentList.size
 
-
-    class CityDiffDUtils
-        (
-        private val newList: List<CityBean>,
-        private val oldList: List<CityBean>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int = oldList.size
-
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int):
-                Boolean = newList[newItemPosition].cityName ==
-                oldList[oldItemPosition].cityName
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int):
-                Boolean = true
-    }
 
 }

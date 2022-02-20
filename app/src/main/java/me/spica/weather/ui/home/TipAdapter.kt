@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.qweather.sdk.bean.IndicesBean
 import me.spica.weather.databinding.ItemTipsBinding
-import me.spica.weather.tools.IndicesUtils
+import me.spica.weather.model.weather.LifeIndexBean
 
 class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
 
 
     // 数据
-    val items: MutableList<IndicesBean.DailyBean?> = mutableListOf()
+    val items: MutableList<LifeIndexBean> = mutableListOf()
 
 
     class ViewHolder(val itemTipsBinding: ItemTipsBinding) :
@@ -30,18 +29,13 @@ class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        items[position]?.let { item ->
+        items[position].let { item ->
             holder.itemTipsBinding.tvName.text = item.name
             holder.itemTipsBinding.tvValue.text = item.category
             holder.itemTipsBinding.tvValue.background.colorFilter =
                 PorterDuffColorFilter(
-                    ContextCompat.getColor(
-                        holder.itemTipsBinding.tvValue.context,
-                        IndicesUtils.getColorRes(
-                            item.type,
-                            item.level.toInt()
-                        )
-                    ),
+                    ContextCompat.getColor(holder.itemTipsBinding.root.context,
+                    item.color),
                     PorterDuff.Mode.ADD
                 )
             holder.itemTipsBinding.tvDesc.text = item.text

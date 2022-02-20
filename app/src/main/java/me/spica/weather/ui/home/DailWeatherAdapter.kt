@@ -9,13 +9,14 @@ import com.qweather.sdk.bean.weather.WeatherDailyBean
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemDayWeatherBinding
+import me.spica.weather.model.weather.DailyWeatherBean
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>() {
 
-    val items = mutableListOf<WeatherDailyBean.DailyBean?>()
+    val items = mutableListOf<DailyWeatherBean>()
 
     // 原始数据
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
@@ -27,7 +28,7 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
 
     // 用于排序的列表
-    private val sortList = mutableListOf<WeatherDailyBean.DailyBean?>()
+    private val sortList = mutableListOf<DailyWeatherBean>()
 
     // 最近几日最低气温中最低的
     private var minTempTop = 0
@@ -56,27 +57,25 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
         sortList.clear()
         sortList.addAll(items)
         sortList.sortBy {
-            it?.tempMax?.toInt()
+            it.maxTemp
         }
-        maxTempTop = sortList.last()?.tempMax?.toInt() ?: 0
-        minTempTop = sortList.first()?.tempMax?.toInt() ?: 0
+        maxTempTop = sortList.last().maxTemp
+        minTempTop = sortList.first().maxTemp
         sortList.sortBy {
-            it?.tempMin?.toInt()
+            it.minTemp
         }
-        maxTempBottom = sortList.last()?.tempMin?.toInt() ?: 0
-        minTempBottom = sortList.first()?.tempMin?.toInt() ?: 0
+        maxTempBottom = sortList.last().minTemp
+        minTempBottom = sortList.first().minTemp
 
     }
 
     @Suppress("DEPRECATION")
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        items[position]?.let {
+        items[position].let {
 
-            val date = sdf.parse(it.fxDate) ?: Date()
-
-            holder.itemDayWeatherBinding.tvDate.text = sdf2.format(date)
-            holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(date)
+            holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime)
+            holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime)
 
             holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
             holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
@@ -91,19 +90,19 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
                 holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = true
                 holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = true
                 holder.itemDayWeatherBinding.itemLineMax.lastValue =
-                    items[position - 1]?.tempMax?.toInt() ?: 0
+                    items[position - 1].maxTemp
                 holder.itemDayWeatherBinding.itemLineMin.lastValue =
-                    items[position - 1]?.tempMin?.toInt() ?: 0
+                    items[position - 1].minTemp
             }
 
             holder.itemDayWeatherBinding.itemLineMax.currentValue =
-                items[position]?.tempMax?.toInt() ?: 0
+                items[position].maxTemp
 
             holder.itemDayWeatherBinding.itemLineMin.currentValue =
-                items[position]?.tempMin?.toInt() ?: 0
+                items[position].minTemp
 
             holder.itemDayWeatherBinding.icon.load(
-                WeatherCodeUtils.getWeatherCode(items[position]?.iconDay ?: "").getIconRes()
+                WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getIconRes()
             )
 
             if (position == items.size - 1) {
@@ -114,9 +113,9 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
                 holder.itemDayWeatherBinding.itemLineMax.drawRightLine = true
                 holder.itemDayWeatherBinding.itemLineMin.drawRightLine = true
                 holder.itemDayWeatherBinding.itemLineMax.nextValue =
-                    items[position + 1]?.tempMax?.toInt() ?: 0
+                    items[position + 1].maxTemp
                 holder.itemDayWeatherBinding.itemLineMin.nextValue =
-                    items[position + 1]?.tempMin?.toInt() ?: 0
+                    items[position + 1].minTemp
             }
 
         }

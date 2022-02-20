@@ -152,34 +152,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     private fun getLocation() {
 
-        viewModel.syncNowWeather(
-            this@MainActivity, Pair(
-                "118.78",
-                "32.04"
-            )
-        )
-
-        viewModel.sync7DayWeather(
-            this@MainActivity, Pair(
-                "118.78",
-                "32.04"
-            )
-        )
-
-        viewModel.sync24hWeather(
-            this@MainActivity, Pair(
-                "118.78",
-                "32.04"
-            )
-        )
-
-        viewModel.sync1DIndices(
-            this, Pair(
-                "118.78",
-                "32.04"
-            )
-        )
-
         locationClient.setLocationListener { info ->
             kotlin.run {
                 Timber.e("${info.longitude},${info.latitude}")

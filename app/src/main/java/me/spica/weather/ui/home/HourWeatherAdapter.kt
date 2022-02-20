@@ -4,26 +4,20 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import me.spica.weather.databinding.ItemHourTempBinding
+import me.spica.weather.model.weather.HourlyWeatherBean
 import java.text.SimpleDateFormat
 import java.util.*
 
 class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>() {
 
-    val items = mutableListOf<WeatherHourlyBean.HourlyBean?>()
-
-    // 接收的格式
-    private val sdf = SimpleDateFormat(
-        "yyyy-MM-dd'T'mm:HH+08:00",
-        Locale.CHINA
-    )
+    val items = mutableListOf<HourlyWeatherBean>()
 
     // 被格式化的时间格式
     private val sdfAfter = SimpleDateFormat("m时", Locale.CHINA)
 
     // 用于排序的列表
-    private val sortItems = mutableListOf<WeatherHourlyBean.HourlyBean?>()
+    private val sortItems = mutableListOf<HourlyWeatherBean>()
 
 
     class ViewHolder(val itemHourTempBinding: ItemHourTempBinding) :
@@ -52,28 +46,26 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
         sortItems.clear()
         sortItems.addAll(items)
         sortItems.sortBy {
-            it?.temp.toString()
+            it.temp.toString()
         }
-        maxTemp = sortItems.last()?.temp?.toInt() ?: 0
-        minTemp = sortItems.first()?.temp?.toInt() ?: 0
+        maxTemp = sortItems.last().temp
+        minTemp = sortItems.first().temp
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        items[position]?.let {
-
-            val date = sdf.parse(it.fxTime) ?: Date()
+        items[position].let {
 
 
-            holder.itemHourTempBinding.tvTime.text = sdfAfter.format(date)
-            if (divisionDate.time.before(date)) {
-                holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(date)
+            holder.itemHourTempBinding.tvTime.text = sdfAfter.format(it.fxTime)
+            if (divisionDate.time.before(it.fxTime)) {
+                holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(it.fxTime)
             }
 
-            holder.itemHourTempBinding.tvPercent.text = "降雨概率\n${it.pop ?: "0"}%"
+            holder.itemHourTempBinding.tvPercent.text = "降雨概率\n${it.pop}%"
 
-            holder.itemHourTempBinding.tvWeather.text = it.text
+            holder.itemHourTempBinding.tvWeather.text = it.weatherName
 
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp
             holder.itemHourTempBinding.itemLine.minValue = minTemp
@@ -85,11 +77,11 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
                 holder.itemHourTempBinding.itemLine.drawLeftLine = true
                 holder.itemHourTempBinding.itemLine.lastValue =
-                    items[position - 1]?.temp?.toInt() ?: 0
+                    items[position - 1].temp
             }
 
             holder.itemHourTempBinding.itemLine.currentValue =
-                items[position]?.temp?.toInt() ?: 0
+                items[position].temp
 
 
             if (position == items.size - 1) {
@@ -97,7 +89,7 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
             } else {
                 holder.itemHourTempBinding.itemLine.drawRightLine = true
                 holder.itemHourTempBinding.itemLine.nextValue =
-                    items[position + 1]?.temp?.toInt() ?: 0
+                    items[position + 1].temp
             }
 
         }

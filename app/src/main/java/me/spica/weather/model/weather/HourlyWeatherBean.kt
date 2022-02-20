@@ -18,7 +18,8 @@ data class HourlyWeatherBean(
     val windSpeed: Int, // 风速
     val water: Int, // 湿度
     val windPa: Int, // 气压
-    val weatherName: String
+    val weatherName: String,
+    val pop:Int,// 降雨概率
 )
 
 fun WeatherHourlyBean.HourlyBean.toHourlyWeatherBean(): HourlyWeatherBean {
@@ -29,6 +30,7 @@ fun WeatherHourlyBean.HourlyBean.toHourlyWeatherBean(): HourlyWeatherBean {
         windSpeed = windSpeed.toIntOrNull() ?: 0,
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
-        weatherName = text
+        weatherName = text,
+        pop = pop.toIntOrNull()?:0
     )
 }

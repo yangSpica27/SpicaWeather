@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import me.spica.weather.model.weather.DailyWeatherBean
+import me.spica.weather.model.weather.HourlyWeatherBean
+import me.spica.weather.model.weather.LifeIndexBean
 import me.spica.weather.model.weather.NowWeatherBean
 import me.spica.weather.repository.HeRepository
 import timber.log.Timber
@@ -39,10 +42,9 @@ class WeatherViewModel @Inject constructor(
         )
     )
 
-    private val gson: Gson = Gson()
 
     // 即时天气
-   val nowWeatherFlow: Flow<NowWeatherBean> =
+    val nowWeatherFlow: Flow<NowWeatherBean> =
         locationKeys.flatMapLatest {
             repository.fetchNowWeather(
                 lon = it.first,
@@ -55,97 +57,45 @@ class WeatherViewModel @Inject constructor(
         }
 
 
-
-    private val _7dayWeatherFlow: MutableStateFlow<WeatherDailyBean?> =
-        MutableStateFlow(null)
-
-    private val _currentDayHourWeather: MutableStateFlow<WeatherHourlyBean?> =
-        MutableStateFlow(null)
-
-    val currentDayHourWeather: StateFlow<WeatherHourlyBean?>
-        get() = _currentDayHourWeather
-
-    val dailyWeatherFlow: MutableStateFlow<WeatherDailyBean?>
-        get() = _7dayWeatherFlow
-
-    private val _currentIndices: MutableStateFlow<List<IndicesBean.DailyBean?>> = MutableStateFlow(listOf())
-
-    val currentIndices: MutableStateFlow<List<IndicesBean.DailyBean?>>
-        get() = _currentIndices
-
-
-    // 获取现在的天气
-    fun syncNowWeather(context: Context, entry: Pair<String, String>) {
-
-        repository.fetchNowWeather(
-            entry.first,
-            entry.second,
-            onComplete = {},
-            onError = {},
+    val dailyWeatherFlow: Flow<List<DailyWeatherBean>> = locationKeys.flatMapLatest {
+        repository.fetchDailyWeather(
+            lon = it.first,
+            lat = it.second,
+            onSuccess = {},
             onStart = {},
-            onSuccess = {}
+            onError = {},
+            onComplete = {}
         )
-
     }
 
-    // 获取一天内的生活指数
-    fun sync1DIndices(context: Context, entry: Pair<String, String>) {
-        viewModelScope.launch {
-            QWeather.getIndices1D(
-                context,
-                "${entry.first},${entry.second}",
-                Lang.ZH_HANS,
-                listOf(IndicesType.ALL),
-                object : QWeather.OnResultIndicesListener {
-                    override fun onError(error: Throwable) {
-                        errorMessage.value = error.message ?: ""
-                        Timber.e(error)
-                    }
-
-                    override fun onSuccess(result: IndicesBean) {
-                        Timber.e(gson.toJson(result))
-                        _currentIndices.value = result.dailyList
-                    }
-                }
+    val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>> =
+        locationKeys.flatMapLatest {
+            repository.fetchHourlyWeather(
+                lon = it.first,
+                lat = it.second,
+                onSuccess = {},
+                onStart = {},
+                onError = {},
+                onComplete = {}
             )
         }
-    }
 
 
-    fun sync7DayWeather(context: Context, entry: Pair<String, String>) {
-        viewModelScope.launch {
-            QWeather.getWeather7D(context, "${entry.first},${entry.second}",
-                object : QWeather.OnResultWeatherDailyListener {
-                    override fun onError(error: Throwable) {
-                        errorMessage.value = error.message ?: ""
-                    }
-
-                    override fun onSuccess(result: WeatherDailyBean) {
-                        Timber.e(gson.toJson(result))
-                        _7dayWeatherFlow.value = result
-                    }
-
-                }
+    val currentIndices: Flow<List<LifeIndexBean>> =
+        locationKeys.flatMapLatest {
+            repository.fetchTodayLifeIndex(
+                lon = it.first,
+                lat = it.second,
+                onSuccess = {},
+                onStart = {},
+                onError = {},
+                onComplete = {}
             )
         }
-    }
 
 
-    fun sync24hWeather(context: Context, entry: Pair<String, String>) {
-        viewModelScope.launch {
-            QWeather.getWeather24Hourly(context, "${entry.first},${entry.second}",
-                object : QWeather.OnResultWeatherHourlyListener {
-                    override fun onError(error: Throwable) {
-                        errorMessage.value = error.message ?: ""
-                    }
-
-                    override fun onSuccess(result: WeatherHourlyBean) {
-                        Timber.e(gson.toJson(result))
-                        _currentDayHourWeather.value = result
-                    }
-
-                })
-        }
+    fun changedCity(lon: String, lat: String) {
+        locationKeys.value = Pair(lon, lat)
     }
 
 

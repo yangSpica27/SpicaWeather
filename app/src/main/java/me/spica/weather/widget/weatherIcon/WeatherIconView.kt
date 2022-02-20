@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import me.spica.weather.common.WeatherType
 
+@Suppress("unused")
 class WeatherIconView : View {
 
     private var drawDelegate: DrawDelegate? = null

@@ -46,7 +46,7 @@ class NowWeatherCard : ConstraintLayout {
 
     init {
         alpha = 0f
-        binding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true);
+        binding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
     }
 

@@ -39,6 +39,9 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_current_city.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_hot_view.xml" value="0.1417979610750695" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.26927083333333335" />
+        <entry key="app/src/main/res/layout/card_daily_weather.xml" value="0.1787037037037037" />
+        <entry key="app/src/main/res/layout/card_hourly_weather.xml" value="0.1787037037037037" />
+        <entry key="app/src/main/res/layout/card_life_index.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/layout/card_weather.xml" value="0.23796296296296296" />
         <entry key="app/src/main/res/layout/card_wind.xml" value="0.23796296296296296" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16296296296296298" />

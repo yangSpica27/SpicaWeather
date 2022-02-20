@@ -3,8 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/window_background"
     android:orientation="vertical">
 
@@ -15,105 +13,42 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-
         <me.spica.weather.widget.card.NowWeatherCard
             android:id="@+id/now_weather_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-
-
-        <LinearLayout
-            android:id="@+id/container_hour_weather"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:animateLayoutChanges="true"
-            android:background="@color/white"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp">
+            android:layout_marginEnd="14dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="12dp"
-                android:textStyle="bold"
-                android:textColor="@color/textColorPrimary"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:text="小时级气象信息" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_hour_weather"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:listitem="@layout/item_day_weather"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_marginTop="6dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container_day_weather"
+        <me.spica.weather.widget.card.HourWeatherCard
+            android:id="@+id/hourly_weather_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:visibility="gone"
-            android:animateLayoutChanges="true"
-            android:background="@color/white"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="14dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:textColor="@color/textColorPrimary"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:text="天级气象信息" />
+        <me.spica.weather.widget.card.DailyWeatherCard
+            android:id="@+id/daily_weather_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_weather"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:listitem="@layout/item_day_weather"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_marginTop="6dp" />
-
-        </LinearLayout>
-
-        <RelativeLayout
+        <me.spica.weather.widget.card.TipsCard
             android:id="@+id/container_tips"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
-            android:visibility="gone"
             android:animateLayoutChanges="true"
             android:layout_marginBottom="20dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:listitem="@layout/item_tips"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </RelativeLayout>
-
+            android:layout_marginTop="6dp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="100dp" />
 
     </LinearLayout>
 

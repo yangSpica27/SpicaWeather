@@ -20,6 +20,7 @@ import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentCityBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.city.Province
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.ui.main.WeatherViewModel
 import java.io.BufferedReader
@@ -75,6 +76,8 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
             cityAdapter.diffUtil.submitList(rvItems.toList())
         }
 
+
+
         requireContext()
             .dividerBuilder()
             .size(1.dp.toInt())
@@ -84,6 +87,11 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
             .addTo(viewBinding.rvList)
 
         viewBinding.rvList.adapter = cityAdapter
+
+
+        cityAdapter.itemClickListener = {
+            viewModel.changedCity(it.lon,it.lat)
+        }
 
         lifecycleScope.launch(Dispatchers.Default) {
             cityList.clear()
@@ -121,9 +129,9 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
             rvItems.addAll(cityList)
 
 
-            withContext(Dispatchers.Main) {
-                cityAdapter.diffUtil.submitList(rvItems.toList())
-            }
+           doOnMainThreadIdle({
+               cityAdapter.diffUtil.submitList(rvItems.toList())
+           })
 
         }
 

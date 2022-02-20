@@ -1,6 +1,9 @@
 package me.spica.weather.repository
 
 import android.content.Context
+import com.qweather.sdk.bean.IndicesBean
+import com.qweather.sdk.bean.base.IndicesType
+import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
@@ -14,6 +17,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import me.spica.weather.model.weather.toDailyWeatherBean
 import me.spica.weather.model.weather.toHourlyWeatherBean
+import me.spica.weather.model.weather.toLifeIndexBean
 import me.spica.weather.model.weather.toNowWeatherBean
 
 
@@ -22,11 +26,10 @@ import me.spica.weather.model.weather.toNowWeatherBean
  */
 class HeRepository(private val context: Context) : Repository {
 
-
     override fun fetchNowWeather(
         lon: String,
         lat: String,
-        onStart: () -> Unit  ,
+        onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
         onSuccess: () -> Unit
@@ -47,7 +50,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
             }
         )
-        awaitClose {  }
+        awaitClose { }
     }.onStart {
         onStart()
     }.onCompletion {
@@ -77,7 +80,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
             })
-        awaitClose {  }
+        awaitClose { }
     }.onStart {
         onStart()
     }.onCompletion {
@@ -108,7 +111,39 @@ class HeRepository(private val context: Context) : Repository {
 
             }
         )
-        awaitClose {  }
+        awaitClose { }
+    }.onStart {
+        onStart()
+    }.onCompletion {
+        onComplete()
+    }.flowOn(Dispatchers.IO)
+
+    override fun fetchTodayLifeIndex(
+        lon: String, lat: String,
+        onStart: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit,
+        onSuccess: () -> Unit
+    ) = callbackFlow {
+        QWeather.getIndices1D(
+            context,
+            "${lon},${lat}",
+            Lang.ZH_HANS,
+            listOf(IndicesType.SPT, IndicesType.CW, IndicesType.AP, IndicesType.DRSG),
+            object : QWeather.OnResultIndicesListener {
+                override fun onError(error: Throwable) {
+                    close(error)
+                    onError(error.message)
+                }
+
+                override fun onSuccess(result: IndicesBean) {
+                    trySend(result.dailyList.map {
+                        it.toLifeIndexBean()
+                    })
+                }
+            }
+        )
+        awaitClose()
     }.onStart {
         onStart()
     }.onCompletion {
