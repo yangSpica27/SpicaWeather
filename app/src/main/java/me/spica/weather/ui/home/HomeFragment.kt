@@ -37,9 +37,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
 
 
-    //12:00
-    private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
-
 
     private val tipAdapter by lazy {
         TipAdapter()
@@ -94,32 +91,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         lifecycleScope.launch {
             viewModel.nowWeatherFlow.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {
-                    viewBinding.cardNowWeather.tvUpdateTime.text =
-                        sdfAfter.format(it.obsTime)
-                    viewBinding.cardNowWeather.tvTemp.text = it.temp.toString() + "℃"
-                    viewBinding.cardNowWeather.tvNow.text = "早上好！"
-                    viewBinding.cardNowWeather.tvWeather.text = it.weatherName
-                    viewBinding.cardNowWeather.tvFeelTemp.text = "体感温度" + it.feelTemp.toString() + "℃"
-                    viewBinding.cardExtraInfo.apply {
-                        tvWaterValue.text = it.water.toString() + "%"
-                        tvWindPaValue.text = it.windPa.toString() + "hPa"
-                        tvWindSpeedValue.text = it.windSpeed.toString() + "km/h"
-                    }
-                    viewBinding.cardExtraInfo.root.show()
-                    // 主题颜色
-                    val themeColor = WeatherCodeUtils
-                        .getWeatherCode(it.iconId.toString()).getThemeColor()
-
-                    viewBinding.cardNowWeather.root.setBackgroundColor(themeColor)
-
-                    viewBinding.cardNowWeather.icWeather.load(
-                        WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getIconRes()
-                    )
-
                     doOnMainThreadIdle({
-                        viewBinding.cardNowWeather.root.show()
+                        viewBinding.nowWeatherCard.bindData(it)
                     })
-
 
                 }
             }

@@ -15,13 +15,11 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/card_now_weather"
-            layout="@layout/card_weather" />
 
-        <include
-            android:id="@+id/card_extra_info"
-            layout="@layout/card_wind" />
+        <me.spica.weather.widget.card.NowWeatherCard
+            android:id="@+id/now_weather_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
 

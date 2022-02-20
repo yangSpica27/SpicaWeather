@@ -7,67 +7,144 @@
     android:layout_marginStart="14dp"
     android:layout_marginEnd="14dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ic_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="14dp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_temp"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ic_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_temp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_weather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/white"
+        android:layout_marginStart="14dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintTop_toBottomOf="@id/ic_weather" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/white"
+        android:layout_marginStart="14dp"
+        android:paddingBottom="20dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        app:layout_constraintTop_toBottomOf="@id/tv_weather" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:paddingTop="20dp"
+        android:layout_marginEnd="14dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_feel_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_weather" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:gravity="end"
+        app:layout_constraintTop_toTopOf="@id/tv_now"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        android:textColor="@color/white"
+        android:text="获取中"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_update_time"
+        android:padding="14dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_weather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/white"
-            android:layout_marginStart="14dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            app:layout_constraintTop_toBottomOf="@id/ic_weather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_now"
-            android:layout_width="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/tv_wind_pa"
             app:layout_constraintStart_toStartOf="parent"
+            android:text="风速" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_speed_value"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textColor="@color/white"
-            android:layout_marginStart="14dp"
-            android:paddingBottom="20dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            app:layout_constraintTop_toBottomOf="@id/tv_weather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:paddingTop="20dp"
-            android:layout_marginEnd="14dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_feel_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_weather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_update_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:gravity="end"
-            android:textColor="@color/white"
             android:text="获取中"
-            android:paddingBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="@id/tv_wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_pa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_water"
+            app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
+            android:text="气压" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wind_pa_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="获取中"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="@id/tv_wind_pa"
+            app:layout_constraintEnd_toEndOf="@id/tv_wind_pa"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_pa" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_water"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="@color/textColorPrimaryLight"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_wind_pa"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="湿度" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_water_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="获取中"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
