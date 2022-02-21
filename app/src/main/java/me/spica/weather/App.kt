@@ -18,11 +18,10 @@ class App : Application() {
         createAppCenter()
     }
 
-
     private fun createAppCenter() {
         AppCenter.start(
             this,
-            "3afb30f9-48ce-4e88-8d79-5316f004b653",
+            BuildConfig.APP_CENTER_KEY,
             Analytics::class.java, Crashes::class.java
         )
     }

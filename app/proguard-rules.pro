@@ -118,3 +118,12 @@
 -keep class com.tencent.open.TDialog$* {*;}
 -keep class com.tencent.open.PKDialog$*
 -keep class com.tencent.open.PKDialog$* {*;}
+
+
+ -dontwarn com.squareup.**
+ -dontwarn okio.**
+ -keep public class org.codehaus.* { *; }
+ -keep public class java.nio.* { *; }
+
+ -dontwarn com.qweather.sdk.**
+ -keep class com.qweather.sdk.** { *;}

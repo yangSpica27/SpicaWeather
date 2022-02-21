@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
+  ext.booster_version = '4.4.0'
   repositories {
     google()
     mavenCentral()
@@ -12,9 +14,20 @@ buildscript {
   }
   dependencies {
     classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.5'
+    classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
+    classpath "com.didiglobal.booster:booster-task-compression-pngquant:$booster_version"
+    classpath "com.didiglobal.booster:booster-task-compression-cwebp:$booster_version"
+    classpath "com.didiglobal.booster:booster-task-compression-processed-res:$booster_version"
+    classpath "com.didiglobal.booster:booster-task-resource-deredundancy:$booster_version"
+    classpath "com.didiglobal.booster:booster-transform-r-inline:$booster_version"
+    classpath "com.didiglobal.booster:booster-transform-br-inline:$booster_version"
+    classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
+    classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
+    classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.21'
   }
 
 }
+
 
 plugins {
   id 'com.android.application' version '7.1.1' apply false
@@ -22,8 +35,12 @@ plugins {
   id 'org.jetbrains.kotlin.android' version '1.5.30' apply false
 }
 
+apply plugin: 'com.didiglobal.booster'
+
+
 
 
 task clean(type: Delete) {
   delete rootProject.buildDir
 }
+
