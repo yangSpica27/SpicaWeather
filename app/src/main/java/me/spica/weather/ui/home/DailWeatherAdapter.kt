@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.qweather.sdk.bean.weather.WeatherDailyBean
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemDayWeatherBinding
@@ -18,8 +17,6 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
 
     val items = mutableListOf<DailyWeatherBean>()
 
-    // 原始数据
-    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
     // 格式化
     private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)

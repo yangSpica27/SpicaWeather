@@ -14,7 +14,6 @@ import com.squareup.moshi.Types
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentCityBinding
@@ -90,7 +89,7 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
 
 
         cityAdapter.itemClickListener = {
-            viewModel.changedCity(it.lon,it.lat)
+            viewModel.changedCity(it)
         }
 
         lifecycleScope.launch(Dispatchers.Default) {

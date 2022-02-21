@@ -3,23 +3,34 @@ package me.spica.weather.ui.main
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
+import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.Preference
 import me.spica.weather.tools.addNewFragment
+import me.spica.weather.tools.dp
 import me.spica.weather.tools.hide
+import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.show
 import me.spica.weather.tools.showOldFragment
 import me.spica.weather.ui.city.CityFragment
@@ -59,6 +70,16 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         CityFragment()
     }
 
+    private val currentCity by Preference(
+        Preference.CUR_CITY,
+        CityBean(
+            lon = "118.78",
+            lat = "32.04",
+            cityName = "南京",
+            sortName = "NanJing"
+        )
+    )
+
 
     private val locationClient by lazy {
         AMapLocationClient(applicationContext).apply {
@@ -73,10 +94,32 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
     }
 
+    private fun initTitle() {
+        viewBinding.toolbar.tsLocation.setFactory {
+            val textView = TextView(this)
+            textView.setTextColor(ContextCompat.getColor(this, R.color.textColorPrimary))
+            textView.textSize = 6.dp
+            textView.isSingleLine = true
+            textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+            textView.ellipsize = TextUtils.TruncateAt.END
+            textView
+        }
+
+    }
 
     override fun initializer() {
-
+        FluidContentResizer.listen(this)
         initFragment()
+        initTitle()
+
+
+        lifecycleScope.launch {
+            viewModel.cityFlow.filterNotNull()
+                .collectLatest {
+                    viewBinding.toolbar.tsLocation.setText("中国，" + currentCity.cityName)
+                }
+        }
+
 
         // 监听点击底栏
         viewBinding.rgBottom.setOnCheckedChangeListener { _, id ->
@@ -151,11 +194,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
 
     private fun getLocation() {
-
         locationClient.setLocationListener { info ->
             kotlin.run {
                 Timber.e("${info.longitude},${info.latitude}")
                 locationClient.stopLocation()
+                viewModel.changedCity(currentCity)
             }
         }
         locationClient.startLocation()

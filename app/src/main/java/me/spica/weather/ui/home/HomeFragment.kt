@@ -14,9 +14,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
+import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.Preference
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.main.WeatherViewModel
-import timber.log.Timber
 
 
 /**
@@ -28,6 +29,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
     private val viewModel: WeatherViewModel by activityViewModels()
 
+
+    private val currentCity by Preference(
+        Preference.CUR_CITY,
+        CityBean(
+            lon = "118.78",
+            lat = "32.04",
+            cityName = "南京",
+            sortName = "NanJing"
+        )
+    )
 
 
     override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
@@ -90,14 +101,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
     }
 
-
+    private val scrollBounds = Rect()
     private fun checkAnim() {
-        val scrollBounds = Rect()
-
         viewBinding.scrollView.getHitRect(scrollBounds)
-        Timber.e("开始检查")
         if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
-            Timber.e("开始动画")
             viewBinding.nowWeatherCard.startEnterAnim()
         }
 
