@@ -20,35 +20,34 @@ import java.util.*
 /**
  *  用于展示现在的天气
  */
-class NowWeatherCard : ConstraintLayout {
+class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private var binding: CardWeatherBinding
+    private val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
+    override var enterAnim: MutableList<Animator> = mutableListOf(
+        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        },
+        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        }
+    )
+
+    init {
+        alpha = 0f
+    }
 
     //12:00
     private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
-    private val enterAnim by lazy {
-        val a: Animator = ObjectAnimator.ofFloat(
-            this,
-            "alpha", 0f, 1f
-        )
-        a.duration = 500
-        a.startDelay = 100
-        a.interpolator = FastOutSlowInInterpolator()
-        return@lazy a
-    }
-
-
-    init {
-        alpha = 0f
-        binding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
-
-    }
 
     @SuppressLint("SetTextI18n")
     fun bindData(nowWeatherBean: NowWeatherBean) {
@@ -71,9 +70,6 @@ class NowWeatherCard : ConstraintLayout {
         binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"
         binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"
 
-        if (alpha == 0f) {
-            enterAnim.start()
-        }
 
     }
 

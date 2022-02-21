@@ -25,7 +25,7 @@ enum class WeatherType {
 // 拓展方法 用于获取对应类型的图标
 @DrawableRes
 fun WeatherType.getIconRes(): Int {
-    Timber.e("getIconRes:"+this.name)
+
    return when (this) {
         WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
         WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly

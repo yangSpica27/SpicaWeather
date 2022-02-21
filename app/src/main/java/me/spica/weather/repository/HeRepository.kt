@@ -45,6 +45,10 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: WeatherNowBean) {
+                    if (result.code.code != "200") {
+                        close()
+                        onError(result.code.txt)
+                    }
                     trySend(result.now.toNowWeatherBean())
                     onSuccess()
                 }
@@ -74,6 +78,10 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: WeatherHourlyBean) {
+                    if (result.code.code != "200") {
+                        close()
+                        onError(result.code.txt)
+                    }
                     trySendBlocking(result.hourly.map {
                         it.toHourlyWeatherBean()
                     })
@@ -104,6 +112,10 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: WeatherDailyBean) {
+                    if (result.code.code != "200") {
+                        close()
+                        onError(result.code.txt)
+                    }
                     trySendBlocking(result.daily.map {
                         it.toDailyWeatherBean()
                     })
@@ -137,6 +149,10 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: IndicesBean) {
+                    if (result.code.code != "200") {
+                        close()
+                        onError(result.code.txt)
+                    }
                     trySend(result.dailyList.map {
                         it.toLifeIndexBean()
                     })

@@ -14,22 +14,12 @@ import me.spica.weather.databinding.CardLifeIndexBinding
 import me.spica.weather.model.weather.LifeIndexBean
 import me.spica.weather.ui.home.TipAdapter
 
-class TipsCard : RelativeLayout {
+class TipsCard : RelativeLayout, SpicaWeatherCard {
 
     private val tipAdapter = TipAdapter()
 
     private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val enterAnim by lazy {
-        val a: Animator = ObjectAnimator.ofFloat(
-            this,
-            "alpha", 0f, 1f
-        )
-        a.duration = 500
-        a.startDelay = 100
-        a.interpolator = FastOutSlowInInterpolator()
-        return@lazy a
-    }
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -52,9 +42,20 @@ class TipsCard : RelativeLayout {
         tipAdapter.items.clear()
         tipAdapter.items.addAll(items)
         tipAdapter.notifyDataSetChanged()
-        if (alpha == 0f) {
-            enterAnim.start()
-        }
     }
+
+    override var enterAnim: MutableList<Animator> = mutableListOf(
+        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        },
+        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        }
+    )
+
 
 }

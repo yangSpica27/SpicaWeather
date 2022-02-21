@@ -10,9 +10,11 @@ import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
+import me.spica.weather.tools.hide
+import me.spica.weather.tools.show
 import me.spica.weather.ui.home.DailWeatherAdapter
 
-class DailyWeatherCard : LinearLayout {
+class DailyWeatherCard : LinearLayout, SpicaWeatherCard {
 
     private val dailyWeatherAdapter by lazy {
         DailWeatherAdapter()
@@ -25,16 +27,18 @@ class DailyWeatherCard : LinearLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
-    private val enterAnim by lazy {
-        val a: Animator = ObjectAnimator.ofFloat(
-            this,
-            "alpha", 0f, 1f
-        )
-        a.duration = 500
-        a.startDelay = 100
-        a.interpolator = FastOutSlowInInterpolator()
-        return@lazy a
-    }
+    override var enterAnim: MutableList<Animator> = mutableListOf(
+        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        },
+        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        }
+    )
 
     init {
         alpha = 0f
@@ -42,17 +46,22 @@ class DailyWeatherCard : LinearLayout {
     }
 
 
-
-
     @SuppressLint("NotifyDataSetChanged")
-    fun bindData(items:List<DailyWeatherBean>){
+    fun bindData(items: List<DailyWeatherBean>) {
         dailyWeatherAdapter.items.clear()
         dailyWeatherAdapter.items.addAll(items)
         dailyWeatherAdapter.syncTempMaxAndMin()
         dailyWeatherAdapter.notifyDataSetChanged()
-        if (alpha == 0f) {
-            enterAnim.start()
-        }
+        binding.rvWeather.postDelayed(
+            {
+                binding.layoutLoading.hide()
+                binding.rvWeather.show()
+            }, 100
+        )
+
+
     }
+
+
 
 }

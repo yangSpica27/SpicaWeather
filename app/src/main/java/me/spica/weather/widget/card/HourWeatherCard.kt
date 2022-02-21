@@ -10,9 +10,11 @@ import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
+import me.spica.weather.tools.hide
+import me.spica.weather.tools.show
 import me.spica.weather.ui.home.HourWeatherAdapter
 
-class HourWeatherCard : LinearLayout {
+class HourWeatherCard : LinearLayout, SpicaWeatherCard {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -27,16 +29,18 @@ class HourWeatherCard : LinearLayout {
     }
 
 
-    private val enterAnim by lazy {
-        val a: Animator = ObjectAnimator.ofFloat(
-            this,
-            "alpha", 0f, 1f
-        )
-        a.duration = 500
-        a.startDelay = 100
-        a.interpolator = FastOutSlowInInterpolator()
-        return@lazy a
-    }
+    override var enterAnim: MutableList<Animator> = mutableListOf(
+        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        },
+        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
+            duration = 400
+            startDelay = 100
+            interpolator = FastOutSlowInInterpolator()
+        }
+    )
 
     init {
         alpha = 0f
@@ -50,9 +54,12 @@ class HourWeatherCard : LinearLayout {
         hourWeatherAdapter.items.addAll(items)
         hourWeatherAdapter.sortList()
         hourWeatherAdapter.notifyDataSetChanged()
-        if (alpha == 0f) {
-            enterAnim.start()
-        }
+        binding.rvHourWeather.postDelayed(
+            {
+                binding.layoutLoading.hide()
+                binding.rvHourWeather.show()
+            }, 100
+        )
     }
 
 

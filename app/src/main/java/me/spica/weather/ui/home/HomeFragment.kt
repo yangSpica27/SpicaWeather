@@ -1,6 +1,7 @@
 package me.spica.weather.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentHomeBinding
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.main.WeatherViewModel
+import timber.log.Timber
 
 
 /**
@@ -27,6 +29,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     private val viewModel: WeatherViewModel by activityViewModels()
 
 
+
     override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
             FragmentHomeBinding = FragmentHomeBinding.inflate(
         inflater, container,
@@ -36,6 +39,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun init() {
 
+
+       viewBinding.scrollView.post {
+           checkAnim()
+       }
+        viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
+            checkAnim()
+        }
 
         //  载入图表数据
         lifecycleScope.launch {
@@ -76,6 +86,31 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     viewBinding.hourlyWeatherCard.bindData(it)
                 })
             }
+        }
+
+    }
+
+
+    private fun checkAnim() {
+        val scrollBounds = Rect()
+
+        viewBinding.scrollView.getHitRect(scrollBounds)
+        Timber.e("开始检查")
+        if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            Timber.e("开始动画")
+            viewBinding.nowWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.dailyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.dailyWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.hourlyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.hourlyWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.containerTips.startEnterAnim()
         }
 
     }
