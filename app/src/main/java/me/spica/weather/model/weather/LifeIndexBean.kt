@@ -1,6 +1,7 @@
 package me.spica.weather.model.weather
 
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.qweather.sdk.bean.IndicesBean
 import com.qweather.sdk.bean.base.IndicesType
 import me.spica.weather.R
@@ -12,7 +13,8 @@ data class LifeIndexBean(
     val name: String,// 指数名称
     val category: String,// 指数级别说明
     val text: String, // 说明
-    @ColorRes val color: Int
+    @ColorRes val color: Int,
+    @DrawableRes val iconRes:Int
 ) {
 
     companion object {
@@ -37,7 +39,8 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 "运动指数",
                 category,
                 text,
-                IndicesUtils.getColorRes(this.type, level.toInt())
+                IndicesUtils.getColorRes(this.type, level.toInt()),
+                R.drawable.ic_spt
             )
         }
         IndicesType.DRSG.code -> {
@@ -46,7 +49,8 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 "穿衣指数",
                 category,
                 text,
-                IndicesUtils.getColorRes(type, level.toInt())
+                IndicesUtils.getColorRes(type, level.toInt()),
+                R.drawable.ic_clothes
             )
         }
         IndicesType.AP.code -> {
@@ -55,7 +59,8 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 "空气污染指数",
                 category,
                 text,
-                IndicesUtils.getColorRes(type, level.toInt())
+                IndicesUtils.getColorRes(type, level.toInt()),
+                R.drawable.ic_air_index
             )
         }
         IndicesType.CW.code -> {
@@ -64,7 +69,8 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 "洗车指数",
                 category,
                 text,
-                IndicesUtils.getColorRes(type, level.toInt())
+                IndicesUtils.getColorRes(type, level.toInt()),
+                R.drawable.ic_clean_car
             )
         }
     }
@@ -73,6 +79,7 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
         text,
         category,
         text = text,
-        R.color.textColorPrimaryHint
+        R.color.textColorPrimaryHint,
+        R.drawable.ic_clean_car
     )
 }

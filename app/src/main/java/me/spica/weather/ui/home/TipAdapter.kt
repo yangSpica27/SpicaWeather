@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import me.spica.weather.databinding.ItemTipsBinding
 import me.spica.weather.model.weather.LifeIndexBean
 
@@ -39,6 +40,7 @@ class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
                     PorterDuff.Mode.ADD
                 )
             holder.itemTipsBinding.tvDesc.text = item.text
+            holder.itemTipsBinding.ivIcon.load(item.iconRes)
         }
 
     }

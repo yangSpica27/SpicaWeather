@@ -35,6 +35,7 @@ import me.spica.weather.tools.show
 import me.spica.weather.tools.showOldFragment
 import me.spica.weather.ui.city.CityFragment
 import me.spica.weather.ui.home.HomeFragment
+import me.spica.weather.ui.setting.SettingActivity
 import timber.log.Timber
 
 
@@ -103,6 +104,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
             textView.ellipsize = TextUtils.TruncateAt.END
             textView
+        }
+
+        viewBinding.toolbar.iconMenu.setOnClickListener {
+            startActivity(Intent(this, SettingActivity::class.java))
         }
 
     }

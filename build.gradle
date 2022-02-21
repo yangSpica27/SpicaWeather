@@ -13,7 +13,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.5'
+    classpath 'com.google.dagger:hilt-android-gradle-plugin:2.41'
     classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
     classpath "com.didiglobal.booster:booster-task-compression-pngquant:$booster_version"
     classpath "com.didiglobal.booster:booster-task-compression-cwebp:$booster_version"

@@ -12,6 +12,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:src="@drawable/ic_menu"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toTopOf="@id/ts_location"
         app:layout_constraintBottom_toBottomOf="@id/ts_location"
         app:layout_constraintStart_toStartOf="parent" />

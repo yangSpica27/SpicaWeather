@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemHourTempBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
 import java.text.SimpleDateFormat
@@ -64,9 +67,11 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
                 holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(it.fxTime)
             }
 
-            holder.itemHourTempBinding.tvPercent.text = "降雨概率\n${it.pop}%"
+            holder.itemHourTempBinding.tvPercent.text = "${it.pop}%"
 
-            holder.itemHourTempBinding.tvWeather.text = it.weatherName
+            holder.itemHourTempBinding.icWeather.load(
+                WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getIconRes()
+            )
 
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp
             holder.itemHourTempBinding.itemLine.minValue = minTemp
