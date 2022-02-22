@@ -40,7 +40,10 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_hot_view.xml" value="0.1417979610750695" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.26927083333333335" />
         <entry key="app/src/main/res/drawable/ic_clothes.xml" value="0.114" />
+        <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.1345" />
         <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.1345" />
+        <entry key="app/src/main/res/drawable/ic_tip.xml" value="0.1345" />
+        <entry key="app/src/main/res/layout/activity_about_me.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/layout/card_daily_weather.xml" value="0.1787037037037037" />

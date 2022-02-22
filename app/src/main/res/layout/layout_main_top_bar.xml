@@ -11,8 +11,8 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
+        android:scaleType="center"
         android:src="@drawable/ic_menu"
-        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toTopOf="@id/ts_location"
         app:layout_constraintBottom_toBottomOf="@id/ts_location"
         app:layout_constraintStart_toStartOf="parent" />
@@ -31,7 +31,16 @@
         app:layout_constraintBottom_toTopOf="@id/line"
         android:gravity="center" />
 
-
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icon_about"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_tip"
+        app:tint="@color/textColorPrimaryHintLight"
+        app:layout_constraintTop_toTopOf="@id/ts_location"
+        app:layout_constraintBottom_toBottomOf="@id/ts_location"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/line"

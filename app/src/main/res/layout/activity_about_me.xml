@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_left"
+            app:titleCentered="true"
+            app:title="关于此项目" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerColor="@color/line_divider" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_app"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:text="v0.1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:gravity="start|left"
+            android:layout_marginTop="12dp"
+            android:text="开源相关"
+            android:textColor="@color/textColorPrimary"
+            android:background="@color/textColorPrimaryHintLight"
+            android:paddingEnd="16dp"
+            android:layout_height="match_parent"
+            tools:ignore="RtlHardcoded" />
+
+    </LinearLayout>
+
+</ScrollView>
