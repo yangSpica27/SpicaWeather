@@ -3,6 +3,7 @@ package me.spica.weather.ui.main
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.Uri
 import android.provider.Settings
@@ -13,28 +14,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.Preference
-import me.spica.weather.tools.addNewFragment
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
-import me.spica.weather.tools.hide
 import me.spica.weather.tools.keyboard.FluidContentResizer
-import me.spica.weather.tools.show
-import me.spica.weather.tools.showOldFragment
-import me.spica.weather.ui.city.CityFragment
-import me.spica.weather.ui.home.HomeFragment
 import me.spica.weather.ui.setting.SettingActivity
 import timber.log.Timber
 
@@ -62,14 +59,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
      */
     private var isNeedCheck = true
 
-
-    private val homeFragment by lazy {
-        HomeFragment()
-    }
-
-    private val cityFragment by lazy {
-        CityFragment()
-    }
+    
 
     private val currentCity by Preference(
         Preference.CUR_CITY,
@@ -80,6 +70,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             sortName = "NanJing"
         )
     )
+
+    private val errorTip by lazy {
+        val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
+        sb.setAction("重试") {
+            sb.dismiss()
+        }
+    }
 
 
     private val locationClient by lazy {
@@ -109,84 +106,18 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         viewBinding.toolbar.iconMenu.setOnClickListener {
             startActivity(Intent(this, SettingActivity::class.java))
         }
+        viewBinding.btnPlus.setOnClickListener {
 
+        }
     }
 
     override fun initializer() {
         FluidContentResizer.listen(this)
-        initFragment()
+        initView()
         initTitle()
-
-
-        lifecycleScope.launch {
-            viewModel.cityFlow.filterNotNull()
-                .collectLatest {
-                    viewBinding.toolbar.tsLocation.setText("中国，" + currentCity.cityName)
-                }
-        }
-
-
-        // 监听点击底栏
-        viewBinding.rgBottom.setOnCheckedChangeListener { _, id ->
-            runBlocking {
-                if (id == viewBinding.btnHome.id) {
-                    // 点击主页
-                    if (viewBinding.btnHome.isSelected) {
-                        return@runBlocking
-                    }
-
-                    showOldFragment(homeFragment, listOf(cityFragment))
-
-                    viewBinding.toolbar.root.show()
-                }
-
-                if (id == viewBinding.btnLocation.id) {
-                    // 点击了地区
-                    if (viewBinding.btnLocation.isSelected) {
-                        return@runBlocking
-                    }
-
-                    supportFragmentManager.commit {
-                        // 点击了。。。
-                        showOldFragment(cityFragment, listOf(homeFragment))
-                    }
-
-                    viewBinding.toolbar.root.hide()
-
-                }
-                if (id == viewBinding.btnMd.id) {
-                    if (viewBinding.btnMd.isSelected) {
-                        return@runBlocking
-                    }
-
-                    viewBinding.toolbar.root.hide()
-
-                }
-
-            }
-        }
-
-        // 监听fab点击
-        viewBinding.btnPlus.setOnClickListener {
-            viewBinding.btnPlus.isSelected = !viewBinding.btnPlus.isSelected
-            if (viewBinding.btnPlus.isSelected) {
-                viewBinding.btnPlus.animate().rotation(135f)
-                viewBinding.viewMenu.animate().scaleX(1F).scaleY(1F).alpha(1F)
-            } else {
-                viewBinding.btnPlus.animate().rotation(0f)
-                viewBinding.viewMenu.animate().scaleX(0F).scaleY(0F).alpha(0F)
-            }
-
-        }
-
-
     }
 
-    private fun initFragment() {
-        addNewFragment(homeFragment, R.id.fragment_container_view)
-        addNewFragment(cityFragment, R.id.fragment_container_view)
-        showOldFragment(homeFragment, listOf(cityFragment))
-    }
+
 
 
     override fun onResume() {
@@ -209,6 +140,63 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         locationClient.startLocation()
     }
 
+
+    private fun initView() {
+        viewBinding.scrollView.post {
+            checkAnim()
+        }
+        viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
+            checkAnim()
+        }
+
+        //  载入图表数据
+        lifecycleScope.launch {
+            viewModel.dailyWeatherFlow
+                .filterNotNull()
+                .collectLatest {
+                    doOnMainThreadIdle({
+                        viewBinding.dailyWeatherCard.bindData(it)
+                    })
+                }
+        }
+
+
+        // 请求当日
+        lifecycleScope.launch {
+            viewModel.nowWeatherFlow.filterNotNull().collectLatest {
+                withContext(Dispatchers.Main) {
+                    doOnMainThreadIdle({
+                        viewBinding.nowWeatherCard.bindData(it)
+                    })
+
+                }
+            }
+        }
+
+
+        // 载入天气指数数据
+        lifecycleScope.launch {
+            viewModel.currentIndices.filterNotNull().collectLatest {
+                viewBinding.containerTips.bindData(it)
+            }
+        }
+
+        // 载入小时天气数据
+        lifecycleScope.launch {
+            viewModel.hourlyWeatherFlow.filterNotNull().collectLatest {
+                doOnMainThreadIdle({
+                    viewBinding.hourlyWeatherCard.bindData(it)
+                })
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.cityFlow.filterNotNull()
+                .collectLatest {
+                    viewBinding.toolbar.tsLocation.setText("中国，" + currentCity.cityName)
+                }
+        }
+    }
 
     /**
      * 显示提示信息
@@ -320,5 +308,25 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         locationClient.onDestroy()
     }
 
+    private val scrollBounds = Rect()
+    private fun checkAnim() {
+        viewBinding.scrollView.getHitRect(scrollBounds)
+        if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.nowWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.dailyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.dailyWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.hourlyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.hourlyWeatherCard.startEnterAnim()
+        }
+
+        if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.containerTips.startEnterAnim()
+        }
+
+    }
 
 }

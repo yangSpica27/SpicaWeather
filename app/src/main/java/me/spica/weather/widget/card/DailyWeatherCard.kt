@@ -41,6 +41,7 @@ class DailyWeatherCard : LinearLayout, SpicaWeatherCard {
     )
 
     init {
+
         alpha = 0f
         binding.rvWeather.adapter = dailyWeatherAdapter
     }

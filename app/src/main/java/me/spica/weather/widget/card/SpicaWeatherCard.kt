@@ -20,4 +20,6 @@ interface SpicaWeatherCard {
         }
     }
 
+    fun resetAnim() = Unit
+
 }
