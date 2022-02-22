@@ -1,37 +1,33 @@
 package me.spica.weather.ui.city
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.lifecycleScope
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.R
-import me.spica.weather.base.BindingFragment
-import me.spica.weather.databinding.FragmentCityBinding
+import me.spica.weather.base.BindingActivity
+import me.spica.weather.databinding.ActivityCitySelectBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.city.Province
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
-import me.spica.weather.ui.main.WeatherViewModel
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-
-@AndroidEntryPoint
-class CityFragment : BindingFragment<FragmentCityBinding>() {
-
-    private val viewModel: WeatherViewModel by activityViewModels()
-
+/**
+ * 城市选择
+ */
+class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     // 城市列表
     private val cityList = arrayListOf<CityBean>()
@@ -51,33 +47,42 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
         val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
         return@lazy jsonAdapter.fromJson(
             getJsonString(
-                requireContext()
+                this
             )
         )
     }
 
+    private val textWatch = object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
-    override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?):
-            FragmentCityBinding =
-        FragmentCityBinding.inflate(inflater, container, false)
-
-    override fun init() {
-        viewBinding.etCityName.addTextChangedListener { et ->
+        override fun afterTextChanged(edit: Editable) {
             rvItems.clear()
-            rvItems.addAll(
-                cityList.filter {
-                    if (et.isNullOrEmpty()) return@filter true
-                    return@filter it.cityName.contains(et.toString(), true) ||
-                            it.sortName.contains(et.toString(), true)
+            cityList.forEach {
+                if (it.cityName.contains(edit.trim()) ||
+                    it.sortName.contains(edit.trim())
+                ) {
+                    rvItems.add(it)
                 }
-            )
+            }
             cityAdapter.diffUtil.submitList(rvItems.toList())
         }
 
+    }
 
 
-        requireContext()
+    override fun initializer() {
+        init()
+    }
+
+
+    private fun init() {
+
+
+        viewBinding.etCityName.addTextChangedListener(textWatch)
+
+        this
             .dividerBuilder()
             .size(1.dp.toInt())
             .colorRes(R.color.line_divider)
@@ -85,12 +90,11 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
             .build()
             .addTo(viewBinding.rvList)
 
+        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_slide_right)
+        viewBinding.rvList.layoutAnimation = animation
         viewBinding.rvList.adapter = cityAdapter
 
 
-        cityAdapter.itemClickListener = {
-            viewModel.changedCity(it)
-        }
 
         lifecycleScope.launch(Dispatchers.Default) {
             cityList.clear()
@@ -104,7 +108,9 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
                         lon = it.log,
                         lat = it.lat
                     )
-                } ?: listOf()
+                }?.filter {
+                    it.cityName.isNotEmpty()
+                } ?: listOf<CityBean>()
             )
 
             provinces?.forEach {
@@ -125,16 +131,24 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
                 it.sortName
             }
 
-            rvItems.addAll(cityList)
 
 
-           doOnMainThreadIdle({
-               cityAdapter.diffUtil.submitList(rvItems.toList())
-           })
+            rvItems.addAll(cityList.filter {
+                it.cityName.isNotEmpty()
+            })
+
+
+            doOnMainThreadIdle({
+                cityAdapter.diffUtil.submitList(rvItems.toList())
+                viewBinding.rvList.scheduleLayoutAnimation()
+                viewBinding.etCityName.isEnabled = true
+            })
 
         }
 
     }
+
+    override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding = ActivityCitySelectBinding.inflate(inflater)
 
 
     /**
@@ -166,6 +180,4 @@ class CityFragment : BindingFragment<FragmentCityBinding>() {
         }
         return sb.toString()
     }
-
-
 }

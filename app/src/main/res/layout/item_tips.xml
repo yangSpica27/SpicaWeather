@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         android:textColor="@color/textColorPrimary"
         android:lines="1"
         android:textStyle="bold"
@@ -40,25 +40,7 @@
         android:layout_marginStart="14dp"
         tools:text="运动指数" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:layout_marginEnd="14dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:paddingTop="2dp"
-        android:backgroundTint="@color/l1"
-        android:paddingBottom="2dp"
-        android:background="@drawable/bg_round"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/white"
-        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-        android:gravity="end"
-        android:layout_marginStart="12dp"
-        tools:text="适宜" />
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_desc"
@@ -68,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_icon"
         android:layout_marginEnd="14dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/textColorPrimaryLight"
         tools:text="昼夜温差大，风力较强，易发生感冒，请注意适当增减衣服，加强自我防护避免感冒"
         android:layout_marginTop="4dp"

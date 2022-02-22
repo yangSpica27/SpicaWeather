@@ -32,13 +32,6 @@ class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items[position].let { item ->
             holder.itemTipsBinding.tvName.text = item.name
-            holder.itemTipsBinding.tvValue.text = item.category
-            holder.itemTipsBinding.tvValue.background.colorFilter =
-                PorterDuffColorFilter(
-                    ContextCompat.getColor(holder.itemTipsBinding.root.context,
-                    item.color),
-                    PorterDuff.Mode.ADD
-                )
             holder.itemTipsBinding.tvDesc.text = item.text
             holder.itemTipsBinding.ivIcon.load(item.iconRes)
         }

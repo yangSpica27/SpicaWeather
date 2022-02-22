@@ -52,7 +52,10 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,6 +63,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.setting.SettingActivity" />
+        <activity android:name=".ui.city.WeatherCityActivity" />
+        <activity android:name=".ui.city.CitySelectActivity" />
 
         <meta-data
             android:name="android.max_aspect"

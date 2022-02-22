@@ -6,9 +6,12 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.platform.MaterialContainerTransform
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -32,7 +37,8 @@ import me.spica.weather.tools.Preference
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
-import me.spica.weather.ui.setting.SettingActivity
+import me.spica.weather.ui.city.CitySelectActivity
+import me.spica.weather.ui.city.WeatherCityActivity
 import timber.log.Timber
 
 
@@ -59,7 +65,21 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
      */
     private var isNeedCheck = true
 
-    
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+        findViewById<View>(android.R.id.content).transitionName = "shared_element_container"
+        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.sharedElementEnterTransition = MaterialContainerTransform().apply {
+            addTarget(android.R.id.content)
+            duration = 300L
+        }
+        window.sharedElementReturnTransition = MaterialContainerTransform().apply {
+            addTarget(android.R.id.content)
+            duration = 250L
+        }
+        super.onCreate(savedInstanceState)
+    }
 
     private val currentCity by Preference(
         Preference.CUR_CITY,
@@ -104,10 +124,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
 
         viewBinding.toolbar.iconMenu.setOnClickListener {
-            startActivity(Intent(this, SettingActivity::class.java))
+            startActivity(Intent(this, WeatherCityActivity::class.java))
         }
-        viewBinding.btnPlus.setOnClickListener {
 
+        viewBinding.btnPlus.setOnClickListener {
+            startActivity(Intent(this, CitySelectActivity::class.java))
         }
     }
 
@@ -143,10 +164,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     private fun initView() {
         viewBinding.scrollView.post {
-            checkAnim()
+            doOnMainThreadIdle({
+                checkAnim()
+            })
         }
         viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
-            checkAnim()
+            doOnMainThreadIdle({
+                checkAnim()
+            })
         }
 
         //  载入图表数据

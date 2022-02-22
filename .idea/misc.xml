@@ -18,10 +18,13 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_menu.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_plus.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_rain.xml" value="0.1085" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_search.xml" value="0.1415" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_sunny.xml" value="0.1165" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_home.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_location.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_material.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/activity_city.xml" value="0.22103463018383926" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/activity_city_select.xml" value="0.22103463018383926" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/activity_main.xml" value="0.14666666666666667" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/activity_setting.xml" value="0.1686746987951807" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/card_daily_weather.xml" value="0.22103463018383926" />
@@ -38,6 +41,7 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_layout_hot_city.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_layout_normal.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_tips.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_weather_city.xml" value="0.22103463018383926" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_weather_location.xml" value="0.1686746987951807" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_city_select_view.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_current_city.xml" value="0.16682113067655235" />

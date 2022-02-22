@@ -33,7 +33,6 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemCityBinding.tvId.text = diffUtil.currentList[position].sortId
         holder.itemCityBinding.tvCityName.text = diffUtil.currentList[position].cityName
         holder.itemCityBinding.root.setOnClickListener {
             itemClickListener(diffUtil.currentList[position])

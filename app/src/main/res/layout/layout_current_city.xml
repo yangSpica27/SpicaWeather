@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:text="@string/str_retry_location"
-        android:textColor="@color/material_dynamic_primary70"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_current_city"
         app:layout_constraintRight_toRightOf="parent"
