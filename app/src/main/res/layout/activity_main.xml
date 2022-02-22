@@ -11,22 +11,30 @@
     tools:context=".ui.main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="wrap_content"
         android:background="@color/window_background">
 
-        <include
-            android:id="@+id/toolbar"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            layout="@layout/layout_main_top_bar" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/layout_main_top_bar" />
+        </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
+        android:minHeight="400dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
@@ -76,22 +84,22 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_plus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:fabCustomSize="56dp"
         android:src="@drawable/ic_plus"
         android:tint="@color/white"
+        app:fabSize="normal"
         android:visibility="visible"
         app:layout_anchor="@id/scrollView"
-        app:layout_anchorGravity="bottom|end"
-        android:tintMode="add"
-        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
-        app:backgroundTint="@color/black"
         android:layout_margin="20dp"
+        app:layout_anchorGravity="bottom|end"
+        android:tintMode="multiply"
+        app:backgroundTint="@color/black"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         tools:ignore="ContentDescription" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

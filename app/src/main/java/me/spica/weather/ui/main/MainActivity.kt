@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -122,6 +123,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             textView.ellipsize = TextUtils.TruncateAt.END
             textView
         }
+
 
         viewBinding.toolbar.iconMenu.setOnClickListener {
             startActivity(Intent(this, WeatherCityActivity::class.java))
