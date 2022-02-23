@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -48,11 +48,20 @@
             android:layout_marginTop="12dp"
             android:text="开源相关"
             android:textColor="@color/textColorPrimary"
-            android:background="@color/textColorPrimaryHintLight"
+            android:background="@color/pathBgColor"
             android:paddingEnd="16dp"
             android:layout_height="match_parent"
             tools:ignore="RtlHardcoded" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_licence"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            tools:listitem="@layout/item_licenses"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

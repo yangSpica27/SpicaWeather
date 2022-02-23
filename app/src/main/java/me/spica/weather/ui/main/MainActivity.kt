@@ -36,6 +36,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
+import me.spica.weather.ui.about.AboutActivity
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
 import timber.log.Timber
@@ -88,6 +89,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             sortName = "NanJing"
         )
     }
+
+
     private val errorTip by lazy {
         val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
         sb.setAction("重试") {
@@ -123,6 +126,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
         viewBinding.toolbar.iconMenu.setOnClickListener {
             startActivity(Intent(this, WeatherCityActivity::class.java))
+        }
+
+        viewBinding.toolbar.iconAbout.setOnClickListener {
+            startActivity(Intent(this, AboutActivity::class.java))
         }
 
         viewBinding.btnPlus.setOnClickListener {

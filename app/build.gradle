@@ -143,9 +143,6 @@ dependencies {
   implementation 'com.github.skydoves:sandwich:1.2.2'
   implementation 'com.google.code.gson:gson:2.9.0'
 
-  // 水波纹
-  implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-andx'
-
 
 
   implementation 'com.github.SilenceDut:jpinyin:v1.0'

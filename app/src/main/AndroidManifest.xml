@@ -65,6 +65,7 @@
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.city.WeatherCityActivity" />
         <activity android:name=".ui.city.CitySelectActivity" />
+        <activity android:name=".ui.about.AboutActivity" />
 
         <meta-data
             android:name="android.max_aspect"
