@@ -7,8 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="nav_select_color">#CC000000</color>
+    <color name="water_color">#64B5F6</color>
     <color name="white">#FFFFFFFF</color>
     <color name="scrollbar">#48000000</color>
+    <color name="dottedLineColor">#33000000</color>
+    <color name="rainRectColor">#16000000</color>
     <color name="window_background">#f1f1f1</color>
     <color name="line_divider">#E5E0E0</color>
     <color name="textColorPrimary">#ff000000</color>

@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -34,7 +33,6 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.tools.Preference
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
@@ -82,16 +80,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
     }
 
-    private val currentCity by Preference(
-        Preference.CUR_CITY,
+    private val currentCity by lazy {
         CityBean(
             lon = "118.78",
             lat = "32.04",
             cityName = "南京",
             sortName = "NanJing"
         )
-    )
-
+    }
     private val errorTip by lazy {
         val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
         sb.setAction("重试") {

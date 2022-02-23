@@ -44,7 +44,7 @@ class MinTempLineItem : View {
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
         strokeWidth = 2.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
     private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG)

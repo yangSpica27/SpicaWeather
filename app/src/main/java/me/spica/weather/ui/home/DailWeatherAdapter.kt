@@ -98,6 +98,8 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
             holder.itemDayWeatherBinding.itemLineMin.currentValue =
                 items[position].minTemp
 
+            holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
+//            holder.itemDayWeatherBinding.icon.rainfallProbability = 60
             holder.itemDayWeatherBinding.icon.load(
                 WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getIconRes()
             )

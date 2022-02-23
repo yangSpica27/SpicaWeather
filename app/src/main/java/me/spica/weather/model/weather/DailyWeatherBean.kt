@@ -7,6 +7,7 @@ import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
+
 data class DailyWeatherBean(
     val fxTime: Date = Date(),// 更新时间
     val maxTemp: Int,// 当日最高的温度
@@ -16,6 +17,7 @@ data class DailyWeatherBean(
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherName: String,
+    val precip: Int,// 降水量
 )
 
 
@@ -28,6 +30,7 @@ fun WeatherDailyBean.DailyBean.toDailyWeatherBean(): DailyWeatherBean {
         windSpeed = windSpeedDay.toIntOrNull() ?: 0,
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
-        weatherName = textDay
+        weatherName = textDay,
+        precip = precip.toIntOrNull() ?: 0
     )
 }

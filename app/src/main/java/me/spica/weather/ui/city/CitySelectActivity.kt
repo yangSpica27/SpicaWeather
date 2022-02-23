@@ -5,14 +5,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityCitySelectBinding
@@ -20,6 +25,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.city.Province
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
+import me.spica.weather.tools.toast
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -27,6 +33,7 @@ import java.io.InputStreamReader
 /**
  * 城市选择
  */
+@AndroidEntryPoint
 class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     // 城市列表
@@ -34,6 +41,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     private val cityAdapter = CityAdapter()
 
+    private val cityViewModel by viewModels<CityViewModel>()
 
     // 用于显示的列表
     private val rvItems = arrayListOf<CityBean>()
@@ -79,7 +87,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     private fun init() {
 
-
         viewBinding.etCityName.addTextChangedListener(textWatch)
 
         this
@@ -94,9 +101,25 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
         viewBinding.rvList.layoutAnimation = animation
         viewBinding.rvList.adapter = cityAdapter
 
+        // 设置点击item
+        cityAdapter.itemClickListener = { cityBean ->
+            cityViewModel.addCity(cityBean)
+        }
+
+        // 提示结果
+        lifecycleScope.launch {
+            cityViewModel.tipsFlow.filter {
+                it.isNotBlank()
+            }.collectLatest {
+                withContext(Dispatchers.Main) {
+                    toast(it)
+                }
+            }
+        }
 
 
-        lifecycleScope.launch(Dispatchers.Default) {
+        // 添加数据
+        lifecycleScope.launch {
             cityList.clear()
             rvItems.clear()
             cityList.addAll(
@@ -136,6 +159,8 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
             rvItems.addAll(cityList.filter {
                 it.cityName.isNotEmpty()
             })
+
+
 
 
             doOnMainThreadIdle({

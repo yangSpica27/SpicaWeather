@@ -14,7 +14,7 @@ import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.home.DailWeatherAdapter
 
-class DailyWeatherCard : LinearLayout, SpicaWeatherCard {
+class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
     private val dailyWeatherAdapter by lazy {
         DailWeatherAdapter()

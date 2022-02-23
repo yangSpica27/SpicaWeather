@@ -41,7 +41,7 @@
         android:paddingTop="12dp"
         android:paddingBottom="12dp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <me.spica.weather.widget.RainImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
         android:layout_height="60dp"

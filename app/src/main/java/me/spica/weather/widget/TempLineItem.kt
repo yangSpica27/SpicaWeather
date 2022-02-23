@@ -1,7 +1,16 @@
 package me.spica.weather.widget
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.BlurMaskFilter
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.CornerPathEffect
+import android.graphics.DashPathEffect
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Rect
+import android.graphics.Shader
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -21,17 +30,22 @@ class TempLineItem : View {
 
     var nextValue = 0 // 下一个数值
 
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    var currentPop = 0 // 当前的降雨概率
+
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+
+    }
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context,R.color.pathBgColor)
+        color = ContextCompat.getColor(context, R.color.pathBgColor)
         style = Paint.Style.FILL
     }
 
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
         strokeWidth = 2.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
     private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -43,6 +57,13 @@ class TempLineItem : View {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
 //        maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+    }
+
+
+    private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+//        strokeCap = Paint.Cap.ROUND
+        strokeWidth = 12.dp
+        color = ContextCompat.getColor(context, R.color.rainRectColor)
     }
 
     private var viewHeight = 0
@@ -105,10 +126,12 @@ class TempLineItem : View {
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
                 (pointBottomY - pointTopY)
+        drawRainPop(canvas)
         drawDottedLine(canvas)
         drawGraph(canvas)
         drawPoint(canvas)
         drawValue(canvas)
+
     }
 
 
@@ -116,20 +139,28 @@ class TempLineItem : View {
 
     // 绘制数字
     private fun drawValue(canvas: Canvas) {
-
-
         textPaint.getTextBounds(tempName, 0, tempName.length, textRect)
-
-
         val baseLine1 = pointY - textRect.height() - 2.dp
 
         canvas.drawText("$currentValue℃", viewWidth / 2F, baseLine1, textPaint)
     }
 
 
+    private fun drawRainPop(canvas: Canvas) {
+        canvas.drawLine(
+            width / 2f,
+            height * 1F,
+            width / 2f,
+            height * 1f - height * (currentPop / 100f),
+            rainPaint
+        )
+    }
+
+
     private var pathLeft = Path()
 
     private var pathRight = Path()
+
 
     // 绘制折线
     private fun drawGraph(canvas: Canvas) {
@@ -145,12 +176,6 @@ class TempLineItem : View {
         linePaint.isAntiAlias = true
 
         linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
-
-
-
-
-        Timber.e("======================")
-
 
         if (drawLeftLine) {
 
@@ -177,13 +202,13 @@ class TempLineItem : View {
                 pathPaint
             )
 
-
             canvas.drawLine(
                 pointX, pointY,
                 0F,
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
+
             canvas.drawLine(
                 pointX, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
                 0F,
@@ -191,10 +216,6 @@ class TempLineItem : View {
                 dottedLinePaint
             )
 
-
-
-
-            Timber.e("lastP${lastPointY}")
         }
 
 

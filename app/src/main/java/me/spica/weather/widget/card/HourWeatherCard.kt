@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
@@ -14,7 +13,7 @@ import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.home.HourWeatherAdapter
 
-class HourWeatherCard : LinearLayout, SpicaWeatherCard {
+class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)

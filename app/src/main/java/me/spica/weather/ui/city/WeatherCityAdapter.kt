@@ -27,24 +27,6 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
             override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = true
         })
 
-    init {
-        diffUtil.submitList(
-            listOf(
-                CityBean(
-                    "南京",
-                    "nanjing",
-                    "118.78",
-                    "32.04"
-                ),
-                CityBean(
-                    "南京",
-                    "nanjing",
-                    "118.78",
-                    "32.04"
-                )
-            )
-        )
-    }
 
     class ViewHolder(val itemBinding: ItemWeatherCityBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {

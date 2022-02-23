@@ -26,18 +26,6 @@ class MaxTempLineItem : View {
 
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-//        shader = LinearGradient(
-//            0F,
-//            0F,
-//            0F,
-//            height/2F,
-//            ContextCompat.getColor(
-//                context,
-//                R.color.black
-//            ),
-//            Color.TRANSPARENT,
-//            Shader.TileMode.CLAMP
-//        )
         color = ContextCompat.getColor(context,R.color.pathBgColor)
         style = Paint.Style.FILL
     }
@@ -45,7 +33,7 @@ class MaxTempLineItem : View {
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
         strokeWidth = 2.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
     private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG)

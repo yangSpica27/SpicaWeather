@@ -19,10 +19,7 @@ class Preference<T>(
 ) : ReadWriteProperty<Any?, T> {
 
     companion object {
-        // 当前城市
-        const val CUR_CITY = "currentCity" // 当前的城市
-        const val CUR_LON = "" // 当前的经度
-        const val CUR_LAT = "" // 当前的纬度
+
     }
 
     private val prefs: MMKV by lazy {

@@ -40,6 +40,10 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
     // 最低温度
     private var minTemp = 0
 
+
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemHourTempBinding = ItemHourTempBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -50,10 +54,13 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
         sortItems.clear()
         sortItems.addAll(items)
         sortItems.sortBy {
-            it.temp.toString()
+            it.temp
         }
         maxTemp = sortItems.last().temp
         minTemp = sortItems.first().temp
+
+
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -76,6 +83,8 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp
             holder.itemHourTempBinding.itemLine.minValue = minTemp
 
+
+
             if (position == 0) {
                 holder.itemHourTempBinding.itemLine.drawLeftLine = false
 
@@ -89,7 +98,9 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
             holder.itemHourTempBinding.itemLine.currentValue =
                 items[position].temp
 
+            holder.itemHourTempBinding.itemLine.currentPop = items[position].pop
 
+//            holder.itemHourTempBinding.itemLine.currentPop = 500
             if (position == items.size - 1) {
                 holder.itemHourTempBinding.itemLine.drawRightLine = false
             } else {
