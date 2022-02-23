@@ -13,10 +13,13 @@
     <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <permission-group android:name="${applicationId}.andpermission"/>
+
     <!-- 获取当前位置，帮助商户填写默认定位，必选 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 获取当前位置，帮助商户填写默认定位，必选 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <!-- 允许写入扩展存储，将照片存储到sd卡公共目录，必选 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 允许读设备等信息，用于问题排查，必选 -->
@@ -28,8 +31,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 允许获取wifi状态改变，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
 
 
 
