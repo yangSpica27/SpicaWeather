@@ -2,6 +2,7 @@ package me.spica.weather.repository
 
 import android.content.Context
 import com.qweather.sdk.bean.IndicesBean
+import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.IndicesType
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.weather.WeatherDailyBean
@@ -34,7 +35,6 @@ class HeRepository(private val context: Context) : Repository {
         onError: (String?) -> Unit,
         onSuccess: () -> Unit
     ) = callbackFlow {
-        onStart()
         QWeather.getWeatherNow(
             context,
             "${lon},${lat}",
@@ -78,7 +78,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: WeatherHourlyBean) {
-                    if (result.code.code != "200") {
+                    if (result.code != Code.OK) {
                         close()
                         onError(result.code.txt)
                     }
@@ -112,7 +112,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: WeatherDailyBean) {
-                    if (result.code.code != "200") {
+                    if (result.code !=Code.OK) {
                         close()
                         onError(result.code.txt)
                     }
@@ -149,7 +149,7 @@ class HeRepository(private val context: Context) : Repository {
                 }
 
                 override fun onSuccess(result: IndicesBean) {
-                    if (result.code.code != "200") {
+                    if (result.code != Code.OK) {
                         close()
                         onError(result.code.txt)
                     }

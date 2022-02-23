@@ -22,9 +22,6 @@
     <!-- 允许读设备等信息，用于问题排查，必选 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- 拍商铺照片，必选 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-
     <!-- 允许app联网，必选 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许获取网络状态，必选 -->
@@ -48,6 +45,10 @@
         <meta-data
             android:name="ScopedStorage"
             android:value="true" />
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="9fokNjwZ20sOccj7GXblgLHEWagrebQr"></meta-data>
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -97,13 +98,10 @@
         </provider>
         <!-- 结束 -->
 
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="d4a154db3cd20aafff317224e9e5b680" />
-
         <service
-            android:foregroundServiceType="location"
-            android:name="com.amap.api.location.APSService" />
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
 
     </application>
 

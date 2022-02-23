@@ -27,6 +27,15 @@ android {
       abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
     }
 
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+      }
+    }
+
+    buildConfigField 'String','BAIDU_AK',quotWrapper("9fokNjwZ20sOccj7GXblgLHEWagrebQr")
+    buildConfigField 'String', 'He_KEY', quotWrapper("01425b0eb61144c9966b38093f648765")
+    buildConfigField 'String', 'HE_ID', quotWrapper("HE2112081349381915")
     buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
     buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("3afb30f9-48ce-4e88-8d79-5316f004b653")
   }
@@ -128,19 +137,17 @@ dependencies {
   // Preference MMKV
   implementation 'com.tencent:mmkv-static:1.2.12'
 
-  // 高德地图
-  implementation 'com.amap.api:location:latest.integration'
-  implementation 'com.amap.api:search:latest.integration'
+
+  implementation 'com.baidu.lbsyun:BaiduMapSDK_Location:9.1.8'
 
   //Json解析
   implementation 'com.squareup.moshi:moshi-kotlin:1.12.0'
   kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.12.0'
 
   //network 网络请求相关
-  implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
+  implementation 'com.squareup.okhttp3:okhttp:3.12.12'
 //  implementation "com.squareup.retrofit2:retrofit:2.9.0"
 //  implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-  implementation 'com.github.skydoves:sandwich:1.2.2'
   implementation 'com.google.code.gson:gson:2.9.0'
 
 

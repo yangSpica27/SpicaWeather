@@ -1,9 +1,11 @@
 package me.spica.weather.ui.about
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import me.spica.weather.BuildConfig
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityAboutMeBinding
@@ -31,7 +33,7 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
         viewBinding.rvLicence.layoutAnimation = animation
         viewBinding.rvLicence.adapter = adapter
         initData()
-
+        viewBinding.tvVersionCode.text = BuildConfig.VERSION_NAME
 
     }
 

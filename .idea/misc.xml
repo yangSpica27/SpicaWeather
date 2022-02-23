@@ -20,6 +20,7 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_rain.xml" value="0.1085" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_search.xml" value="0.1415" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_sunny.xml" value="0.1165" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_umbrella.xml" value="0.1225" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_home.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_location.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_material.xml" value="0.131" />
@@ -38,7 +39,7 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/fragment_main.xml" value="0.26927083333333335" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_city.xml" value="0.22103463018383926" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_day_weather.xml" value="0.19057635675220866" />
-        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_hour_temp.xml" value="0.16666666666666666" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_hour_temp.xml" value="0.6" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_layout_hot_city.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_layout_normal.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/item_licenses.xml" value="0.22103463018383926" />
