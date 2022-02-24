@@ -38,13 +38,13 @@ object PersistenceModule {
     @Singleton
     fun provideCityDao(appDatabase: AppDatabase) = appDatabase.cityDao()
 
-
     @Provides
     @Singleton
     fun provideCityBeans(application: Application): List<Province> {
         val moshi = Moshi.Builder().build()
         val listOfCardsType = Types.newParameterizedType(
-            List::class.java, Province::class.java)
+            List::class.java, Province::class.java
+        )
 
         val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
 
@@ -84,5 +84,4 @@ object PersistenceModule {
         }
         return sb.toString()
     }
-
 }

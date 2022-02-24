@@ -17,14 +17,12 @@ import me.spica.weather.R
 import me.spica.weather.tools.dp
 import timber.log.Timber
 
-
 // 日出view
 
 private const val sunRiseTitle = "日出"
 private const val sunFallTitle = "日落"
 
 class SunriseView : View {
-
 
     /**
      * 太阳图标[0]
@@ -39,7 +37,7 @@ class SunriseView : View {
 
     private val iconSize = 24.dp
 
-    //=========各个文本的bound========
+    // =========各个文本的bound========
 
     private val boundSunRise = Rect()
 
@@ -49,8 +47,7 @@ class SunriseView : View {
 
     private val boundSunFallTime = Rect()
 
-    //=========各个文本的bound========
-
+    // =========各个文本的bound========
 
     // 绘制日出日落的Paint
     private val statePaint = TextPaint(Paint.FAKE_BOLD_TEXT_FLAG).apply {
@@ -64,20 +61,18 @@ class SunriseView : View {
         color = context.getColor(R.color.textColorPrimary)
     }
 
-
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
         strokeWidth = 2.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
     }
 
-    //是否绘制
+    // 是否绘制
     private var isDraw = false
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     private val roundPath = RectF()
 
@@ -105,7 +100,6 @@ class SunriseView : View {
         }
 
         invalidate()
-
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -120,26 +114,17 @@ class SunriseView : View {
             false,
             dottedLinePaint
         )
-
     }
-
 
     // 绘制半圆曲线
     private fun drawDottedLine() {
-
     }
-
 
     // 绘制进度曲线
     private fun drawProgressLine() {
-
     }
-
 
     // 绘制太阳坐标
     private fun drawSunnyIcon() {
-
     }
-
-
 }

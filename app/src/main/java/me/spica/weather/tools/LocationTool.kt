@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat
 
 class LocationTool {
 
-
     // 检查权限
     fun Context.hasPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
@@ -18,5 +17,4 @@ class LocationTool {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
-
 }

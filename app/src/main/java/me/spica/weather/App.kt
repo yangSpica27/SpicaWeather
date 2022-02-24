@@ -10,7 +10,6 @@ import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-
 @HiltAndroidApp
 class App : Application() {
 
@@ -40,8 +39,8 @@ class App : Application() {
                     if (e is SecurityException) {
                         Timber.tag("SecurityException").w(e)
                     } else if (stack.contains("Toast") ||
-                        stack.contains("SFEffectsAPI")
-                        || stack.contains("BadTokenException")
+                        stack.contains("SFEffectsAPI") ||
+                        stack.contains("BadTokenException")
                     ) {
                         Timber.tag("warning!").w(e.message!!)
                     } else {

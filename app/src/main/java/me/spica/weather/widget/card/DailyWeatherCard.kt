@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
@@ -25,7 +24,6 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     override var enterAnim: MutableList<Animator> = mutableListOf(
         ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
@@ -46,7 +44,6 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
         binding.rvWeather.adapter = dailyWeatherAdapter
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     fun bindData(items: List<DailyWeatherBean>) {
         dailyWeatherAdapter.items.clear()
@@ -59,10 +56,5 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
                 binding.rvWeather.show()
             }, 100
         )
-
-
     }
-
-
-
 }

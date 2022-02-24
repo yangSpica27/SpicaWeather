@@ -14,12 +14,11 @@ import kotlin.reflect.KProperty
 
 class Preference<T>(
     private val key:
-    String,
+        String,
     private val defaultValue: T
 ) : ReadWriteProperty<Any?, T> {
 
     companion object {
-
     }
 
     private val prefs: MMKV by lazy {
@@ -79,7 +78,6 @@ class Preference<T>(
         prefs.edit().remove(key).apply()
     }
 
-
     @Throws(IOException::class)
     private fun <A> serialize(obj: A): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
@@ -129,7 +127,6 @@ class Preference<T>(
     fun contains(key: String): Boolean {
         return prefs.contains(key)
     }
-
 
     fun getAll(): Map<String, *> {
         return prefs.all

@@ -12,11 +12,9 @@ import me.spica.weather.model.weather.DailyWeatherBean
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>() {
 
     val items = mutableListOf<DailyWeatherBean>()
-
 
     // 格式化
     private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
@@ -48,7 +46,6 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
         return ViewHolder(itemDayWeatherBinding)
     }
 
-
     // 获取最高低期望用于计算折线图对应坐标
     fun syncTempMaxAndMin() {
         sortList.clear()
@@ -63,7 +60,6 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
         }
         maxTempBottom = sortList.last().minTemp
         minTempBottom = sortList.first().minTemp
-
     }
 
     @Suppress("DEPRECATION")
@@ -116,12 +112,8 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
                 holder.itemDayWeatherBinding.itemLineMin.nextValue =
                     items[position + 1].minTemp
             }
-
         }
-
     }
 
     override fun getItemCount(): Int = items.size
-
-
 }

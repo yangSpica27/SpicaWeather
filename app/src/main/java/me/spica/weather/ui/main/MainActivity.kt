@@ -41,13 +41,10 @@ import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
-
     private val viewModel: WeatherViewModel by viewModels()
-
 
     private val locationListener = object : BDAbstractLocationListener() {
         override fun onReceiveLocation(result: BDLocation) {
@@ -59,7 +56,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     @Inject
     lateinit var locationClint: LocationClient
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -85,7 +81,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         )
     }
 
-
     private val errorTip by lazy {
         val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
         sb.setAction("重试") {
@@ -100,7 +95,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
     }
 
-
     private fun initTitle() {
         viewBinding.toolbar.tsLocation.setFactory {
             val textView = TextView(this)
@@ -111,7 +105,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             textView.ellipsize = TextUtils.TruncateAt.END
             textView
         }
-
 
         viewBinding.toolbar.iconMenu.setOnClickListener {
             startActivity(Intent(this, WeatherCityActivity::class.java))
@@ -134,7 +127,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         getLocation()
     }
 
-
     // 获取定位信息
     private fun getLocation() {
         if (hasPermissions()) {
@@ -152,7 +144,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
                 .start()
         }
     }
-
 
     private fun hasPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
@@ -187,7 +178,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
                 }
         }
 
-
         // 请求当日
         lifecycleScope.launch {
             viewModel.nowWeatherFlow.filterNotNull().collectLatest {
@@ -195,11 +185,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
                     doOnMainThreadIdle({
                         viewBinding.nowWeatherCard.bindData(it)
                     })
-
                 }
             }
         }
-
 
         // 载入天气指数数据
         lifecycleScope.launch {
@@ -225,13 +213,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
     }
 
-
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding =
         ActivityMainBinding.inflate(inflater)
-
-
-
-
 
     private val scrollBounds = Rect()
     private fun checkAnim() {
@@ -251,13 +234,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
             viewBinding.containerTips.startEnterAnim()
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         locationClint.unRegisterLocationListener(locationListener)
     }
-
-
 }

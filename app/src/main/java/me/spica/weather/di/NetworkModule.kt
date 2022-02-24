@@ -18,11 +18,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
 
     /**
      * 注入ohHttpClient
@@ -59,7 +57,6 @@ object NetworkModule {
         return HeClient(heService)
     }
 
-
     @Provides
     @Singleton
     fun provideHeRepository(heClient: HeClient): HeRepository {
@@ -72,7 +69,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideBaiduMap(@ApplicationContext context: Context): LocationClient {
-        return LocationClient(context,
+        return LocationClient(
+            context,
             LocationClientOption().apply {
                 setIsNeedAddress(true)
                 setNeedNewVersionRgc(true)
@@ -80,7 +78,7 @@ object NetworkModule {
                 setIgnoreKillProcess(false)
                 setWifiCacheTimeOut(5 * 60 * 1000)
                 locationMode = LocationClientOption.LocationMode.Battery_Saving
-            })
+            }
+        )
     }
-
 }

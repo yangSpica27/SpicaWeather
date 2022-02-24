@@ -27,7 +27,6 @@ class CityRepository @Inject constructor(
         return result
     }
 
-
     suspend fun selected(cityBean: CityBean) = withContext(Dispatchers.IO) {
         cityDao.getAll(true).forEach {
             it.isSelected = false
@@ -37,9 +36,7 @@ class CityRepository @Inject constructor(
         cityDao.update(cityBean)
     }
 
-
     fun deleteCity(cityBean: CityBean) {
         cityDao.deleteCity(cityBean = cityBean)
     }
-
 }

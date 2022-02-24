@@ -14,14 +14,14 @@ class WeatherIconView : View {
 
     constructor(context: Context?) : super(context)
 
-    constructor(context: Context?, attrs: AttributeSet?)
-            : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?) :
+        super(context, attrs)
 
     constructor(
-        context: Context?, attrs: AttributeSet?,
+        context: Context?,
+        attrs: AttributeSet?,
         defStyleAttr: Int
     ) : super(context, attrs, defStyleAttr)
-
 
     fun setTypeAndDraw(weatherType: WeatherType) {
         drawDelegate?.stopDraw()
@@ -37,16 +37,12 @@ class WeatherIconView : View {
 
         // 绘制
         fun onDraw(canvas: Canvas) {
-
         }
 
         //  初始化
         fun init(context: Context, view: View)
 
-
         // 停止绘制
         fun stopDraw()
-
     }
-
 }

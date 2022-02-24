@@ -45,9 +45,8 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         alpha = 0f
     }
 
-    //12:00
+    // 12:00
     private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
-
 
     @SuppressLint("SetTextI18n")
     fun bindData(nowWeatherBean: NowWeatherBean) {
@@ -69,8 +68,5 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"
         binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"
         binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"
-
-
     }
-
 }

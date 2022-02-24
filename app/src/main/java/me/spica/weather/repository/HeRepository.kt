@@ -16,7 +16,6 @@ import me.spica.weather.network.hefeng.mapper.SuccessLifeIndexWeatherMapper
 import me.spica.weather.network.hefeng.mapper.SuccessNowWeatherMapper
 import timber.log.Timber
 
-
 /**
  * 和风天气源的Repository封装
  */
@@ -41,7 +40,6 @@ class HeRepository(private val heClient: HeClient) : Repository {
         }.suspendOnError {
             onError(message())
         }
-
     }.onStart {
         onStart()
     }.onCompletion {
@@ -69,13 +67,11 @@ class HeRepository(private val heClient: HeClient) : Repository {
             Timber.e(message())
             onError(message())
         }
-
     }.onStart {
         onStart()
     }.onCompletion {
         onComplete()
     }.flowOn(Dispatchers.IO)
-
 
     override fun fetchDailyWeather(
         lon: String,
@@ -98,7 +94,6 @@ class HeRepository(private val heClient: HeClient) : Repository {
             Timber.e(message())
             onError(message())
         }
-
     }.onStart {
         onStart()
     }.onCompletion {
@@ -106,7 +101,8 @@ class HeRepository(private val heClient: HeClient) : Repository {
     }.flowOn(Dispatchers.IO)
 
     override fun fetchTodayLifeIndex(
-        lon: String, lat: String,
+        lon: String,
+        lat: String,
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
@@ -125,12 +121,9 @@ class HeRepository(private val heClient: HeClient) : Repository {
             Timber.e(message())
             onError(message())
         }
-
     }.onStart {
         onStart()
     }.onCompletion {
         onComplete()
     }.flowOn(Dispatchers.IO)
-
-
 }

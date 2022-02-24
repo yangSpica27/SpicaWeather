@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
@@ -28,13 +27,12 @@ class RainImageView : AppCompatImageView {
 
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.water_color)
-        textSize =10.dp
+        textSize = 10.dp
     }
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     override fun onDrawForeground(canvas: Canvas) {
         super.onDrawForeground(canvas)
@@ -43,8 +41,7 @@ class RainImageView : AppCompatImageView {
             canvas.drawText(
                 text,
                 width - textBound.width() * 1f,
-                textBound.height() * 1f+height/3f
-                , textPaint
+                textBound.height() * 1f + height / 3f, textPaint
             )
         }
     }

@@ -2,10 +2,8 @@ package me.spica.weather.common
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import me.spica.weather.R
-import timber.log.Timber
 
 enum class WeatherType {
     WEATHER_CLEAR,
@@ -21,12 +19,11 @@ enum class WeatherType {
     WEATHER_THUNDERSTORM
 }
 
-
 // 拓展方法 用于获取对应类型的图标
 @DrawableRes
 fun WeatherType.getIconRes(): Int {
 
-   return when (this) {
+    return when (this) {
         WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
         WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
         WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
@@ -41,10 +38,9 @@ fun WeatherType.getIconRes(): Int {
     }
 }
 
-
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
-   return when(this){
+    return when (this) {
         WeatherType.WEATHER_CLOUDY
         -> Color.rgb(96, 121, 136)
         WeatherType.WEATHER_CLOUD -> Color.rgb(0, 165, 217)

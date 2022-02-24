@@ -2,9 +2,7 @@ package me.spica.weather.tools
 
 import android.graphics.Color
 
-
 object IndicesUtils {
-
 
 //    private val levelColor3 = arrayListOf(
 //        R.color.l2,
@@ -65,6 +63,4 @@ object IndicesUtils {
     fun getColorRes(type: String, level: Int): Int {
         return Color.BLACK
     }
-
-
 }

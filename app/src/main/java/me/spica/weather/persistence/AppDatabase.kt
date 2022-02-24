@@ -9,5 +9,4 @@ import me.spica.weather.persistence.dao.CityDao
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cityDao(): CityDao
-
 }

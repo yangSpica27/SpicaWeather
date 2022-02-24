@@ -20,11 +20,9 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
 
     private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
 
-
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     init {
         alpha = 0f
@@ -35,7 +33,6 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
             .addTo(binding.rvTip)
         binding.rvTip.adapter = tipAdapter
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun bindData(items: List<LifeIndexBean>) {
@@ -56,6 +53,4 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
             interpolator = FastOutSlowInInterpolator()
         }
     )
-
-
 }

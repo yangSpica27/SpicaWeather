@@ -24,5 +24,4 @@ class LicenceAdapter : RecyclerView.Adapter<LicenceAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int = items.size
-
 }

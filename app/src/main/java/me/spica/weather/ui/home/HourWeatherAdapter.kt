@@ -12,7 +12,6 @@ import me.spica.weather.model.weather.HourlyWeatherBean
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>() {
 
     val items = mutableListOf<HourlyWeatherBean>()
@@ -22,7 +21,6 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
     // 用于排序的列表
     private val sortItems = mutableListOf<HourlyWeatherBean>()
-
 
     class ViewHolder(val itemHourTempBinding: ItemHourTempBinding) :
         RecyclerView.ViewHolder(itemHourTempBinding.root)
@@ -40,10 +38,6 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
     // 最低温度
     private var minTemp = 0
 
-
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemHourTempBinding = ItemHourTempBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -58,16 +52,12 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
         }
         maxTemp = sortItems.last().temp
         minTemp = sortItems.first().temp
-
-
-
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         items[position].let {
-
 
             holder.itemHourTempBinding.tvTime.text = sdfAfter.format(it.fxTime)
             if (divisionDate.time.before(it.fxTime)) {
@@ -83,11 +73,8 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp
             holder.itemHourTempBinding.itemLine.minValue = minTemp
 
-
-
             if (position == 0) {
                 holder.itemHourTempBinding.itemLine.drawLeftLine = false
-
             } else {
 
                 holder.itemHourTempBinding.itemLine.drawLeftLine = true
@@ -108,7 +95,6 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
                 holder.itemHourTempBinding.itemLine.nextValue =
                     items[position + 1].temp
             }
-
         }
     }
 

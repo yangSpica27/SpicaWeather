@@ -14,7 +14,6 @@ import me.spica.weather.model.weather.NowWeatherBean
 import me.spica.weather.repository.HeRepository
 import javax.inject.Inject
 
-
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val repository: HeRepository
@@ -23,10 +22,8 @@ class WeatherViewModel @Inject constructor(
     // 错误信息
     private val errorMessage = MutableStateFlow("")
 
-
     // 经度 纬度
     val cityFlow: MutableStateFlow<CityBean?> = MutableStateFlow(null)
-
 
     // 即时天气
     val nowWeatherFlow: Flow<NowWeatherBean> =
@@ -42,7 +39,6 @@ class WeatherViewModel @Inject constructor(
                     onComplete = {}
                 )
             }
-
 
     val dailyWeatherFlow: Flow<List<DailyWeatherBean>> =
         cityFlow.filterNotNull().flatMapLatest {
@@ -70,7 +66,6 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
-
     val currentIndices: Flow<List<LifeIndexBean>> =
         cityFlow
             .filterNotNull()
@@ -85,10 +80,7 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
-
     fun changedCity(cityBean: CityBean) {
         cityFlow.value = cityBean
     }
-
-
 }

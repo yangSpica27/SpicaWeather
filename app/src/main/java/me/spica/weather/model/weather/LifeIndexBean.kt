@@ -5,14 +5,13 @@ import androidx.annotation.DrawableRes
 import me.spica.weather.R
 import me.spica.weather.tools.IndicesUtils
 
-
 data class LifeIndexBean(
     val type: Int, // 类型
-    val name: String,// 指数名称
-    val category: String,// 指数级别说明
+    val name: String, // 指数名称
+    val category: String, // 指数级别说明
     val text: String, // 说明
     @ColorRes val color: Int,
-    @DrawableRes val iconRes:Int
+    @DrawableRes val iconRes: Int
 ) {
 
     companion object {

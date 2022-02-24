@@ -31,7 +31,8 @@ data class ActivityViewHolder(
             return ActivityViewHolder(
                 nonResizableLayout = decorView,
                 resizableLayout = resizableLayout,
-                contentView = contentView)
+                contentView = contentView
+            )
         }
     }
 

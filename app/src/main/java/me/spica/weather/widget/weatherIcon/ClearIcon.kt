@@ -9,14 +9,9 @@ import android.view.View
 @Suppress("unused")
 class ClearIcon : WeatherIconView.DrawDelegate {
 
-
     override fun init(context: Context, view: View) {
-
     }
 
     override fun stopDraw() {
-
     }
-
-
 }

@@ -12,13 +12,11 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.persistence.repository.CityRepository
 import javax.inject.Inject
 
-
 @HiltViewModel
 class CityViewModel @Inject
 constructor(private val cityRepository: CityRepository) : ViewModel() {
 
-
-     val allCityFlow = cityRepository.allCityFlow()
+    val allCityFlow = cityRepository.allCityFlow()
 
     private val _tips = MutableStateFlow("")
 
@@ -30,15 +28,11 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
         }
     }
 
-
     fun addCity(cityBean: CityBean) {
         viewModelScope.launch(Dispatchers.IO) {
             _tips.value = cityRepository.addCity(cityBean)
         }
     }
 
-
     fun deleteItem(cityBean: CityBean) = cityRepository.deleteCity(cityBean)
-
-
 }

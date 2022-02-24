@@ -3,22 +3,19 @@ package me.spica.weather.model.weather
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 
-
 data class DailyWeatherBean(
-    val fxTime: Date = Date(),// 更新时间
-    val maxTemp: Int,// 当日最高的温度
-    val minTemp: Int,// 当日最低的温度
-    val iconId: Int,// 图标
+    val fxTime: Date = Date(), // 更新时间
+    val maxTemp: Int, // 当日最高的温度
+    val minTemp: Int, // 当日最低的温度
+    val iconId: Int, // 图标
     val windSpeed: Int, // 风速
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherName: String,
-    val precip: Int,// 降水量
+    val precip: Int, // 降水量
 )
-
 
 fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeatherBean {
     return DailyWeatherBean(

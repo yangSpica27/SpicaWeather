@@ -1,7 +1,6 @@
 package me.spica.weather.ui.about
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import com.fondesa.recyclerviewdivider.dividerBuilder
@@ -10,7 +9,6 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityAboutMeBinding
 import me.spica.weather.tools.dp
-
 
 /**
  * 关于我
@@ -34,7 +32,6 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
         viewBinding.rvLicence.adapter = adapter
         initData()
         viewBinding.tvVersionCode.text = BuildConfig.VERSION_NAME
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -75,5 +72,5 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
     }
 
     override fun setupViewBinding(inflater: LayoutInflater):
-            ActivityAboutMeBinding = ActivityAboutMeBinding.inflate(inflater)
+        ActivityAboutMeBinding = ActivityAboutMeBinding.inflate(inflater)
 }

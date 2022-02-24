@@ -19,14 +19,11 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-
     private val binding = CardHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
-
 
     private val hourWeatherAdapter by lazy {
         HourWeatherAdapter()
     }
-
 
     override var enterAnim: MutableList<Animator> = mutableListOf(
         ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
@@ -46,7 +43,6 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
         binding.rvHourWeather.adapter = hourWeatherAdapter
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     fun bindData(items: List<HourlyWeatherBean>) {
         hourWeatherAdapter.items.clear()
@@ -60,6 +56,4 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
             }, 100
         )
     }
-
-
 }

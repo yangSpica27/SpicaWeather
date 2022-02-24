@@ -12,7 +12,6 @@ import retrofit2.http.Query
 @Suppress("unused")
 interface HeService {
 
-
     /**
      * 获取当前的天气
      */
@@ -24,7 +23,6 @@ interface HeService {
         key: String = BuildConfig.HE_WEB_KEY
     ): ApiResponse<NowWeather>
 
-
     /**
      * 获取一周内的天气
      */
@@ -35,7 +33,6 @@ interface HeService {
         @Query("key")
         key: String = BuildConfig.HE_WEB_KEY
     ): ApiResponse<DailyWeather>
-
 
     /**
      * 获取24h内的天气
@@ -60,6 +57,4 @@ interface HeService {
         @Query("key")
         key: String = BuildConfig.HE_WEB_KEY
     ): ApiResponse<LifeIndex>
-
-
 }

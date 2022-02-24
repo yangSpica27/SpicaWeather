@@ -60,14 +60,11 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
             }
             cityAdapter.diffUtil.submitList(rvItems.toList())
         }
-
     }
-
 
     override fun initializer() {
         init()
     }
-
 
     private fun init() {
 
@@ -101,7 +98,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
             }
         }
 
-
         // 添加数据
         lifecycleScope.launch {
             cityList.clear()
@@ -111,7 +107,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
                     CityBean(
                         cityName = it.name,
                         sortName = PinyinHelper.convertToPinyinString
-                            (it.name, "", PinyinFormat.WITHOUT_TONE),
+                        (it.name, "", PinyinFormat.WITHOUT_TONE),
                         lon = it.log,
                         lat = it.lat
                     )
@@ -126,7 +122,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
                         CityBean(
                             cityName = city.name,
                             sortName = PinyinHelper.convertToPinyinString
-                                (city.name, "", PinyinFormat.WITHOUT_TONE),
+                            (city.name, "", PinyinFormat.WITHOUT_TONE),
                             lon = city.log,
                             lat = city.lat
                         )
@@ -138,27 +134,20 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
                 it.sortName
             }
 
-
-
-            rvItems.addAll(cityList.filter {
-                it.cityName.isNotEmpty()
-            })
-
-
-
+            rvItems.addAll(
+                cityList.filter {
+                    it.cityName.isNotEmpty()
+                }
+            )
 
             doOnMainThreadIdle({
                 cityAdapter.diffUtil.submitList(rvItems.toList())
                 viewBinding.rvList.scheduleLayoutAnimation()
                 viewBinding.etCityName.isEnabled = true
             })
-
         }
-
     }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding =
         ActivityCitySelectBinding.inflate(inflater)
-
-
 }

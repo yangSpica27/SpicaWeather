@@ -7,10 +7,8 @@ import android.view.View
 @Suppress("unused")
 class CloudIcon : WeatherIconView.DrawDelegate {
     override fun init(context: Context, view: View) {
-
     }
 
     override fun stopDraw() {
-
     }
 }

@@ -5,7 +5,6 @@ import me.spica.weather.R
 
 object WeatherCodeUtils {
 
-
     fun getWeatherCode(type: String): WeatherType {
         when (type) {
 
@@ -52,16 +51,10 @@ object WeatherCodeUtils {
             "302", "304" -> {
                 WeatherType.WEATHER_THUNDERSTORM
             }
-
-
         }
 
         return WeatherType.WEATHER_CLEAR
     }
-
-
-
-
 
     @DrawableRes
     fun getWeatherIcon(weatherType: WeatherType): Int {
@@ -79,6 +72,4 @@ object WeatherCodeUtils {
             WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
         }
     }
-
-
 }

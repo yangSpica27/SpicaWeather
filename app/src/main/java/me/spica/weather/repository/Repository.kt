@@ -7,7 +7,6 @@ import me.spica.weather.model.weather.NowWeatherBean
 
 interface Repository {
 
-
     // 获取当日天气
     fun fetchNowWeather(
         lon: String,
@@ -17,7 +16,6 @@ interface Repository {
         onError: (String?) -> Unit,
         onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<NowWeatherBean>
-
 
     // 获取近几小时的天气
     fun fetchHourlyWeather(
@@ -29,7 +27,6 @@ interface Repository {
         onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<HourlyWeatherBean>>
 
-
     // 获取近几天的天气
     fun fetchDailyWeather(
         lon: String,
@@ -40,7 +37,6 @@ interface Repository {
         onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<DailyWeatherBean>>
 
-
     // 获取今天的生活指数
     fun fetchTodayLifeIndex(
         lon: String,
@@ -50,6 +46,4 @@ interface Repository {
         onError: (String?) -> Unit,
         onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<LifeIndexBean>>
-
-
 }

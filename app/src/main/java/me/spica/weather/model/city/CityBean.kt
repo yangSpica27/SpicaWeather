@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
-
 @Entity(tableName = "t_city")
 data class CityBean(
     @PrimaryKey(autoGenerate = false)
@@ -14,7 +13,6 @@ data class CityBean(
     var lat: String, // 纬度
     var isSelected: Boolean = false,
 ) {
-
 
     @Ignore
     val sortId: String = if (sortName.isNotEmpty()) {

@@ -20,18 +20,16 @@ import me.spica.weather.ui.main.MainActivity
  */
 class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherCityAdapter.ViewHolder>() {
 
-
-    val diffUtil = AsyncListDiffer(this,
+    val diffUtil = AsyncListDiffer(
+        this,
         object : DiffUtil.ItemCallback<CityBean>() {
             override fun areItemsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.cityName == newItem.cityName
             override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = true
-        })
-
+        }
+    )
 
     class ViewHolder(val itemBinding: ItemWeatherCityBinding) :
-        RecyclerView.ViewHolder(itemBinding.root) {
-
-    }
+        RecyclerView.ViewHolder(itemBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding = ItemWeatherCityBinding.inflate(LayoutInflater.from(parent.context), parent, false)

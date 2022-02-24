@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
 
-
 class BottomBgView : View {
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -25,14 +24,12 @@ class BottomBgView : View {
         strokeJoin = Paint.Join.ROUND
     }
 
-
     private val arcPaint = Paint().apply {
         strokeWidth = 1.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.line_divider)
         maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.SOLID)
     }
-
 
     private var path = Path()
 
@@ -53,7 +50,6 @@ class BottomBgView : View {
 
         path.lineTo(w - 20.dp - 56.dp - 12.dp, 0F)
 
-
         path.addArc(
             width - 20.dp - 56.dp - 12.dp,
             -(height.toFloat() - 14.dp),
@@ -63,7 +59,6 @@ class BottomBgView : View {
             -180F
         )
 
-
         path.lineTo(w.toFloat(), 0F)
         path.lineTo(w.toFloat(), height.toFloat())
         path.lineTo(0F, height.toFloat())
@@ -71,8 +66,6 @@ class BottomBgView : View {
         path.lineTo(0F, 0F)
 
         path.close()
-
-
     }
 
     override fun onDraw(canvas: Canvas) {

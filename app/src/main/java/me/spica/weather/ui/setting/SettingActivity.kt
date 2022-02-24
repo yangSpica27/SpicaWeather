@@ -7,7 +7,6 @@ import me.spica.weather.databinding.ActivitySettingBinding
 class SettingActivity : BindingActivity<ActivitySettingBinding>() {
 
     override fun initializer() {
-
     }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivitySettingBinding =

@@ -37,7 +37,7 @@ class MinTempLineItem : View {
 //            Color.TRANSPARENT,
 //            Shader.TileMode.CLAMP
 //        )
-        color = ContextCompat.getColor(context,R.color.pathBgColor)
+        color = ContextCompat.getColor(context, R.color.pathBgColor)
         style = Paint.Style.FILL
     }
 
@@ -69,24 +69,21 @@ class MinTempLineItem : View {
     private var pointX = 0F // 所有点的x坐标
     private var pointY = 0F // 当前点的Y
 
-    var drawLeftLine = true //是否画左边的线
+    var drawLeftLine = true // 是否画左边的线
 
-    var drawRightLine = true //是否画右边的线
+    var drawRightLine = true // 是否画右边的线
 
     private val tempName: String
         get() = "$currentValue℃"
-
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         initViewValue()
     }
-
 
     private fun initViewValue() {
         viewHeight = measuredHeight
@@ -100,28 +97,24 @@ class MinTempLineItem : View {
         super.onDraw(canvas)
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+            (pointBottomY - pointTopY)
         drawDottedLine(canvas)
         drawGraph(canvas)
         drawPoint(canvas)
         drawValue(canvas)
     }
 
-
     private val textRect = Rect()
 
     // 绘制数字
     private fun drawValue(canvas: Canvas) {
 
-
         textPaint.getTextBounds(tempName, 0, tempName.length, textRect)
-
 
         val baseLine1 = pointY + textRect.height() * 2 + 2.dp
 
         canvas.drawText("$currentValue℃", viewWidth / 2F, baseLine1, textPaint)
     }
-
 
     private var pathLeft = Path()
 
@@ -142,23 +135,19 @@ class MinTempLineItem : View {
 
         linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
 
-
-
-
         Timber.i("======================")
-
 
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
-                    (pointBottomY - pointTopY)
+                (pointBottomY - pointTopY)
 
             pathLeft = Path()
 
             pathLeft.moveTo(pointX, pointY)
 
-            pathLeft.lineTo(pointX,0F)
+            pathLeft.lineTo(pointX, 0F)
 
-            pathLeft.lineTo(0F,0F)
+            pathLeft.lineTo(0F, 0F)
 
             pathLeft.lineTo(0F, (lastPointY + pointY) / 2F)
 
@@ -176,24 +165,24 @@ class MinTempLineItem : View {
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
-            Timber.i("lastP${lastPointY}")
+            Timber.i("lastP$lastPointY")
         }
 
-        Timber.i("currentP${pointY}")
+        Timber.i("currentP$pointY")
 
         if (drawRightLine) {
 
             val nextPointY = pointBottomY -
-                    ((nextValue * 1f - minValue) / (maxValue - minValue)) *
-                    (pointBottomY - pointTopY)
+                ((nextValue * 1f - minValue) / (maxValue - minValue)) *
+                (pointBottomY - pointTopY)
 
             // 绘制背景
 
             pathRight = Path()
-            pathRight.moveTo(pointX,pointY)
-            pathRight.lineTo(pointX,0F)
-            pathRight.lineTo(viewWidth.toFloat(),0F)
-            pathRight.lineTo(viewWidth.toFloat(),(pointY + nextPointY) / 2F)
+            pathRight.moveTo(pointX, pointY)
+            pathRight.lineTo(pointX, 0F)
+            pathRight.lineTo(viewWidth.toFloat(), 0F)
+            pathRight.lineTo(viewWidth.toFloat(), (pointY + nextPointY) / 2F)
 
             canvas.drawPath(
                 pathRight,
@@ -208,12 +197,11 @@ class MinTempLineItem : View {
                 linePaint
             )
 
-            Timber.i("lastP${nextPointY}")
+            Timber.i("lastP$nextPointY")
         }
 
         Timber.i("======================")
     }
-
 
     private fun drawDottedLine(canvas: Canvas) {
         canvas.drawLine(
@@ -224,7 +212,6 @@ class MinTempLineItem : View {
             dottedLinePaint
         )
     }
-
 
     // 画点
     private fun drawPoint(canvas: Canvas) {

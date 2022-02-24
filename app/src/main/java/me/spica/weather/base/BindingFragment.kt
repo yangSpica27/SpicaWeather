@@ -14,11 +14,11 @@ import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(),
+abstract class BindingFragment<ViewBindingType : ViewBinding> :
+    Fragment(),
     LifecycleEventObserver {
 
     private var isFirstLoad = true
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,16 +42,12 @@ abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(),
 
     abstract fun init()
 
-
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
 
         if (event == Lifecycle.Event.ON_DESTROY) {
             viewLifecycleOwner.lifecycle.removeObserver(this)
         }
-
-
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,8 +70,4 @@ abstract class BindingFragment<ViewBindingType : ViewBinding> : Fragment(),
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-
 }

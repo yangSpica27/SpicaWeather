@@ -147,9 +147,7 @@ fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = thi
 
 fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(textId, duration) }
 
-
 fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
-
 
 fun Context.getCompatDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
 
@@ -163,7 +161,6 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId:
     val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
     ContextCompat.startActivity(this, intent, bundle)
 }
-
 
 inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0, intentBody: Intent.() -> Unit) {
     val intent = Intent(this, T::class.java)
@@ -186,7 +183,6 @@ val Int.dp: Float
         Resources.getSystem().displayMetrics
     )
 
-
 fun View.show() {
     this.visibility = View.VISIBLE
 }
@@ -195,38 +191,35 @@ fun View.hide() {
     this.visibility = View.GONE
 }
 
-
 fun AppCompatActivity.addNewFragment(
-    new_add_fragment: Fragment, container_view_id: Int,
+    new_add_fragment: Fragment,
+    container_view_id: Int,
     need_back_from_stack: Boolean = false
 ) {
 
     val transaction = this.supportFragmentManager.beginTransaction()
 
-    transaction.add(container_view_id, new_add_fragment)       //新加
-    transaction.show(new_add_fragment)                         //显示
+    transaction.add(container_view_id, new_add_fragment) // 新加
+    transaction.show(new_add_fragment) // 显示
 
     if (need_back_from_stack) {
-        transaction.addToBackStack(null)                   //加入回退栈。                   //TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
+        transaction.addToBackStack(null) // 加入回退栈。                   //TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
     }
-    transaction.commit()//最终提交。
+    transaction.commit() // 最终提交。
 }
-
 
 fun AppCompatActivity.showOldFragment(
     show_old_fragment: Fragment,
     hide_fragment_list:
-    List<Fragment> = listOf()
+        List<Fragment> = listOf()
 ) {
 
     val transaction = this.supportFragmentManager.beginTransaction()
 
     hide_fragment_list.forEach {
-        transaction.hide(it)                                                                        //隐藏
+        transaction.hide(it) // 隐藏
     }
-    transaction.show(show_old_fragment)                                                             //显示
+    transaction.show(show_old_fragment) // 显示
 
-    transaction.commit()                                                                            //提交
-
+    transaction.commit() // 提交
 }
-

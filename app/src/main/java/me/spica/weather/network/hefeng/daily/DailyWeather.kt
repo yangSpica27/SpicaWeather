@@ -1,6 +1,5 @@
 package me.spica.weather.network.hefeng.daily
 
-
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

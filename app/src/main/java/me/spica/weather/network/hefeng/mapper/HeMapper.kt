@@ -20,7 +20,7 @@ object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<Dail
 
     @Throws(RuntimeException::class)
     override fun map(apiErrorResponse: ApiResponse.Success<DailyWeather>):
-            List<DailyWeatherBean> {
+        List<DailyWeatherBean> {
 
         if (apiErrorResponse.data.code == HeCode.Ok.code) {
             return apiErrorResponse.data.daily.map {
@@ -32,11 +32,10 @@ object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<Dail
     }
 }
 
-
 object SuccessNowWeatherMapper : ApiSuccessModelMapper<NowWeather, NowWeatherBean> {
     @Throws(RuntimeException::class)
     override fun map(apiErrorResponse: ApiResponse.Success<NowWeather>):
-            NowWeatherBean {
+        NowWeatherBean {
 
         if (apiErrorResponse.data.code == HeCode.Ok.code) {
             return apiErrorResponse.data.now.toNowWeatherBean()
@@ -50,7 +49,7 @@ object SuccessHourlyWeatherMapper : ApiSuccessModelMapper<HourlyWeather, List<Ho
 
     @Throws(RuntimeException::class)
     override fun map(apiErrorResponse: ApiResponse.Success<HourlyWeather>):
-            List<HourlyWeatherBean> {
+        List<HourlyWeatherBean> {
 
         if (apiErrorResponse.data.code == HeCode.Ok.code) {
             return apiErrorResponse.data.hourly.map {
@@ -62,12 +61,11 @@ object SuccessHourlyWeatherMapper : ApiSuccessModelMapper<HourlyWeather, List<Ho
     }
 }
 
-
 object SuccessLifeIndexWeatherMapper : ApiSuccessModelMapper<LifeIndex, List<LifeIndexBean>> {
 
     @Throws(RuntimeException::class)
     override fun map(apiErrorResponse: ApiResponse.Success<LifeIndex>):
-            List<LifeIndexBean> {
+        List<LifeIndexBean> {
 
         if (apiErrorResponse.data.code == HeCode.Ok.code) {
             return apiErrorResponse.data.daily.map {

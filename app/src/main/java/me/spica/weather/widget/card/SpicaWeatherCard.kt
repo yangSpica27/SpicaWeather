@@ -5,9 +5,7 @@ import androidx.core.animation.doOnEnd
 
 interface SpicaWeatherCard {
 
-
     var enterAnim: MutableList<Animator>
-
 
     fun startEnterAnim() {
         enterAnim.forEach {
@@ -21,5 +19,4 @@ interface SpicaWeatherCard {
     }
 
     fun resetAnim() = Unit
-
 }
