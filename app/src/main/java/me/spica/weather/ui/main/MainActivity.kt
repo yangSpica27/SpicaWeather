@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
-import com.baidu.location.LocationClientOption
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -39,11 +36,10 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
-import me.spica.weather.tools.toast
 import me.spica.weather.ui.about.AboutActivity
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
-import timber.log.Timber
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -52,16 +48,18 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     private val viewModel: WeatherViewModel by viewModels()
 
-    private var locationClint: LocationClient? = null
 
-
-    private val locationListener = object :BDAbstractLocationListener(){
+    private val locationListener = object : BDAbstractLocationListener() {
         override fun onReceiveLocation(result: BDLocation) {
-            Timber.i("BDMAP:${result.locType}")
-            toast(result.city)
+            if (result.hasAddr()) {
+//                changeCityTip.setText("检查到当前位置在${result.city},是否切换").show()
+            }
         }
-
     }
+
+    @Inject
+    lateinit var locationClint: LocationClient
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -91,6 +89,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
     private val errorTip by lazy {
         val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
         sb.setAction("重试") {
+            sb.dismiss()
+        }
+    }
+
+    private val changeCityTip by lazy {
+        val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
+        sb.setAction("切换") {
             sb.dismiss()
         }
     }
@@ -126,34 +131,20 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         initView()
         initTitle()
         viewModel.changedCity(currentCity)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
         getLocation()
     }
 
 
+    // 获取定位信息
     private fun getLocation() {
         if (hasPermissions()) {
-
-            if (locationClint == null) {
-                locationClint = LocationClient(this)
-                locationClint?.locOption = LocationClientOption().apply {
-                    setIsNeedAddress(true)
-                    setNeedNewVersionRgc(true)
-                    locationMode = LocationClientOption.LocationMode.Battery_Saving
-                }
-                locationClint?.registerLocationListener(locationListener)
-                locationClint?.start()
-            }
-
+            // 定位
+            locationClint.registerLocationListener(locationListener)
+            locationClint.start()
         } else {
+            // 无权限则请求权限
             AndPermission.with(this)
                 .runtime()
-                .permission(Permission.ACCESS_FINE_LOCATION)
-                .permission(Permission.ACCESS_COARSE_LOCATION)
                 .permission(Permission.Group.LOCATION)
                 .onGranted {
                     getLocation()
@@ -239,17 +230,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         ActivityMainBinding.inflate(inflater)
 
 
-    /**
-     * 启动应用的设置
-     *
-     */
-    private fun startAppSettings() {
-        val intent = Intent(
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        )
-        intent.data = Uri.parse("package:$packageName")
-        startActivity(intent)
-    }
+
 
 
     private val scrollBounds = Rect()
@@ -271,6 +252,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             viewBinding.containerTips.startEnterAnim()
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationClint.unRegisterLocationListener(locationListener)
     }
 
 

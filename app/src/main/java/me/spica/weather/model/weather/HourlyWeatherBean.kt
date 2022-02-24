@@ -1,9 +1,7 @@
 package me.spica.weather.model.weather
 
-import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
 
 private val sdf = SimpleDateFormat(
@@ -22,7 +20,7 @@ data class HourlyWeatherBean(
     val pop:Int,// 降雨概率
 )
 
-fun WeatherHourlyBean.HourlyBean.toHourlyWeatherBean(): HourlyWeatherBean {
+fun me.spica.weather.network.hefeng.hourly.Hourly.toHourlyWeatherBean(): HourlyWeatherBean {
     return HourlyWeatherBean(
         fxTime = sdf.parse(fxTime) ?: Date(),
         temp = temp.toIntOrNull() ?: 0,

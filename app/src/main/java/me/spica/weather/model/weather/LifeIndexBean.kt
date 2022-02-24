@@ -2,8 +2,6 @@ package me.spica.weather.model.weather
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import com.qweather.sdk.bean.IndicesBean
-import com.qweather.sdk.bean.base.IndicesType
 import me.spica.weather.R
 import me.spica.weather.tools.IndicesUtils
 
@@ -31,9 +29,9 @@ data class LifeIndexBean(
  * 穿衣，运动，空气，洗车
  */
 
-fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
+fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean {
     when (type) {
-        IndicesType.SPT.code -> {
+        "1" -> {
             return LifeIndexBean(
                 LifeIndexBean.SPT,
                 "运动指数",
@@ -43,7 +41,7 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 R.drawable.ic_spt
             )
         }
-        IndicesType.DRSG.code -> {
+        "3" -> {
             return LifeIndexBean(
                 LifeIndexBean.CLOTHES,
                 "穿衣指数",
@@ -53,7 +51,7 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 R.drawable.ic_clothes
             )
         }
-        IndicesType.AP.code -> {
+        "10" -> {
             return LifeIndexBean(
                 LifeIndexBean.AIR,
                 "空气污染指数",
@@ -63,7 +61,7 @@ fun IndicesBean.DailyBean.toLifeIndexBean(): LifeIndexBean {
                 R.drawable.ic_air_index
             )
         }
-        IndicesType.CW.code -> {
+        "2" -> {
             return LifeIndexBean(
                 LifeIndexBean.CAR,
                 "洗车指数",

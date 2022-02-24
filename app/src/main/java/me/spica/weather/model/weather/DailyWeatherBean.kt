@@ -1,6 +1,5 @@
 package me.spica.weather.model.weather
 
-import com.qweather.sdk.bean.weather.WeatherDailyBean
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +20,7 @@ data class DailyWeatherBean(
 )
 
 
-fun WeatherDailyBean.DailyBean.toDailyWeatherBean(): DailyWeatherBean {
+fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeatherBean {
     return DailyWeatherBean(
         fxTime = sdf.parse(fxDate) ?: Date(),
         maxTemp = tempMax.toIntOrNull() ?: 0,

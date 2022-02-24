@@ -50,7 +50,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="9fokNjwZ20sOccj7GXblgLHEWagrebQr"></meta-data>
+            android:value="9fokNjwZ20sOccj7GXblgLHEZagrebQr" />
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -59,16 +59,22 @@
             android:exported="true"
             android:launchMode="singleTask"
             tools:ignore="LockedOrientationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.city.WeatherCityActivity" />
         <activity android:name=".ui.city.CitySelectActivity" />
-        <activity android:name=".ui.about.AboutActivity" />
+        <activity
+            android:name=".ui.about.AboutActivity"
+            android:exported="true">
+
+        </activity>
 
         <meta-data
             android:name="android.max_aspect"
@@ -86,24 +92,18 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="me.spica.weather.initializer.HeInitializer"
-                android:value="androidx.startup" />
-
-            <meta-data
                 android:name="me.spica.weather.initializer.TimberInitializer"
                 android:value="androidx.startup" />
-
             <meta-data
                 android:name="me.spica.weather.initializer.CoilInitializer"
                 android:value="androidx.startup" />
 
         </provider>
         <!-- 结束 -->
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
+                <service
+                    android:name="com.baidu.location.f"
+                    android:enabled="true"
+                    android:process=":remote" />
 
     </application>
 

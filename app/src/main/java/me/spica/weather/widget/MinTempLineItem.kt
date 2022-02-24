@@ -145,7 +145,7 @@ class MinTempLineItem : View {
 
 
 
-        Timber.e("======================")
+        Timber.i("======================")
 
 
         if (drawLeftLine) {
@@ -176,10 +176,10 @@ class MinTempLineItem : View {
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
-            Timber.e("lastP${lastPointY}")
+            Timber.i("lastP${lastPointY}")
         }
 
-        Timber.e("currentP${pointY}")
+        Timber.i("currentP${pointY}")
 
         if (drawRightLine) {
 
@@ -208,10 +208,10 @@ class MinTempLineItem : View {
                 linePaint
             )
 
-            Timber.e("lastP${nextPointY}")
+            Timber.i("lastP${nextPointY}")
         }
 
-        Timber.e("======================")
+        Timber.i("======================")
     }
 
 

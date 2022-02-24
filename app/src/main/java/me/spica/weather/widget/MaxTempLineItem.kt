@@ -1,7 +1,13 @@
 package me.spica.weather.widget
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.BlurMaskFilter
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Rect
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -134,7 +140,7 @@ class MaxTempLineItem : View {
 
 
 
-        Timber.e("======================")
+        Timber.i("======================")
 
 
         if (drawLeftLine) {
@@ -167,10 +173,10 @@ class MaxTempLineItem : View {
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
-            Timber.e("lastP${lastPointY}")
+            Timber.i("lastP${lastPointY}")
         }
 
-        Timber.e("currentP${pointY}")
+        Timber.i("currentP${pointY}")
 
         if (drawRightLine) {
 
@@ -200,10 +206,10 @@ class MaxTempLineItem : View {
                 linePaint
             )
 
-            Timber.e("lastP${nextPointY}")
+            Timber.i("lastP${nextPointY}")
         }
 
-        Timber.e("======================")
+        Timber.i("======================")
     }
 
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.CornerPathEffect
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
@@ -171,21 +170,16 @@ class TempLineItem : View {
             context,
             R.color.textColorPrimaryHintLight
         )
-
         linePaint.strokeWidth = 2.dp
         linePaint.isAntiAlias = true
-
         linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
 
         if (drawLeftLine) {
-
-
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
                     (pointBottomY - pointTopY)
-
-
             pathLeft = Path()
 
+            // 七点
             pathLeft.moveTo(pointX, pointY)
 
             pathLeft.lineTo(pointX,viewHeight.toFloat())
@@ -197,23 +191,11 @@ class TempLineItem : View {
             pathLeft.close()
 
             // 绘制背景
-            canvas.drawPath(
-                pathLeft,
-                pathPaint
-            )
+            canvas.drawPath(pathLeft, pathPaint)
 
-            canvas.drawLine(
-                pointX, pointY,
-                0F,
-                (lastPointY + pointY) / 2F,
-                linePaint
-            )
+            canvas.drawLine(pointX, pointY, 0F, (lastPointY + pointY) / 2F, linePaint)
 
-            canvas.drawLine(
-                pointX, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
-                0F,
-                viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
-                dottedLinePaint
+            canvas.drawLine(pointX, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, 0F, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, dottedLinePaint
             )
 
         }
@@ -256,10 +238,10 @@ class TempLineItem : View {
                 dottedLinePaint
             )
 
-            Timber.e("lastP${nextPointY}")
+            Timber.i("lastP${nextPointY}")
         }
 
-        Timber.e("======================")
+        Timber.i("======================")
     }
 
 

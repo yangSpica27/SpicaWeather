@@ -1,9 +1,7 @@
 package me.spica.weather.model.weather
 
-import com.qweather.sdk.bean.weather.WeatherNowBean
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
 
@@ -19,7 +17,7 @@ data class NowWeatherBean(
     val weatherName:String,
 )
 
-fun WeatherNowBean.NowBaseBean.toNowWeatherBean(): NowWeatherBean {
+fun me.spica.weather.network.hefeng.now.Now.toNowWeatherBean(): NowWeatherBean {
     val updateDate = sdf.parse(this.obsTime) ?: Date()
     return NowWeatherBean(
         obsTime = updateDate,

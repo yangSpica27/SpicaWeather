@@ -10,7 +10,6 @@ buildscript {
     maven { url 'https://maven.aliyun.com/repository/google' }
     maven { url 'https://maven.aliyun.com/repository/public'}
     maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-    jcenter()
   }
   dependencies {
     classpath 'com.google.dagger:hilt-android-gradle-plugin:2.41'

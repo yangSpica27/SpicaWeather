@@ -1,6 +1,5 @@
 package me.spica.weather.ui.city
 
-import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -10,8 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -26,9 +23,7 @@ import me.spica.weather.model.city.Province
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.toast
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+import javax.inject.Inject
 
 /**
  * 城市选择
@@ -46,19 +41,8 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     // 用于显示的列表
     private val rvItems = arrayListOf<CityBean>()
 
-    private val provinces by lazy {
-        val moshi = Moshi.Builder().build()
-        val listOfCardsType = Types.newParameterizedType(
-            List::class.java,
-            Province::class.java
-        )
-        val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
-        return@lazy jsonAdapter.fromJson(
-            getJsonString(
-                this
-            )
-        )
-    }
+    @Inject
+    lateinit var provinces: List<Province>
 
     private val textWatch = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -123,7 +107,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
             cityList.clear()
             rvItems.clear()
             cityList.addAll(
-                provinces?.map {
+                provinces.map {
                     CityBean(
                         cityName = it.name,
                         sortName = PinyinHelper.convertToPinyinString
@@ -131,12 +115,12 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
                         lon = it.log,
                         lat = it.lat
                     )
-                }?.filter {
+                }.filter {
                     it.cityName.isNotEmpty()
-                } ?: listOf<CityBean>()
+                }
             )
 
-            provinces?.forEach {
+            provinces.forEach {
                 cityList.addAll(
                     it.children.map { city ->
                         CityBean(
@@ -173,36 +157,8 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     }
 
-    override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding = ActivityCitySelectBinding.inflate(inflater)
+    override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding =
+        ActivityCitySelectBinding.inflate(inflater)
 
 
-    /**
-     * 读取assets下配置文件
-     *
-     * @param context 上下文
-     * @return 内容
-     */
-    @Throws(IOException::class)
-    private fun getJsonString(context: Context): String {
-        var br: BufferedReader? = null
-        val sb = StringBuilder()
-        try {
-            val manager = context.assets
-            br = BufferedReader(InputStreamReader(manager.open("city.json")))
-            var line: String?
-            while (br.readLine().also { line = it } != null) {
-                sb.append(line)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            throw e
-        } finally {
-            try {
-                br?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-        return sb.toString()
-    }
 }
