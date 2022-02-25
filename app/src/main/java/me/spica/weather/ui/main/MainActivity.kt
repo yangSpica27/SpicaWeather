@@ -62,6 +62,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             if (result.hasAddr()) {
                 syncNewCity(result.city)
             } else {
+                Snackbar.make(
+                    viewBinding.root,
+                    "获取地理信息失败",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 viewModel.changedCity(
                     cityList.first()
                 )
@@ -105,50 +110,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
             )
-//            when {
-//                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-//                    // 适配android12
-//
-//                    EasyPermissions.requestPermissions(
-//                        this,
-//                        getString(R.string.rationale_location),
-//                        RC_LOCATION_PERM,
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    )
-////
-////                    EasyPermissions.requestPermissions(
-////                        this,
-////                        getString(R.string.rationale_location),
-////                        RC_LOCATION_PERM,
-////                        Manifest.permission.ACCESS_FINE_LOCATION,
-////                        Manifest.permission.ACCESS_COARSE_LOCATION,
-////                    )
-//                }
-//                else -> {
-//                    Timber.e("请求权限M")
-//                    EasyPermissions.requestPermissions(
-//                        this,
-//                        getString(R.string.rationale_location),
-//                        RC_LOCATION_PERM,
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    )
-//                }
-//            }
         } else {
             Timber.e("开始定位2")
             locationClint.start()
         }
     }
 
-    // 错误信息
-    private val errorTip by lazy {
-        val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
-        sb.setAction("重试") {
-            sb.dismiss()
-        }
-    }
 
     // 初始化Toolbar
     private fun initTitle() {
