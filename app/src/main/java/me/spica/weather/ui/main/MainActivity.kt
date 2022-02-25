@@ -39,6 +39,7 @@ import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.ui.about.AboutActivity
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,10 +47,17 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     private val viewModel: WeatherViewModel by viewModels()
 
+
+    private var currentCity = ""
+
+    @Inject
+    lateinit var cityList: List<CityBean>
+
     private val locationListener = object : BDAbstractLocationListener() {
         override fun onReceiveLocation(result: BDLocation) {
+            Timber.e("定位${result.city}")
             if (result.hasAddr()) {
-//                changeCityTip.setText("检查到当前位置在${result.city},是否切换").show()
+                syncNewCity(result.city)
             }
         }
     }
@@ -72,14 +80,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
     }
 
-    private val currentCity by lazy {
-        CityBean(
-            lon = "118.78",
-            lat = "32.04",
-            cityName = "南京",
-            sortName = "NanJing"
-        )
-    }
 
     private val errorTip by lazy {
         val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
@@ -88,12 +88,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
     }
 
-    private val changeCityTip by lazy {
-        val sb = Snackbar.make(viewBinding.root, "", Snackbar.LENGTH_INDEFINITE)
-        sb.setAction("切换") {
-            sb.dismiss()
-        }
-    }
 
     private fun initTitle() {
         viewBinding.toolbar.tsLocation.setFactory {
@@ -123,23 +117,42 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         FluidContentResizer.listen(this)
         initView()
         initTitle()
-        viewModel.changedCity(currentCity)
-        getLocation()
     }
 
     // 获取定位信息
     private fun getLocation() {
         if (hasPermissions()) {
             // 定位
+            Timber.e("拥有定位权限")
             locationClint.registerLocationListener(locationListener)
             locationClint.start()
         } else {
             // 无权限则请求权限
+            Timber.e("没有定位权限")
+
             AndPermission.with(this)
                 .runtime()
                 .permission(Permission.Group.LOCATION)
                 .onGranted {
+                    it.forEach {
+                        Timber.e("授权" + it)
+                    }
                     getLocation()
+                }.onDenied {
+                    if (hasPermissions()) {
+                        getLocation()
+                    } else {
+                        // 否则给默认
+                        viewModel.changedCity(
+                            CityBean(
+                                cityName = "南京",
+                                lon = "118.78",
+                                lat = "32.04",
+                                sortName = "nanjing"
+                            )
+                        )
+                    }
+
                 }
                 .start()
         }
@@ -205,10 +218,17 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             }
         }
 
+        // 获取当前城市
         lifecycleScope.launch {
-            viewModel.cityFlow.filterNotNull()
+            viewModel.cityFlow
                 .collectLatest {
-                    viewBinding.toolbar.tsLocation.setText("中国，" + currentCity.cityName)
+                    if (it == null) {
+                        getLocation()
+                    } else {
+                        currentCity = it.cityName
+                        viewBinding.toolbar.tsLocation.setText("中国，" + it.cityName)
+                    }
+
                 }
         }
     }
@@ -233,6 +253,26 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
         if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
             viewBinding.containerTips.startEnterAnim()
+        }
+    }
+
+
+    private fun syncNewCity(cityName: String) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            cityList.forEach {
+                if (cityName.contains(it.cityName)) {
+                    if (currentCity != it.cityName)
+                        withContext(Dispatchers.IO) {
+                            Snackbar.make(
+                                viewBinding.root,
+                                "检查到您目前的城市在${it.cityName}，正在切换",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    viewModel.changedCity(it)
+                    return@launch
+                }
+            }
         }
     }
 

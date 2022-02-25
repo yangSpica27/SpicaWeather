@@ -30,6 +30,10 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
         viewBinding.rvCity.layoutAnimation = animation
         viewBinding.rvCity.adapter = cityWeatherAdapter
 
+        cityWeatherAdapter.itemClickListener = {
+            cityViewModel.selectCity(it)
+        }
+
         lifecycleScope.launch {
             cityViewModel.allCityFlow.collectLatest {
                 if (it.isEmpty()) {

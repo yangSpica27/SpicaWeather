@@ -3,12 +3,15 @@ package me.spica.weather.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.github.stuxuhai.jpinyin.PinyinFormat
+import com.github.stuxuhai.jpinyin.PinyinHelper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.city.Province
 import me.spica.weather.persistence.AppDatabase
 import java.io.BufferedReader
@@ -40,7 +43,10 @@ object PersistenceModule {
 
     @Provides
     @Singleton
-    fun provideCityBeans(application: Application): List<Province> {
+    fun provideProvinces(application: Application): List<CityBean> {
+
+        val provinces = arrayListOf<Province>()
+        val cityList = arrayListOf<CityBean>()
         val moshi = Moshi.Builder().build()
         val listOfCardsType = Types.newParameterizedType(
             List::class.java, Province::class.java
@@ -48,12 +54,52 @@ object PersistenceModule {
 
         val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
 
-        return jsonAdapter.fromJson(
-            getJsonString(
-                application
+        provinces.addAll(
+            jsonAdapter.fromJson(
+                getJsonString(
+                    application
+                )
+            ) ?: listOf()
+        )
+
+        cityList.addAll(
+            provinces.map {
+                CityBean(
+                    cityName = it.name,
+                    sortName = PinyinHelper.convertToPinyinString
+                        (it.name, "", PinyinFormat.WITHOUT_TONE),
+                    lon = it.log,
+                    lat = it.lat
+                )
+            }.filter {
+                it.cityName.isNotEmpty()
+            }
+        )
+
+        provinces.forEach {
+            cityList.addAll(
+                it.children.map { city ->
+                    CityBean(
+                        cityName = city.name,
+                        sortName = PinyinHelper.convertToPinyinString
+                            (city.name, "", PinyinFormat.WITHOUT_TONE),
+                        lon = city.log,
+                        lat = city.lat
+                    )
+                }
             )
-        ) ?: listOf()
+        }
+
+        cityList.sortBy {
+            it.sortName
+        }
+
+        return cityList.filter {
+            it.cityName.isNotEmpty()
+        }
+
     }
+
 
     /**
      * 读取assets下配置文件

@@ -24,9 +24,11 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
         this,
         object : DiffUtil.ItemCallback<CityBean>() {
             override fun areItemsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.cityName == newItem.cityName
-            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = true
+            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.isSelected == newItem.isSelected
         }
     )
+
+    var itemClickListener: (CityBean) -> Unit = {}
 
     class ViewHolder(val itemBinding: ItemWeatherCityBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
@@ -40,14 +42,16 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
         holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon} 北纬${diffUtil.currentList[position].lat}"
-        if (position == 0) {
+        if (diffUtil.currentList[position].isSelected) {
             holder.itemBinding.tvIsDefault.show()
         } else {
             holder.itemBinding.tvIsDefault.hide()
         }
         holder.itemView.rootView.setOnClickListener {
-            val intent = Intent(activity, MainActivity::class.java)
 
+            itemClickListener(diffUtil.currentList[position])
+
+            val intent = Intent(activity, MainActivity::class.java)
             val options = ActivityOptions.makeSceneTransitionAnimation(
                 activity,
                 holder.itemBinding.root,

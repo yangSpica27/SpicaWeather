@@ -93,7 +93,6 @@
         android:src="@drawable/ic_plus"
         android:tint="@color/white"
         app:fabSize="normal"
-        android:visibility="visible"
         app:layout_anchor="@id/scrollView"
         android:layout_margin="20dp"
         app:layout_anchorGravity="bottom|end"

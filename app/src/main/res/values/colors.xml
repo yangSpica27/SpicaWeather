@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="nav_select_color">#CC000000</color>
     <color name="water_color">#64B5F6</color>
+    <color name="error_color">#E91E63</color>
     <color name="white">#FFFFFFFF</color>
     <color name="scrollbar">#48000000</color>
     <color name="dottedLineColor">#33000000</color>

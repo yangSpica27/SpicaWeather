@@ -7,8 +7,6 @@ import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.stuxuhai.jpinyin.PinyinFormat
-import com.github.stuxuhai.jpinyin.PinyinHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -19,7 +17,6 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityCitySelectBinding
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.model.city.Province
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.toast
@@ -32,7 +29,8 @@ import javax.inject.Inject
 class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     // 城市列表
-    private val cityList = arrayListOf<CityBean>()
+    @Inject
+    lateinit var cityList: List<CityBean>
 
     private val cityAdapter = CityAdapter()
 
@@ -41,8 +39,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     // 用于显示的列表
     private val rvItems = arrayListOf<CityBean>()
 
-    @Inject
-    lateinit var provinces: List<Province>
 
     private val textWatch = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -100,40 +96,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
         // 添加数据
         lifecycleScope.launch {
-            cityList.clear()
             rvItems.clear()
-            cityList.addAll(
-                provinces.map {
-                    CityBean(
-                        cityName = it.name,
-                        sortName = PinyinHelper.convertToPinyinString
-                        (it.name, "", PinyinFormat.WITHOUT_TONE),
-                        lon = it.log,
-                        lat = it.lat
-                    )
-                }.filter {
-                    it.cityName.isNotEmpty()
-                }
-            )
-
-            provinces.forEach {
-                cityList.addAll(
-                    it.children.map { city ->
-                        CityBean(
-                            cityName = city.name,
-                            sortName = PinyinHelper.convertToPinyinString
-                            (city.name, "", PinyinFormat.WITHOUT_TONE),
-                            lon = city.log,
-                            lat = city.lat
-                        )
-                    }
-                )
-            }
-
-            cityList.sortBy {
-                it.sortName
-            }
-
             rvItems.addAll(
                 cityList.filter {
                     it.cityName.isNotEmpty()

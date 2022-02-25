@@ -31,6 +31,7 @@ object NetworkModule {
 
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor())
+            .retryOnConnectionFailure(true)
             .build()
     }
 
@@ -43,12 +44,15 @@ object NetworkModule {
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory.create())
             .build()
+
     }
 
     @Provides
     @Singleton
     fun provideHeService(retrofit: Retrofit): HeService {
-        return retrofit.create(HeService::class.java)
+
+        return retrofit
+            .create(HeService::class.java)
     }
 
     @Provides

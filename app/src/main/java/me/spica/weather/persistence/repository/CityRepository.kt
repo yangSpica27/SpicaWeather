@@ -27,16 +27,21 @@ class CityRepository @Inject constructor(
         return result
     }
 
+    @WorkerThread
     suspend fun selected(cityBean: CityBean) = withContext(Dispatchers.IO) {
-        cityDao.getAll(true).forEach {
+        cityDao.getAllList().forEach {
             it.isSelected = false
             cityDao.update(it)
         }
         cityBean.isSelected = true
-        cityDao.update(cityBean)
+        cityDao.insert(cityBean)
     }
 
+    @WorkerThread
     fun deleteCity(cityBean: CityBean) {
         cityDao.deleteCity(cityBean = cityBean)
     }
+
+
+    fun selectedCityFlow() = cityDao.getSelectCity()
 }

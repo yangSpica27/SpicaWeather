@@ -155,6 +155,7 @@ dependencies {
 
   implementation 'com.yanzhenjie:permission:2.0.3'
 
+
   def appCenterSdkVersion = '4.4.2'
   implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
   implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"

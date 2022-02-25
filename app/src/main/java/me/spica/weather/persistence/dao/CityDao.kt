@@ -19,17 +19,17 @@ interface CityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg cityBean: CityBean)
 
-    @Query("SELECT * FROM t_city WHERE isSelected =:isSelect")
-    suspend fun getAll(isSelect: Boolean): List<CityBean>
+    @Query("SELECT * FROM t_city WHERE isSelected =:isSelect LIMIT 0,1")
+    fun getSelectCity(isSelect: Boolean = true): Flow<CityBean?>
 
     @Query("SELECT * FROM t_city")
-    fun getAll(): Flow<List<CityBean>>
+    fun getCities(): Flow<List<CityBean>>
 
     @Query("SELECT * FROM t_city")
     fun getAllList(): List<CityBean>
 
     @ExperimentalCoroutinesApi
-    fun getAllDistinctUntilChanged() = getAll().distinctUntilChanged()
+    fun getAllDistinctUntilChanged() = getCities().distinctUntilChanged()
 
     @Update
     fun update(cityBean: CityBean)
