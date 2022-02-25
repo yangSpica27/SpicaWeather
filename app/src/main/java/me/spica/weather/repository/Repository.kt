@@ -14,7 +14,6 @@ interface Repository {
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
-        onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<NowWeatherBean>
 
     // 获取近几小时的天气
@@ -24,7 +23,6 @@ interface Repository {
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
-        onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<HourlyWeatherBean>>
 
     // 获取近几天的天气
@@ -34,7 +32,6 @@ interface Repository {
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
-        onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<DailyWeatherBean>>
 
     // 获取今天的生活指数
@@ -44,6 +41,5 @@ interface Repository {
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit,
-        onSuccess: () -> Unit
     ): kotlinx.coroutines.flow.Flow<List<LifeIndexBean>>
 }

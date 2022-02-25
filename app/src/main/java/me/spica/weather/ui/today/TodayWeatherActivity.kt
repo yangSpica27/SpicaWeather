@@ -12,6 +12,8 @@ import me.spica.weather.databinding.ActivityTodayWeatherBinding
 class TodayWeatherActivity : BindingActivity<ActivityTodayWeatherBinding>() {
 
 
+
+
     override fun initializer() {
 
     }

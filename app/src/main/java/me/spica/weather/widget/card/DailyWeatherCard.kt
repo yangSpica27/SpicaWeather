@@ -7,8 +7,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.home.DailWeatherAdapter
@@ -45,16 +48,19 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun bindData(items: List<DailyWeatherBean>) {
+    suspend fun bindData(items: List<DailyWeatherBean>)= withContext(Dispatchers.Default) {
         dailyWeatherAdapter.items.clear()
         dailyWeatherAdapter.items.addAll(items)
         dailyWeatherAdapter.syncTempMaxAndMin()
-        dailyWeatherAdapter.notifyDataSetChanged()
-        binding.rvWeather.postDelayed(
-            {
-                binding.layoutLoading.hide()
-                binding.rvWeather.show()
-            }, 100
-        )
+        doOnMainThreadIdle({
+            dailyWeatherAdapter.notifyDataSetChanged()
+            binding.rvWeather.postDelayed(
+                {
+                    binding.layoutLoading.hide()
+                    binding.rvWeather.show()
+                }, 100
+            )
+        })
+
     }
 }

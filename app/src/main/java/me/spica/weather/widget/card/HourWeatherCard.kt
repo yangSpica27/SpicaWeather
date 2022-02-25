@@ -7,6 +7,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.tools.hide
@@ -44,11 +46,13 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun bindData(items: List<HourlyWeatherBean>) {
+    suspend fun bindData(items: List<HourlyWeatherBean>) = withContext(Dispatchers.Default) {
         hourWeatherAdapter.items.clear()
         hourWeatherAdapter.items.addAll(items)
         hourWeatherAdapter.sortList()
-        hourWeatherAdapter.notifyDataSetChanged()
+        binding.rvHourWeather.post {
+            hourWeatherAdapter.notifyDataSetChanged()
+        }
         binding.rvHourWeather.postDelayed(
             {
                 binding.layoutLoading.hide()

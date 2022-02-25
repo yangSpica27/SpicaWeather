@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import coil.load
+import coil.request.ImageRequest
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.common.getThemeColor
@@ -58,7 +60,10 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         // 加载图标
         binding.icWeather.load(
             WeatherCodeUtils.getWeatherCode(nowWeatherBean.iconId.toString()).getIconRes()
-        )
+        ){
+            crossfade(true)
+        }
+
 
         binding.tvTemp.text = nowWeatherBean.temp.toString() + "℃"
         binding.tvNow.text = "早上好！"

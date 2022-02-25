@@ -13,11 +13,13 @@ import android.view.View
 import android.view.Window
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -34,6 +36,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
+import me.spica.weather.tools.toast
 import me.spica.weather.ui.about.AboutActivity
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
@@ -41,8 +44,14 @@ import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val RC_LOCATION_PERM = 0x01
+// 请求的返回码
+private const val PERMISSION_CODE = 0x01
 
+// 需要的权限
+private val LOCATION_PERMISSION = arrayOf(
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION
+)
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(),
     EasyPermissions.RationaleCallbacks,
@@ -55,6 +64,25 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     @Inject
     lateinit var cityList: List<CityBean>
 
+
+    private val permissionDialog by lazy {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("申请运行时权限")
+            .setMessage(R.string.rationale_location)
+            .setPositiveButton(
+                R.string.rationale_location_ok
+            ) { _, _ ->
+                ActivityCompat.requestPermissions(
+                    this,
+                    LOCATION_PERMISSION,
+                    PERMISSION_CODE
+                )
+            }
+            .setNegativeButton(R.string.rationale_location_cancel) { _, _ ->
+                locationClint.start()
+            }.create()
+    }
+
     // 获取地理信息后
     private val locationListener = object : BDAbstractLocationListener() {
         override fun onReceiveLocation(result: BDLocation) {
@@ -62,11 +90,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             if (result.hasAddr()) {
                 syncNewCity(result.city)
             } else {
-                Snackbar.make(
-                    viewBinding.root,
-                    "获取地理信息失败",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                toast("获取地理位置失败")
                 viewModel.changedCity(
                     cityList.first()
                 )
@@ -103,15 +127,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     // 请求定位权限
     private fun requestPermission() {
         if (!hasPermissions()) {
-            EasyPermissions.requestPermissions(
-                this,
-                getString(R.string.rationale_location),
-                RC_LOCATION_PERM,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            )
+            permissionDialog.show()
         } else {
-            Timber.e("开始定位2")
             locationClint.start()
         }
     }
@@ -199,18 +216,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             viewModel.dailyWeatherFlow
                 .filterNotNull()
                 .collectLatest {
-                    doOnMainThreadIdle({
-                        viewBinding.dailyWeatherCard.bindData(it)
-                    })
+                    viewBinding.dailyWeatherCard.bindData(it)
                 }
         }
         // 请求当日
         lifecycleScope.launch {
             viewModel.nowWeatherFlow.filterNotNull().collectLatest {
                 withContext(Dispatchers.Main) {
-                    doOnMainThreadIdle({
                         viewBinding.nowWeatherCard.bindData(it)
-                    })
                 }
             }
         }
@@ -223,26 +236,45 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         // 载入小时天气数据
         lifecycleScope.launch {
             viewModel.hourlyWeatherFlow.filterNotNull().collectLatest {
-                doOnMainThreadIdle({
-                    viewBinding.hourlyWeatherCard.bindData(it)
-                })
+                viewBinding.hourlyWeatherCard.bindData(it)
             }
         }
         // 获取当前城市
         lifecycleScope.launch {
-            viewModel.cityFlow
+            viewModel
+                .cityFlow
+                .filterNotNull()
                 .collectLatest {
-                    if (it == null) {
-                        return@collectLatest
-                    } else {
-                        if (currentCity != it.cityName) {
-                            val text = "中国，" + it.cityName
-                            viewBinding.toolbar.tsLocation.setText(text)
-                        }
-                        currentCity = it.cityName
+                    if (currentCity != it.cityName) {
+                        val text = "中国，" + it.cityName
+                        viewBinding.toolbar.tsLocation.setText(text)
                     }
+                    currentCity = it.cityName
                 }
         }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collectLatest {
+                if (errorTip.isShown) {
+                    errorTip.dismiss()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest {
+                if (!errorTip.isShown) {
+                    errorTip.show()
+                }
+            }
+        }
+    }
+
+    private val errorTip by lazy {
+        Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
+            .setAction("重试") {
+
+            }
     }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding =
@@ -296,6 +328,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     override fun onDestroy() {
         super.onDestroy()
         locationClint.unRegisterLocationListener(locationListener)
+        if (permissionDialog.isShowing) {
+            permissionDialog.cancel()
+        }
     }
 
     override fun onRationaleAccepted(requestCode: Int) {
@@ -304,7 +339,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.rationale_location),
-                RC_LOCATION_PERM,
+                PERMISSION_CODE,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION

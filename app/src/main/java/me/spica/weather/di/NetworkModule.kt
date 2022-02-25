@@ -16,6 +16,7 @@ import me.spica.weather.repository.HeRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -32,6 +33,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor())
             .retryOnConnectionFailure(true)
+            .connectTimeout(5000L, TimeUnit.MILLISECONDS)
             .build()
     }
 

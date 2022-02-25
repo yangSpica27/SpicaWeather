@@ -91,13 +91,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_plus"
-        android:tint="@color/white"
+        app:tint="@color/white"
+        android:tintMode="multiply"
         app:fabSize="normal"
+        app:backgroundTint="@color/textColorPrimary"
         app:layout_anchor="@id/scrollView"
         android:layout_margin="20dp"
         app:layout_anchorGravity="bottom|end"
-        android:tintMode="multiply"
-        app:backgroundTint="@color/black"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         tools:ignore="ContentDescription" />
 

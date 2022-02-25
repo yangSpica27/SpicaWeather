@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -25,7 +26,22 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
 
     // 错误信息
-    private val errorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
+    private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    private val _isLoading = MutableStateFlow(false)
+
+    val isLoading: Flow<Boolean> = _isLoading
+
+    val errorMessage: Flow<String?> = _errorMessage.filterNotNull()
+
+
+    private var resultNumer = 0
+        set(value) {
+            if (value == 4) {
+                _isLoading.value = true
+            }
+            field = value
+        }
 
     // 经度 纬度
     val cityFlow: Flow<CityBean?> =
@@ -40,10 +56,15 @@ class WeatherViewModel @Inject constructor(
                 repository.fetchNowWeather(
                     lon = it.lon,
                     lat = it.lat,
-                    onSuccess = {},
-                    onStart = {},
-                    onError = {},
-                    onComplete = {}
+                    onStart = {
+                        _isLoading.value = true
+                    },
+                    onError = {
+                        _errorMessage.value = it
+                    },
+                    onComplete = {
+                        resultNumer++
+                    }
                 )
             }
 
@@ -52,12 +73,15 @@ class WeatherViewModel @Inject constructor(
             repository.fetchDailyWeather(
                 lon = it.lon,
                 lat = it.lat,
-                onSuccess = {},
-                onStart = {},
-                onError = { message ->
-                    errorMessage.value = message
+                onStart = {
+                    _isLoading.value = true
                 },
-                onComplete = {}
+                onError = { message ->
+                    _errorMessage.value = message
+                },
+                onComplete = {
+                    resultNumer++
+                }
             )
         }
 
@@ -68,12 +92,15 @@ class WeatherViewModel @Inject constructor(
                 repository.fetchHourlyWeather(
                     lon = it.lon,
                     lat = it.lat,
-                    onSuccess = {},
-                    onStart = {},
-                    onError = { message ->
-                        errorMessage.value = message
+                    onStart = {
+                        _isLoading.value = true
                     },
-                    onComplete = {}
+                    onError = { message ->
+                        _errorMessage.value = message
+                    },
+                    onComplete = {
+                        resultNumer++
+                    }
                 )
             }
 
@@ -84,16 +111,20 @@ class WeatherViewModel @Inject constructor(
                 repository.fetchTodayLifeIndex(
                     lon = it.lon,
                     lat = it.lat,
-                    onSuccess = {},
-                    onStart = {},
-                    onError = { message ->
-                        errorMessage.value = message
+                    onStart = {
+                        _isLoading.value = true
                     },
-                    onComplete = {}
+                    onError = { message ->
+                        _errorMessage.value = message
+                    },
+                    onComplete = {
+                        resultNumer++
+                    }
                 )
             }
 
     fun changedCity(cityBean: CityBean) {
+        resultNumer = 0
         viewModelScope.launch(Dispatchers.IO) {
             cityRepository.selected(cityBean)
         }

@@ -9,9 +9,12 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.databinding.CardLifeIndexBinding
 import me.spica.weather.model.weather.LifeIndexBean
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.home.TipAdapter
 
 class TipsCard : RelativeLayout, SpicaWeatherCard {
@@ -35,10 +38,12 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun bindData(items: List<LifeIndexBean>) {
+    suspend fun bindData(items: List<LifeIndexBean>) = withContext(Dispatchers.Default) {
         tipAdapter.items.clear()
         tipAdapter.items.addAll(items)
-        tipAdapter.notifyDataSetChanged()
+        doOnMainThreadIdle({
+            tipAdapter.notifyDataSetChanged()
+        })
     }
 
     override var enterAnim: MutableList<Animator> = mutableListOf(
