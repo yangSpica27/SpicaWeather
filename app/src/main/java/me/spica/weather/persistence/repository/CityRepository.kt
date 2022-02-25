@@ -42,6 +42,5 @@ class CityRepository @Inject constructor(
         cityDao.deleteCity(cityBean = cityBean)
     }
 
-
     fun selectedCityFlow() = cityDao.getSelectCity()
 }

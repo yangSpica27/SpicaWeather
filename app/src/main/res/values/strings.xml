@@ -4,4 +4,7 @@
     <string name="str_cancel">取消</string>
     <string name="str_retry_location">重新定位</string>
     <string name="str_is_location">正在定位</string>
+    <string name="rationale_location">将获取地理信息用于快速定位城市</string>
+    <string name="rationale_location_ok">好的</string>
+    <string name="rationale_location_cancel">取消</string>
 </resources>

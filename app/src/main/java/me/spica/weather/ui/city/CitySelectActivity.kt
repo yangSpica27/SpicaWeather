@@ -1,5 +1,6 @@
 package me.spica.weather.ui.city
 
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,7 +20,9 @@ import me.spica.weather.databinding.ActivityCitySelectBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
+import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
+import me.spica.weather.ui.main.MainActivity
 import javax.inject.Inject
 
 /**
@@ -38,7 +41,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     // 用于显示的列表
     private val rvItems = arrayListOf<CityBean>()
-
 
     private val textWatch = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -63,7 +65,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     }
 
     private fun init() {
-
+        FluidContentResizer.listen(this)
         viewBinding.etCityName.addTextChangedListener(textWatch)
 
         this
@@ -109,6 +111,11 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
                 viewBinding.etCityName.isEnabled = true
             })
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding =

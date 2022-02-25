@@ -67,6 +67,12 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
                 address = "https://github.com/fondesa/recycler-view-divider"
             )
         )
+        adapter.items.add(
+            Licence(
+                name = "Coil",
+                address = "https://coil-kt.github.io/coil"
+            )
+        )
         adapter.notifyDataSetChanged()
         viewBinding.rvLicence.scheduleLayoutAnimation()
     }

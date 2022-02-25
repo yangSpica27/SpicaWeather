@@ -67,7 +67,7 @@ object PersistenceModule {
                 CityBean(
                     cityName = it.name,
                     sortName = PinyinHelper.convertToPinyinString
-                        (it.name, "", PinyinFormat.WITHOUT_TONE),
+                    (it.name, "", PinyinFormat.WITHOUT_TONE),
                     lon = it.log,
                     lat = it.lat
                 )
@@ -82,7 +82,7 @@ object PersistenceModule {
                     CityBean(
                         cityName = city.name,
                         sortName = PinyinHelper.convertToPinyinString
-                            (city.name, "", PinyinFormat.WITHOUT_TONE),
+                        (city.name, "", PinyinFormat.WITHOUT_TONE),
                         lon = city.log,
                         lat = city.lat
                     )
@@ -97,9 +97,7 @@ object PersistenceModule {
         return cityList.filter {
             it.cityName.isNotEmpty()
         }
-
     }
-
 
     /**
      * 读取assets下配置文件

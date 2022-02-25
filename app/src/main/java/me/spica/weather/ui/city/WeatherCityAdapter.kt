@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.weather.databinding.ItemWeatherCityBinding
 import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.main.MainActivity
@@ -51,13 +52,15 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
 
             itemClickListener(diffUtil.currentList[position])
 
-            val intent = Intent(activity, MainActivity::class.java)
-            val options = ActivityOptions.makeSceneTransitionAnimation(
-                activity,
-                holder.itemBinding.root,
-                "shared_element_container"
-            )
-            activity.startActivity(intent, options.toBundle())
+            doOnMainThreadIdle({
+                val intent = Intent(activity, MainActivity::class.java)
+                val options = ActivityOptions.makeSceneTransitionAnimation(
+                    activity,
+                    holder.itemBinding.root,
+                    "shared_element_container"
+                )
+                activity.startActivity(intent, options.toBundle())
+            })
         }
     }
 

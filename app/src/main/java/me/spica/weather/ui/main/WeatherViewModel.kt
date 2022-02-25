@@ -98,5 +98,4 @@ class WeatherViewModel @Inject constructor(
             cityRepository.selected(cityBean)
         }
     }
-
 }

@@ -109,9 +109,7 @@ class HeRepository(private val heClient: HeClient) : Repository {
         onSuccess: () -> Unit
     ) = flow {
 
-        val response = heClient.getLifeIndex(
-            lon, lat
-        )
+        val response = heClient.getLifeIndex(lon, lat)
         response.suspendOnSuccess(SuccessLifeIndexWeatherMapper) {
             emit(this)
         }.suspendOnException {

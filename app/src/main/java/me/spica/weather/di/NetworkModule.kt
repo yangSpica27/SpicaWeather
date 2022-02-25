@@ -44,7 +44,6 @@ object NetworkModule {
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory.create())
             .build()
-
     }
 
     @Provides
@@ -73,6 +72,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideBaiduMap(@ApplicationContext context: Context): LocationClient {
+        LocationClient.setAgreePrivacy(true);
         return LocationClient(
             context,
             LocationClientOption().apply {

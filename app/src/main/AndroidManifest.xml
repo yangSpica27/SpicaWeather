@@ -12,24 +12,18 @@
 
     <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <permission-group android:name="${applicationId}.andpermission"/>
-
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <!-- 允许读设备等信息，用于问题排查，必选 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <!-- 允许app联网，必选 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许获取网络状态，必选 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-
 
 
     <application
@@ -45,9 +39,10 @@
             android:name="ScopedStorage"
             android:value="true" />
 
+        <!--百度地图-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="9fokNjwZ20sOccj7GXblgLHEZagrebQr" />
+            android:value="9fokNjwZ20sOccj7GXblgLHEWagrebQr" />
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -64,21 +59,34 @@
             </intent-filter>
 
         </activity>
+
         <activity android:name=".ui.setting.SettingActivity" />
+
         <activity android:name=".ui.city.WeatherCityActivity" />
-        <activity android:name=".ui.city.CitySelectActivity" />
+
+        <activity
+            android:name=".ui.city.CitySelectActivity"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".ui.about.AboutActivity"
             android:exported="true">
 
         </activity>
 
+        <activity
+            android:name=".ui.today.TodayWeatherActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
+            android:value="2.4" />
+        <!-- 适配华为（huawei）刘海屏 -->
         <meta-data
             android:name="android.notch_support"
-            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
+            android:value="true" />
+        <!-- 适配小米（xiaomi）刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
@@ -97,11 +105,11 @@
 
         </provider>
         <!-- 结束 -->
-                <service
-                    android:name="com.baidu.location.f"
-                    android:enabled="true"
-                    android:foregroundServiceType="location"
-                    android:process=":remote" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:foregroundServiceType="location"
+            android:process=":remote" />
 
     </application>
 
