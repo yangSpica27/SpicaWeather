@@ -59,7 +59,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     private val viewModel: WeatherViewModel by viewModels()
 
-    private var currentCity = ""
+    private var currentCity: CityBean? = null
 
     @Inject
     lateinit var cityList: List<CityBean>
@@ -206,74 +206,60 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                 checkAnim()
             })
         }
+
         viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
             doOnMainThreadIdle({
                 checkAnim()
             })
         }
-        //  载入图表数据
+
+
+        // 设置下拉刷新
+        viewBinding.swipeRefreshLayout.setOnRefreshListener {
+            currentCity?.let {
+                viewModel.changedCity(it)
+            }
+        }
+
         lifecycleScope.launch {
-            viewModel.dailyWeatherFlow
-                .filterNotNull()
-                .collectLatest {
-                    viewBinding.dailyWeatherCard.bindData(it)
+            viewModel.weatherFlow.collectLatest {
+                if (it != null) {
+                    viewBinding.dailyWeatherCard.bindData(it.dailyWeather)
+                    viewBinding.nowWeatherCard.bindData(it.todayWeather)
+                    viewBinding.containerTips.bindData(it.lifeIndexes)
+                    viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
+                } else {
+                    errorTip.show()
                 }
-        }
-        // 请求当日
-        lifecycleScope.launch {
-            viewModel.nowWeatherFlow.filterNotNull().collectLatest {
-                withContext(Dispatchers.Main) {
-                        viewBinding.nowWeatherCard.bindData(it)
-                }
+                viewBinding.swipeRefreshLayout.isRefreshing = false
+
             }
         }
-        // 载入天气指数数据
-        lifecycleScope.launch {
-            viewModel.currentIndices.filterNotNull().collectLatest {
-                viewBinding.containerTips.bindData(it)
-            }
-        }
-        // 载入小时天气数据
-        lifecycleScope.launch {
-            viewModel.hourlyWeatherFlow.filterNotNull().collectLatest {
-                viewBinding.hourlyWeatherCard.bindData(it)
-            }
-        }
+
+
         // 获取当前城市
         lifecycleScope.launch {
             viewModel
                 .cityFlow
                 .filterNotNull()
                 .collectLatest {
-                    if (currentCity != it.cityName) {
+                    if (currentCity?.cityName != it.cityName) {
                         val text = "中国，" + it.cityName
                         viewBinding.toolbar.tsLocation.setText(text)
                     }
-                    currentCity = it.cityName
+                    currentCity = it
                 }
         }
 
-        lifecycleScope.launch {
-            viewModel.isLoading.collectLatest {
-                if (errorTip.isShown) {
-                    errorTip.dismiss()
-                }
-            }
-        }
 
-        lifecycleScope.launch {
-            viewModel.errorMessage.collectLatest {
-                if (!errorTip.isShown) {
-                    errorTip.show()
-                }
-            }
-        }
     }
 
     private val errorTip by lazy {
         Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
             .setAction("重试") {
-
+                currentCity?.let {
+                    viewModel.changedCity(it)
+                }
             }
     }
 
@@ -304,7 +290,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         lifecycleScope.launch(Dispatchers.Default) {
             cityList.forEach {
                 if (cityName.contains(it.cityName)) {
-                    if (currentCity != it.cityName)
+                    if (currentCity?.cityName != it.cityName)
                         withContext(Dispatchers.IO) {
                             Snackbar.make(
                                 viewBinding.root,

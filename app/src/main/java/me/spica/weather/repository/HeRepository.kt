@@ -1,12 +1,12 @@
 package me.spica.weather.repository
 
+import com.skydoves.sandwich.message
+import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnFailure
 import com.skydoves.sandwich.suspendOnSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import me.spica.weather.network.hefeng.HeClient
 import me.spica.weather.network.hefeng.mapper.SuccessDailyWeatherMapper
 import me.spica.weather.network.hefeng.mapper.SuccessHourlyWeatherMapper
@@ -22,8 +22,6 @@ class HeRepository(private val heClient: HeClient) : Repository {
     override fun fetchNowWeather(
         lon: String,
         lat: String,
-        onStart: () -> Unit,
-        onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
         val response = heClient.getNowWeather(
@@ -32,20 +30,18 @@ class HeRepository(private val heClient: HeClient) : Repository {
         response.suspendOnSuccess(SuccessNowWeatherMapper) {
             emit(this)
         }.suspendOnFailure {
+            emit(null)
             onError(this)
+        }.suspendOnError {
+            emit(null)
+            onError(message())
         }
-    }.onStart {
-        onStart()
-    }.onCompletion {
-        onComplete()
     }.flowOn(Dispatchers.IO)
 
 
     override fun fetchHourlyWeather(
         lon: String,
         lat: String,
-        onStart: () -> Unit,
-        onComplete: () -> Unit,
         onError: (String?) -> Unit,
     ) = flow {
 
@@ -55,19 +51,17 @@ class HeRepository(private val heClient: HeClient) : Repository {
         response.suspendOnSuccess(SuccessHourlyWeatherMapper) {
             emit(this)
         }.suspendOnFailure {
+            emit(null)
             onError(this)
+        }.suspendOnError {
+            emit(null)
+            onError(message())
         }
-    }.onStart {
-        onStart()
-    }.onCompletion {
-        onComplete()
     }.flowOn(Dispatchers.IO)
 
     override fun fetchDailyWeather(
         lon: String,
         lat: String,
-        onStart: () -> Unit,
-        onComplete: () -> Unit,
         onError: (String?) -> Unit,
     ) = flow {
 
@@ -77,20 +71,17 @@ class HeRepository(private val heClient: HeClient) : Repository {
         response.suspendOnSuccess(SuccessDailyWeatherMapper) {
             emit(this)
         }.suspendOnFailure {
-            Timber.e(this)
+            emit(null)
             onError(this)
+        }.suspendOnError {
+            emit(null)
+            onError(message())
         }
-    }.onStart {
-        onStart()
-    }.onCompletion {
-        onComplete()
     }.flowOn(Dispatchers.IO)
 
     override fun fetchTodayLifeIndex(
         lon: String,
         lat: String,
-        onStart: () -> Unit,
-        onComplete: () -> Unit,
         onError: (String?) -> Unit,
     ) = flow {
 
@@ -98,12 +89,11 @@ class HeRepository(private val heClient: HeClient) : Repository {
         response.suspendOnSuccess(SuccessLifeIndexWeatherMapper) {
             emit(this)
         }.suspendOnFailure {
-            Timber.e(this)
+            emit(null)
             onError(this)
+        }.suspendOnError {
+            emit(null)
+            onError(message())
         }
-    }.onStart {
-        onStart()
-    }.onCompletion {
-        onComplete()
     }.flowOn(Dispatchers.IO)
 }

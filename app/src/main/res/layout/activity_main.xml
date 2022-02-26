@@ -29,62 +29,68 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:minHeight="400dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:animateLayoutChanges="true"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical">
 
-            <me.spica.weather.widget.card.NowWeatherCard
-                android:id="@+id/now_weather_card"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp" />
-
-            <me.spica.weather.widget.card.HourWeatherCard
-                android:id="@+id/hourly_weather_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp" />
-
-            <me.spica.weather.widget.card.DailyWeatherCard
-                android:id="@+id/daily_weather_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp" />
-
-            <me.spica.weather.widget.card.TipsCard
-                android:id="@+id/container_tips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
+                android:paddingTop="20dp"
                 android:animateLayoutChanges="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="12dp" />
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                <me.spica.weather.widget.card.NowWeatherCard
+                    android:id="@+id/now_weather_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp" />
 
-        </LinearLayout>
+                <me.spica.weather.widget.card.HourWeatherCard
+                    android:id="@+id/hourly_weather_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp" />
 
-    </androidx.core.widget.NestedScrollView>
+                <me.spica.weather.widget.card.DailyWeatherCard
+                    android:id="@+id/daily_weather_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp" />
+
+                <me.spica.weather.widget.card.TipsCard
+                    android:id="@+id/container_tips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp"
+                    android:animateLayoutChanges="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_plus"

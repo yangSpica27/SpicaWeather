@@ -6,15 +6,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.model.weather.DailyWeatherBean
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.LifeIndexBean
 import me.spica.weather.model.weather.NowWeatherBean
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.persistence.repository.CityRepository
 import me.spica.weather.repository.HeRepository
 import javax.inject.Inject
@@ -35,96 +39,92 @@ class WeatherViewModel @Inject constructor(
     val errorMessage: Flow<String?> = _errorMessage.filterNotNull()
 
 
-    private var resultNumer = 0
-        set(value) {
-            if (value == 4) {
-                _isLoading.value = true
-            }
-            field = value
-        }
 
     // 经度 纬度
     val cityFlow: Flow<CityBean?> =
         cityRepository
             .selectedCityFlow()
 
+
     // 即时天气
-    val nowWeatherFlow: Flow<NowWeatherBean> =
+    val nowWeatherFlow: Flow<NowWeatherBean?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
                 repository.fetchNowWeather(
                     lon = it.lon,
                     lat = it.lat,
-                    onStart = {
-                        _isLoading.value = true
-                    },
-                    onError = {
-                        _errorMessage.value = it
-                    },
-                    onComplete = {
-                        resultNumer++
+                    onError = { message ->
+                        _errorMessage.value = message
                     }
                 )
             }
 
-    val dailyWeatherFlow: Flow<List<DailyWeatherBean>> =
+
+    val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
         cityFlow.filterNotNull().flatMapLatest { it ->
             repository.fetchDailyWeather(
                 lon = it.lon,
                 lat = it.lat,
-                onStart = {
-                    _isLoading.value = true
-                },
                 onError = { message ->
                     _errorMessage.value = message
-                },
-                onComplete = {
-                    resultNumer++
                 }
             )
         }
 
-    val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>> =
+    val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
                 repository.fetchHourlyWeather(
                     lon = it.lon,
                     lat = it.lat,
-                    onStart = {
-                        _isLoading.value = true
-                    },
                     onError = { message ->
                         _errorMessage.value = message
-                    },
-                    onComplete = {
-                        resultNumer++
                     }
                 )
             }
 
-    val currentIndices: Flow<List<LifeIndexBean>> =
+    val currentIndices: Flow<List<LifeIndexBean>?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
                 repository.fetchTodayLifeIndex(
                     lon = it.lon,
                     lat = it.lat,
-                    onStart = {
-                        _isLoading.value = true
-                    },
                     onError = { message ->
                         _errorMessage.value = message
-                    },
-                    onComplete = {
-                        resultNumer++
                     }
                 )
             }
 
+
+    val weatherFlow = combine(
+        nowWeatherFlow,
+        dailyWeatherFlow,
+        hourlyWeatherFlow,
+        currentIndices,
+    ) { nowWeather, dailyWeather, hourWeather, lifeIndexes ->
+        if (nowWeather != null
+            && dailyWeather != null
+            && hourWeather != null &&
+            lifeIndexes != null
+        )
+            return@combine Weather(
+                nowWeather,
+                dailyWeather,
+                hourWeather,
+                lifeIndexes
+            )
+        return@combine null
+    }.onStart {
+        _isLoading.value = true
+    }.onCompletion {
+        _isLoading.value = false
+    }
+
     fun changedCity(cityBean: CityBean) {
-        resultNumer = 0
+
         viewModelScope.launch(Dispatchers.IO) {
             cityRepository.selected(cityBean)
         }

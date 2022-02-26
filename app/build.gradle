@@ -143,14 +143,13 @@ dependencies {
   implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
   implementation "com.squareup.retrofit2:retrofit:2.9.0"
   implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-  implementation 'com.google.code.gson:gson:2.9.0'
   implementation 'com.github.skydoves:sandwich:1.2.3'
 
   implementation 'com.github.SilenceDut:jpinyin:v1.0'
 
   implementation "com.github.fondesa:recycler-view-divider:3.5.0"
 
-  implementation 'com.yanzhenjie:permission:2.0.3'
+  implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
   implementation 'pub.devrel:easypermissions:3.0.0'
 
 

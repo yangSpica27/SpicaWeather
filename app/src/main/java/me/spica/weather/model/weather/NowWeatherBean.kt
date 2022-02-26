@@ -28,4 +28,7 @@ fun me.spica.weather.network.hefeng.now.Now.toNowWeatherBean(): NowWeatherBean {
         windPa = pressure.toIntOrNull() ?: 0,
         weatherName = text
     )
+
+
+
 }
