@@ -284,6 +284,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
             viewBinding.containerTips.startEnterAnim()
         }
+        if (viewBinding.sunriseCard.getLocalVisibleRect(scrollBounds)) {
+            viewBinding.sunriseCard.startEnterAnim()
+        }
     }
 
     private fun syncNewCity(cityName: String) {

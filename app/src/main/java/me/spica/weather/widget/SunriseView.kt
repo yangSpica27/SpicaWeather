@@ -5,22 +5,23 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.DashPathEffect
 import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.Size
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
 import timber.log.Timber
+import java.util.*
 
 // 日出view
 
-private const val sunRiseTitle = "日出"
-private const val sunFallTitle = "日落"
+private val mMargin = 14.dp
+private const val ARC_ANGLE = 135
 
 class SunriseView : View {
 
@@ -28,42 +29,24 @@ class SunriseView : View {
      * 太阳图标[0]
      * 月亮图标[1]X暂不做月落图
      */
-    @Size(2)
-    private val sunIconDrawable: List<Drawable?> =
-        listOf(
-            ContextCompat.getDrawable(context, R.drawable.ic_sunny),
-            ContextCompat.getDrawable(context, R.drawable.ic_sunny),
-        )
+    private val sunIconDrawable: Drawable? =
+        ContextCompat.getDrawable(context, R.drawable.ic_sunny)
 
     private val iconSize = 24.dp
 
     // =========各个文本的bound========
 
-    private val boundSunRise = Rect()
 
-    private val boundSunFall = Rect()
+    private val mRectF: RectF = RectF()
 
-    private val boundSunriseTime = Rect()
+    // 用于清除绘制内容
+    private val clearfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
-    private val boundSunFallTime = Rect()
-
-    // =========各个文本的bound========
-
-    // 绘制日出日落的Paint
-    private val statePaint = TextPaint(Paint.FAKE_BOLD_TEXT_FLAG).apply {
-        textSize = 16.dp
-        color = context.getColor(R.color.textColorPrimaryLight)
-    }
-
-    // 绘制时间的Paint
-    private val timePaint = TextPaint().apply {
-        textSize = 12.dp
-        color = context.getColor(R.color.textColorPrimary)
-    }
 
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
+        pathEffect = DashPathEffect(floatArrayOf(3.dp, 2.dp), 0F)
         strokeWidth = 2.dp
+        style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
     }
 
@@ -74,7 +57,12 @@ class SunriseView : View {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val roundPath = RectF()
+
+    private var startTime = 0
+
+    private var currentTime = 100
+
+    private var endTime = 200
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -82,38 +70,105 @@ class SunriseView : View {
     ) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        val mWidth = MeasureSpec.getSize(widthMeasureSpec) + paddingLeft + paddingRight
-
-        val mHeight = mWidth + iconSize / 2F + paddingTop + paddingBottom
-
+        val width = (MeasureSpec.getSize(widthMeasureSpec) - 2 * mMargin)
+        val deltaRadians = Math.toRadians((180 - ARC_ANGLE) / 2.0)
+        val radius = (width / 2 / Math.cos(deltaRadians)).toInt()
+        val height = (radius - width / 2 * Math.tan(deltaRadians)).toInt()
         setMeasuredDimension(
-            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(mHeight.toInt(), MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec((width + 2 * mMargin).toInt(), MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec((height + 2 * mMargin).toInt(), MeasureSpec.EXACTLY)
         )
 
-        roundPath.apply {
-            left = paddingLeft * 1F
-            right = mWidth * 1F - paddingRight * 1F
-            top = (paddingTop + iconSize / 2F)
-            bottom = (mWidth + iconSize / 2F)
-            +paddingTop + paddingBottom
-        }
+        val centerX = measuredWidth / 2F
+        val centerY = (mMargin + radius) * 1F
+        mRectF.set(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY + radius
+        )
 
-        invalidate()
+        ViewCompat.postInvalidateOnAnimation(this)
+    }
+
+
+    /**
+     *  设置时间
+     */
+    fun bindTime(startTime: Date, endTime: Date, currentTime: Date) {
+        this.startTime = decodeTime(startTime)
+        this.endTime = decodeTime(endTime)
+        this.currentTime = decodeTime(currentTime)
+    }
+
+    private var progress = 100
+
+    private var max = 200
+
+    private fun ensureProgress() {
+        max = endTime - startTime
+        progress = currentTime - startTime
+        progress = Math.max(0, progress)
+        progress = Math.min(progress, max)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        Timber.e("绘制容器：" + roundPath.toShortString())
+        val startAngle: Float = 270 - ARC_ANGLE / 2f
+        //
+//        val progressSweepAngle = (1f * progress / max * ARC_ANGLE)
+        val progressSweepAngle = 66
 
+        val progressEndAngle = startAngle + progressSweepAngle
+
+        val deltaAngle = progressEndAngle - 180
+
+        val deltaWidth = Math.abs(mRectF.width() / 2f * Math.cos(Math.toRadians(deltaAngle.toDouble()))).toFloat()
+        val deltaHeight = Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble()))).toFloat()
+
+        val iconPositionX = mRectF.centerX() - deltaWidth - iconSize / 2f
+
+        val iconPositionY = mRectF.centerY() - deltaHeight - iconSize / 2f
+
+        // 绘制背景虚线
         canvas.drawArc(
-            roundPath,
-            180F,
-            180F,
+            mRectF,
+            startAngle,
+            ARC_ANGLE.toFloat(),
             false,
             dottedLinePaint
         )
+        // 绘制底线
+        canvas.drawLine(
+            mMargin,
+            measuredHeight - mMargin,
+            measuredWidth - mMargin,
+            measuredHeight - mMargin,
+            dottedLinePaint
+        )
+        val restoreCount: Int = canvas.save()
+
+        Timber.i("progress${progressEndAngle}")
+
+        Timber.i("X:${iconPositionX}Y:${iconPositionY}")
+
+        if (progressEndAngle <= 270) {
+            Timber.i("X:${iconPositionX}Y:${iconPositionY}")
+
+            canvas.translate(iconPositionX, iconPositionY)
+
+            canvas.drawText("坐标", 0f, 0f, dottedLinePaint)
+            sunIconDrawable?.draw(canvas)
+
+        }
+        canvas.restoreToCount(restoreCount)
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun decodeTime(time: Date): Int {
+        return time.hours * 60 + time.minutes
     }
 
     // 绘制半圆曲线
