@@ -6,22 +6,36 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.3145833333333333" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/bg_an.xml" value="0.167" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/bg_round.xml" value="0.112" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_air_index.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_app.xml" value="0.124" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_c.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_clean_car.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_clear_day.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_clothes.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_cloudly.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_fog.xml" value="0.1085" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home_selected.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_home_unselected.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_hurricane.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_left.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_local_selected.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_local_unselected.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material_selected.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_material_unselected.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_menu.xml" value="0.131" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_overcast_day.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_overcast_night.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_plus.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_rain.xml" value="0.1085" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_rain_thumb.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_search.xml" value="0.1415" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_sunny.xml" value="0.1165" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_thumb.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_tip.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_umbrella.xml" value="0.1225" />
+        <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/ic_warin.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_home.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_location.xml" value="0.131" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/drawable/selector_material.xml" value="0.131" />
