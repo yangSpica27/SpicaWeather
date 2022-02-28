@@ -151,7 +151,10 @@ class SunriseView : View {
 
         val deltaAngle = progressEndAngle - 180
 
-        val deltaWidth = Math.abs(mRectF.width() / 2f * Math.cos(Math.toRadians(deltaAngle.toDouble()))).toFloat()
+        val deltaWidth = Math.abs(
+            mRectF.width() / 2f *
+                    Math.cos(Math.toRadians(deltaAngle.toDouble()))
+        ).toFloat()
         val deltaHeight = Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble()))).toFloat()
 
         val iconPositionX = mRectF.centerX() - deltaWidth - iconSize / 2f

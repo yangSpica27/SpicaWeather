@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/content_view"
-    android:background="@color/window_background"
+    android:background="@drawable/bg_an"
+    android:backgroundTint="#1F787474"
     android:fitsSystemWindows="true"
     tools:context=".ui.main.MainActivity">
 
