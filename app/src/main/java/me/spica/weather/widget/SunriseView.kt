@@ -180,8 +180,11 @@ class SunriseView : View {
 
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
-        val progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
+        var progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
 
+        progressSweepAngle = Math.min(ARC_ANGLE * 1f, progressSweepAngle)
+
+        progressSweepAngle = Math.max(0f, progressSweepAngle)
 
         val progressEndAngle = startAngle + progressSweepAngle
 
