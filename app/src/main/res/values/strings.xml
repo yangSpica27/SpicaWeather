@@ -7,4 +7,5 @@
     <string name="rationale_location">将获取地理信息用于快速定位城市</string>
     <string name="rationale_location_ok">好的</string>
     <string name="rationale_location_cancel">取消</string>
+    <string name="sunrise_sunset_time">日出%1$s\n日落%2$s</string>
 </resources>

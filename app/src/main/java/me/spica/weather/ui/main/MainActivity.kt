@@ -230,7 +230,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                     viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
                     viewBinding.sunriseCard.bindTime(
                         it.dailyWeather[0].sunriseDate,
-                        it.dailyWeather[0].sunsetDate
+                        it.dailyWeather[0].sunsetDate,
+                        it.dailyWeather[0].moonParse
                     )
                 } else {
                     errorTip.show()

@@ -16,7 +16,8 @@ data class DailyWeatherBean(
     val weatherName: String,
     val precip: Int, // 降水量
     val sunriseDate: Date,
-    val sunsetDate: Date
+    val sunsetDate: Date,
+    val moonParse: String
 )
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -32,6 +33,7 @@ fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeath
         weatherName = textDay,
         precip = precip.toIntOrNull() ?: 0,
         sunriseDate = sdf2.parse(sunrise) ?: sdf2.parse("06:00"),
-        sunsetDate = sdf2.parse(sunset) ?: sdf2.parse("18:00")
+        sunsetDate = sdf2.parse(sunset) ?: sdf2.parse("18:00"),
+        moonParse = moonPhase
     )
 }

@@ -32,7 +32,7 @@ class SunriseView : View {
      * 太阳图标[0]
      * 月亮图标[1]X暂不做月落图
      */
-    private lateinit var sunIcon: Bitmap
+    private var sunIcon: Bitmap
 
     private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -115,7 +115,7 @@ class SunriseView : View {
 
     fun startAnim() {
 
-        val animator = ValueAnimator.ofInt(0, currentTime - startTime)
+        val animator = ValueAnimator.ofInt(0, currentTime-startTime)
         animator.duration = 1500
         animator.addUpdateListener {
             progress = it.animatedValue as Int
@@ -133,15 +133,18 @@ class SunriseView : View {
 
     private fun ensureProgress() {
         max = endTime - startTime
+        progress = currentTime - startTime
+        progress = Math.max(0, progress)
+        progress = Math.min(max, progress)
     }
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val startAngle: Float = 270 - ARC_ANGLE / 2f
+        val startAngle: Float = 270f - ARC_ANGLE / 2f
 
-        val progressSweepAngle = (progress / max.toFloat() * ARC_ANGLE)
+        val progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
 
 
         val progressEndAngle = startAngle + progressSweepAngle
@@ -196,15 +199,5 @@ class SunriseView : View {
         return time.hours * 60 + time.minutes
     }
 
-    // 绘制半圆曲线
-    private fun drawDottedLine() {
-    }
 
-    // 绘制进度曲线
-    private fun drawProgressLine() {
-    }
-
-    // 绘制太阳坐标
-    private fun drawSunnyIcon() {
-    }
 }
