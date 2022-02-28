@@ -26,12 +26,19 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
     private val cityViewModel: CityViewModel by viewModels()
 
     override fun initializer() {
-        val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down)
+        val animation = AnimationUtils.loadLayoutAnimation(
+            this,
+            R.anim.layout_animation_fall_down
+        )
         viewBinding.rvCity.layoutAnimation = animation
         viewBinding.rvCity.adapter = cityWeatherAdapter
 
         cityWeatherAdapter.itemClickListener = {
             cityViewModel.selectCity(it)
+        }
+
+        viewBinding.toolbar.setNavigationOnClickListener {
+            finish()
         }
 
         lifecycleScope.launch {
@@ -46,7 +53,7 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
                         )
                     )
                 }
-                cityWeatherAdapter.diffUtil.submitList(it)
+                cityWeatherAdapter.diffUtil.submitList(it.reversed())
             }
         }
     }

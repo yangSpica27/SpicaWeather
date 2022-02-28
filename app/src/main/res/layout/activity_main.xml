@@ -56,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
+                    style="@style/spica_card"
                     android:layout_marginEnd="14dp" />
 
                 <me.spica.weather.widget.card.HourWeatherCard
@@ -63,6 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    style="@style/spica_card"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="14dp" />
 
@@ -71,6 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    style="@style/spica_card"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="14dp" />
 
@@ -79,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    style="@style/spica_card"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="14dp" />
 
@@ -88,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="14dp"
+                    style="@style/spica_card"
                     android:animateLayoutChanges="true"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="12dp" />

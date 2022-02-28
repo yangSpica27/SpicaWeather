@@ -25,7 +25,7 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
         this,
         object : DiffUtil.ItemCallback<CityBean>() {
             override fun areItemsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.cityName == newItem.cityName
-            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.isSelected == newItem.isSelected
+            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = false
         }
     )
 
@@ -52,15 +52,20 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
 
             itemClickListener(diffUtil.currentList[position])
 
-            doOnMainThreadIdle({
-                val intent = Intent(activity, MainActivity::class.java)
-                val options = ActivityOptions.makeSceneTransitionAnimation(
-                    activity,
-                    holder.itemBinding.root,
-                    "shared_element_container"
-                )
-                activity.startActivity(intent, options.toBundle())
-            })
+            holder.itemBinding.root.postDelayed(
+                {
+                    doOnMainThreadIdle({
+                        val intent = Intent(activity, MainActivity::class.java)
+                        val options = ActivityOptions.makeSceneTransitionAnimation(
+                            activity,
+                            holder.itemBinding.root,
+                            "shared_element_container"
+                        )
+                        activity.startActivity(intent, options.toBundle())
+                    })
+                }, 500
+            )
+
         }
     }
 

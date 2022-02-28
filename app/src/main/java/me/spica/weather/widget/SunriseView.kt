@@ -6,11 +6,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.DashPathEffect
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.animation.doOnEnd
@@ -47,9 +50,21 @@ class SunriseView : View {
     private val clearfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
 
+    // 区域绘制
+    private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(3.dp, 2.dp), 0F)
         strokeWidth = 2.dp
+        style = Paint.Style.STROKE
+        color = ContextCompat.getColor(context, R.color.dottedLineColor)
+    }
+
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        strokeWidth = 3.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
     }
@@ -76,6 +91,10 @@ class SunriseView : View {
     private var currentTime = 100
 
     private var endTime = 200
+
+
+    private lateinit var shader: Shader
+
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -111,11 +130,28 @@ class SunriseView : View {
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
         ensureProgress()
+        ViewCompat.postInvalidateOnAnimation(this)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        shader = LinearGradient(
+            0F,
+            0F,
+            0F,
+            height * 1f,
+            ContextCompat.getColor(
+                context,
+                R.color.pathBgColor
+            ),
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
     }
 
     fun startAnim() {
 
-        val animator = ValueAnimator.ofInt(0, currentTime-startTime)
+        val animator = ValueAnimator.ofInt(0, currentTime - startTime)
         animator.duration = 1500
         animator.addUpdateListener {
             progress = it.animatedValue as Int
@@ -151,15 +187,61 @@ class SunriseView : View {
 
         val deltaAngle = progressEndAngle - 180
 
+
         val deltaWidth = Math.abs(
             mRectF.width() / 2f *
                     Math.cos(Math.toRadians(deltaAngle.toDouble()))
         ).toFloat()
+
+
         val deltaHeight = Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble()))).toFloat()
 
-        val iconPositionX = mRectF.centerX() - deltaWidth - iconSize / 2f
+
+        val iconPositionX =
+            if (
+                progressEndAngle > 270
+            ) {
+                mRectF.centerX() + deltaWidth - iconSize / 2f
+            } else {
+                mRectF.centerX() - deltaWidth - iconSize / 2f
+            }
+
 
         val iconPositionY = mRectF.centerY() - deltaHeight - iconSize / 2f
+        val layerId = canvas.saveLayer(
+            mRectF.left, mRectF.top, mRectF.right, mRectF.top + mRectF.height() / 2,
+            null
+        )
+
+
+        // 绘制阴影
+        pathPaint.shader = shader
+
+        canvas.drawArc(
+            mRectF,
+            270 - ARC_ANGLE / 2f,
+            ARC_ANGLE * 1f,
+            false,
+            pathPaint
+        )
+        pathPaint.xfermode = clearfermode
+        pathPaint.shader = null
+        canvas.drawRect(
+            (
+                    (mRectF.centerX() + mRectF.width() / 2
+                            * Math.cos(
+                        (360 - progressEndAngle)
+                                * Math.PI / 180
+                    )).toFloat()
+                    ),
+            mRectF.top,
+            mRectF.right,
+            mRectF.top + mRectF.height() / 2,
+            pathPaint
+        )
+
+        pathPaint.xfermode = null
+        canvas.restoreToCount(layerId)
 
         // 绘制背景虚线
         canvas.drawArc(
@@ -169,6 +251,16 @@ class SunriseView : View {
             false,
             dottedLinePaint
         )
+        
+        // 途径线
+        canvas.drawArc(
+            mRectF,
+            270 - ARC_ANGLE / 2f,
+            progressSweepAngle,
+            false,
+            linePaint
+        )
+
         // 绘制底线
         canvas.drawLine(
             mMargin,
@@ -182,17 +274,13 @@ class SunriseView : View {
         Timber.i("progress${progressEndAngle}")
 
 
+        canvas.translate(iconPositionX, iconPositionY)
+        canvas.drawBitmap(
+            sunIcon,
+            0f, 0f,
+            drawablePaint
+        )
 
-        if (0 <= 270) {
-
-            canvas.translate(iconPositionX, iconPositionY)
-
-            canvas.drawBitmap(
-                sunIcon,
-                0f, 0f,
-                drawablePaint
-            )
-        }
         canvas.restoreToCount(restoreCount)
     }
 
