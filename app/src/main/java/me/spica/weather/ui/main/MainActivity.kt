@@ -228,6 +228,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                     viewBinding.nowWeatherCard.bindData(it.todayWeather)
                     viewBinding.containerTips.bindData(it.lifeIndexes)
                     viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
+                    viewBinding.sunriseCard.bindTime(
+                        it.dailyWeather[0].sunriseDate,
+                        it.dailyWeather[0].sunsetDate
+                    )
                 } else {
                     errorTip.show()
                 }

@@ -38,13 +38,14 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    suspend fun bindData(items: List<LifeIndexBean>) = withContext(Dispatchers.Default) {
-        tipAdapter.items.clear()
-        tipAdapter.items.addAll(items)
-        doOnMainThreadIdle({
-            tipAdapter.notifyDataSetChanged()
-        })
-    }
+    suspend fun bindData(items: List<LifeIndexBean>) =
+        withContext(Dispatchers.Default) {
+            tipAdapter.items.clear()
+            tipAdapter.items.addAll(items)
+            doOnMainThreadIdle({
+                tipAdapter.notifyDataSetChanged()
+            })
+        }
 
     override var enterAnim: MutableList<Animator> = mutableListOf(
         ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {

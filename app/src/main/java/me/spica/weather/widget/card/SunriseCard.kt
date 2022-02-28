@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.databinding.CardSunriseBinding
+import java.util.*
 
 class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
@@ -34,6 +35,19 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     init {
         alpha = 0f
+
     }
 
+
+    fun bindTime(startTime: Date, endTime: Date) {
+        binding.sunriseView.bindTime(startTime, endTime)
+    }
+
+
+    override fun startEnterAnim() {
+        if (enterAnim.size != 0) {
+            binding.sunriseView.startAnim()
+        }
+        super.startEnterAnim()
+    }
 }

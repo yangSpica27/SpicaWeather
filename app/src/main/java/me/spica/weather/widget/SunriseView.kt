@@ -1,16 +1,19 @@
 @file:Suppress("unused")
 package me.spica.weather.widget
 
+import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import me.spica.weather.R
@@ -29,10 +32,11 @@ class SunriseView : View {
      * 太阳图标[0]
      * 月亮图标[1]X暂不做月落图
      */
-    private val sunIconDrawable: Drawable? =
-        ContextCompat.getDrawable(context, R.drawable.ic_sunny)
+    private lateinit var sunIcon: Bitmap
 
-    private val iconSize = 24.dp
+    private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private val iconSize = 32.dp
 
     // =========各个文本的bound========
 
@@ -57,6 +61,15 @@ class SunriseView : View {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    init {
+        val option = BitmapFactory.Options()
+        option.inJustDecodeBounds = true
+        BitmapFactory.decodeResource(resources, R.drawable.ic_sun, option)
+        option.inJustDecodeBounds = false
+        option.inDensity = option.outWidth
+        option.inTargetDensity = iconSize.toInt()
+        sunIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_sun, option)
+    }
 
     private var startTime = 0
 
@@ -87,18 +100,31 @@ class SunriseView : View {
             centerX + radius,
             centerY + radius
         )
-
-        ViewCompat.postInvalidateOnAnimation(this)
     }
 
 
     /**
      *  设置时间
      */
-    fun bindTime(startTime: Date, endTime: Date, currentTime: Date) {
+    fun bindTime(startTime: Date, endTime: Date, currentTime: Date = Date()) {
         this.startTime = decodeTime(startTime)
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
+        ensureProgress()
+    }
+
+    fun startAnim() {
+
+        val animator = ValueAnimator.ofInt(0, currentTime - startTime)
+        animator.duration = 1500
+        animator.addUpdateListener {
+            progress = it.animatedValue as Int
+            ViewCompat.postInvalidateOnAnimation(this)
+        }
+        animator.doOnEnd {
+            it.removeAllListeners()
+        }
+        animator.start()
     }
 
     private var progress = 100
@@ -107,18 +133,16 @@ class SunriseView : View {
 
     private fun ensureProgress() {
         max = endTime - startTime
-        progress = currentTime - startTime
-        progress = Math.max(0, progress)
-        progress = Math.min(progress, max)
     }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         val startAngle: Float = 270 - ARC_ANGLE / 2f
-        //
-//        val progressSweepAngle = (1f * progress / max * ARC_ANGLE)
-        val progressSweepAngle = 66
+
+        val progressSweepAngle = (progress / max.toFloat() * ARC_ANGLE)
+
 
         val progressEndAngle = startAngle + progressSweepAngle
 
@@ -151,16 +175,17 @@ class SunriseView : View {
 
         Timber.i("progress${progressEndAngle}")
 
-        Timber.i("X:${iconPositionX}Y:${iconPositionY}")
 
-        if (progressEndAngle <= 270) {
-            Timber.i("X:${iconPositionX}Y:${iconPositionY}")
+
+        if (0 <= 270) {
 
             canvas.translate(iconPositionX, iconPositionY)
 
-            canvas.drawText("坐标", 0f, 0f, dottedLinePaint)
-            sunIconDrawable?.draw(canvas)
-
+            canvas.drawBitmap(
+                sunIcon,
+                0f, 0f,
+                drawablePaint
+            )
         }
         canvas.restoreToCount(restoreCount)
     }
