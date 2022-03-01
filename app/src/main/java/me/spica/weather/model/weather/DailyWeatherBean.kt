@@ -1,10 +1,14 @@
 package me.spica.weather.model.weather
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 private val sdf2 = SimpleDateFormat("HH:mm", Locale.CHINA)
+@Parcelize
 data class DailyWeatherBean(
     val fxTime: Date = Date(), // 更新时间
     val maxTemp: Int, // 当日最高的温度
@@ -18,7 +22,7 @@ data class DailyWeatherBean(
     val sunriseDate: Date,
     val sunsetDate: Date,
     val moonParse: String
-)
+):Parcelable
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeatherBean {

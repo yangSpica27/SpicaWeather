@@ -25,6 +25,9 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     // 用于排序的列表
     private val sortList = mutableListOf<DailyWeatherBean>()
 
+    //点击监听
+    var itemClickListener: (DailyWeatherBean) -> Unit = {}
+
     // 最近几日最低气温中最低的
     private var minTempTop = 0
 
@@ -74,6 +77,10 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
             holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
             holder.itemDayWeatherBinding.itemLineMin.maxValue = maxTempBottom
             holder.itemDayWeatherBinding.itemLineMin.minValue = minTempBottom
+
+            holder.itemDayWeatherBinding.root.setOnClickListener {
+                itemClickListener(items[position])
+            }
 
             if (position == 0) {
                 // 首个item不绘制左半部分

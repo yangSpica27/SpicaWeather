@@ -1,10 +1,13 @@
 package me.spica.weather.model.weather
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
 
+@Parcelize
 data class NowWeatherBean(
     val obsTime: Date = Date(), // 更新时间
     val temp: Int, // 当前的温度
@@ -14,7 +17,7 @@ data class NowWeatherBean(
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherName: String,
-)
+) : Parcelable
 
 fun me.spica.weather.network.hefeng.now.Now.toNowWeatherBean(): NowWeatherBean {
     val updateDate = sdf.parse(this.obsTime) ?: Date()

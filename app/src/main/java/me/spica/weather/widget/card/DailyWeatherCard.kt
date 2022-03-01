@@ -15,6 +15,7 @@ import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.home.DailWeatherAdapter
+import me.spica.weather.ui.today.TodayWeatherActivity
 
 class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
@@ -45,6 +46,9 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
         alpha = 0f
         binding.rvWeather.adapter = dailyWeatherAdapter
+        dailyWeatherAdapter.itemClickListener = {
+            TodayWeatherActivity.startActivity(context, it)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

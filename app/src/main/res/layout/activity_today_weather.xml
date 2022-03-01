@@ -4,28 +4,495 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@anim/in_left"
-        app:title="3月1日"
-        app:subtitle="星期2" />
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_left"
+        app:title="天气详情" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbars="none"
         android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:divider="@drawable/bg_divider"
+            android:showDividers="middle|end">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="天气"
+                android:paddingStart="14dp"
+                android:background="@color/white"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="日间天气"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="多云"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:background="@color/white"
+                android:paddingBottom="12dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="夜间天气"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="多云转晴"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="温度"
+                android:layout_marginTop="12dp"
+                android:paddingStart="14dp"
+                android:background="@color/white"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="最高气温"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10℃"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:background="@color/white"
+                android:paddingBottom="12dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="最低气温"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10℃"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="风力"
+                android:paddingStart="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/white"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="日间风向"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="东北风"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="日间风力"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1-2级"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="夜间风向"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="东北风"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sun" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="夜间风力"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1-2级"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="专业数据"
+                android:paddingStart="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/white"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:background="@color/white"
+                android:layout_marginBottom="100dp"
+                android:rowCount="2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_rowSpan="1"
+                    android:layout_columnSpan="1"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ic_pressure"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_sun"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_pressure_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000pa"
+                        android:paddingBottom="2dp"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_pressure_subtitle"
+                        app:layout_constraintStart_toEndOf="@id/ic_pressure" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_pressure_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="气压"
+                        android:gravity="center"
+                        android:paddingTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_pressure_title"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ic_pressure" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_rowSpan="1"
+                    android:layout_columnSpan="1"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ic_uv"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_sun"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_uv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:paddingBottom="2dp"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_uv_subtitle"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@id/ic_uv" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_uv_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="紫外线强度"
+                        android:paddingTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_uv_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@id/ic_uv" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_rowSpan="1"
+                    android:layout_columnSpan="1"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ic_vis"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_sun"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_vis_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5Km"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toTopOf="@id/tv_vis_subtitle"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintStart_toEndOf="@id/ic_vis" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_vis_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="能见度"
+                        android:paddingTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_vis_title"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ic_vis" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_rowSpan="1"
+                    android:layout_columnSpan="1"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ic_cloud"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_sun"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_cloud_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30%"
+                        android:paddingBottom="2dp"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toTopOf="@id/tv_cloud_subtitle"
+                        app:layout_constraintStart_toEndOf="@id/ic_cloud" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_cloud_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="云量"
+                        android:paddingTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_cloud_title"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ic_cloud" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </GridLayout>
 
         </LinearLayout>
 
