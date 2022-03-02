@@ -283,7 +283,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                             Snackbar.make(
                                 viewBinding.root,
                                 "检查到您目前的城市在${it.cityName}，正在切换",
-                                Snackbar.LENGTH_LONG
+                                Snackbar.LENGTH_SHORT
                             ).show()
                         }
                     viewModel.changedCity(it)
