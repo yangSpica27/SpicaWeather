@@ -19,7 +19,9 @@ import me.spica.weather.ui.main.MainActivity
 /**
  * 城市
  */
-class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherCityAdapter.ViewHolder>() {
+class WeatherCityAdapter(
+    private val activity: Activity,
+) : RecyclerView.Adapter<WeatherCityAdapter.ViewHolder>() {
 
     val diffUtil = AsyncListDiffer(
         this,
@@ -28,6 +30,7 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
             override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = false
         }
     )
+
 
     var itemClickListener: (CityBean) -> Unit = {}
 
@@ -39,13 +42,18 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
         return ViewHolder(itemBinding)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
         holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon} 北纬${diffUtil.currentList[position].lat}"
         if (diffUtil.currentList[position].isSelected) {
             holder.itemBinding.tvIsDefault.show()
+            holder.itemBinding.root.setOnTouchListener { _, _ ->
+                // 不可操作目前选中的item
+                return@setOnTouchListener true
+            }
         } else {
+            holder.itemBinding.root.setOnTouchListener(null)
             holder.itemBinding.tvIsDefault.hide()
         }
         holder.itemView.rootView.setOnClickListener {
@@ -65,9 +73,12 @@ class WeatherCityAdapter(val activity: Activity) : RecyclerView.Adapter<WeatherC
                     })
                 }, 500
             )
-
         }
+
+
     }
 
     override fun getItemCount(): Int = diffUtil.currentList.size
+
+
 }

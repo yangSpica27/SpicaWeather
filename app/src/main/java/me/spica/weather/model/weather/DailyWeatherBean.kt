@@ -1,6 +1,5 @@
 package me.spica.weather.model.weather
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
@@ -17,11 +16,20 @@ data class DailyWeatherBean(
     val windSpeed: Int, // 风速
     val water: Int, // 湿度
     val windPa: Int, // 气压
-    val weatherName: String,
+    val weatherNameDay: String,
     val precip: Int, // 降水量
     val sunriseDate: Date,
     val sunsetDate: Date,
-    val moonParse: String
+    val moonParse: String,
+    val dayWindDir: String,
+    val dayWindSpeed: String,
+    val nightWindSpeed: String,
+    val nightWindDir: String,
+    val weatherNameNight: String,
+    val pressure: String,
+    val uv: String,
+    val vis: Int,
+    val cloud: Int
 ):Parcelable
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -34,10 +42,19 @@ fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeath
         windSpeed = windSpeedDay.toIntOrNull() ?: 0,
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
-        weatherName = textDay,
+        weatherNameDay = textDay,
         precip = precip.toIntOrNull() ?: 0,
         sunriseDate = sdf2.parse(sunrise) ?: sdf2.parse("06:00"),
         sunsetDate = sdf2.parse(sunset) ?: sdf2.parse("18:00"),
-        moonParse = moonPhase
+        moonParse = moonPhase,
+        dayWindSpeed = windSpeedDay,
+        dayWindDir = windDirDay,
+        nightWindDir = windDirNight,
+        nightWindSpeed = windSpeedNight,
+        weatherNameNight = textNight,
+        pressure = pressure,
+        uv = uvIndex,
+        vis = vis.toIntOrNull() ?: 0,
+        cloud = cloud.toIntOrNull() ?: 0
     )
 }

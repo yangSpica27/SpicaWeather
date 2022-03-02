@@ -2,15 +2,12 @@ package me.spica.weather.ui.main
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
-import android.view.Window
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -21,8 +18,6 @@ import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.platform.MaterialContainerTransform
-import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -103,21 +98,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     lateinit var locationClint: LocationClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-        findViewById<View>(android.R.id.content).transitionName = "shared_element_container"
-        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-        window.sharedElementEnterTransition = MaterialContainerTransform().apply {
-            addTarget(android.R.id.content)
-            duration = 500L
-            containerColor = Color.WHITE
-            fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
-        }
-        window.sharedElementReturnTransition = MaterialContainerTransform().apply {
-            addTarget(android.R.id.content)
-            duration = 550L
-            containerColor = Color.WHITE
-            fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
-        }
         super.onCreate(savedInstanceState)
         // 绑定定位监听
         locationClint.registerLocationListener(locationListener)

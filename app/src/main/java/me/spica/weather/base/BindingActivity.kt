@@ -3,6 +3,7 @@ package me.spica.weather.base
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.viewbinding.ViewBinding
 
 abstract class BindingActivity<ViewBindingType : ViewBinding> : AppCompatActivity() {
@@ -27,4 +28,6 @@ abstract class BindingActivity<ViewBindingType : ViewBinding> : AppCompatActivit
         _binding = null
         super.onDestroy()
     }
+
+
 }
