@@ -90,9 +90,11 @@ class HeRepository(private val heClient: HeClient) : Repository {
             emit(this)
         }.suspendOnFailure {
             emit(null)
+            Timber.e(this)
             onError(this)
         }.suspendOnError {
             emit(null)
+            Timber.e(message())
             onError(message())
         }
     }.flowOn(Dispatchers.IO)

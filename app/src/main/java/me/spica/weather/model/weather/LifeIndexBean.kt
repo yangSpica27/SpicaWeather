@@ -35,7 +35,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 LifeIndexBean.SPT,
                 "运动指数",
                 category,
-                text,
+                text ?: "无更多描述",
                 IndicesUtils.getColorRes(this.type, level.toInt()),
                 R.drawable.ic_spt
             )
@@ -45,7 +45,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 LifeIndexBean.CLOTHES,
                 "穿衣指数",
                 category,
-                text,
+                text ?: "无更多描述",
                 IndicesUtils.getColorRes(type, level.toInt()),
                 R.drawable.ic_clothes
             )
@@ -55,7 +55,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 LifeIndexBean.AIR,
                 "空气污染指数",
                 category,
-                text,
+                text ?: "无更多描述",
                 IndicesUtils.getColorRes(type, level.toInt()),
                 R.drawable.ic_air_index
             )
@@ -65,7 +65,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 LifeIndexBean.CAR,
                 "洗车指数",
                 category,
-                text,
+                text ?: "无更多描述",
                 IndicesUtils.getColorRes(type, level.toInt()),
                 R.drawable.ic_clean_car
             )
@@ -73,9 +73,9 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
     }
     return LifeIndexBean(
         LifeIndexBean.UNKNOWN,
-        text,
+        name,
         category,
-        text = text,
+        text ?: "无更多描述",
         R.color.textColorPrimaryHint,
         R.drawable.ic_clean_car
     )

@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Daily(
     @Json(name = "cloud")
-    val cloud: String,
+    val cloud: String?,
     @Json(name = "fxDate")
     val fxDate: String,
     @Json(name = "humidity")

@@ -55,6 +55,6 @@ fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeath
         pressure = pressure,
         uv = uvIndex,
         vis = vis.toIntOrNull() ?: 0,
-        cloud = cloud.toIntOrNull() ?: 0
+        cloud = cloud?.toIntOrNull() ?: 0
     )
 }

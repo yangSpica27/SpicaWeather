@@ -21,6 +21,7 @@ import me.spica.weather.model.weather.NowWeatherBean
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.persistence.repository.CityRepository
 import me.spica.weather.repository.HeRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -116,6 +117,19 @@ class WeatherViewModel @Inject constructor(
                 hourWeather,
                 lifeIndexes
             )
+
+        if (nowWeather==null){
+            Timber.e("now==nu;;")
+        }
+        if (dailyWeather==null){
+            Timber.e("daily==null")
+        }
+        if (hourWeather==null){
+            Timber.e("hourWeather==null")
+        }
+        if (lifeIndexes==null){
+            Timber.e("lifeIndex==null")
+        }
         return@combine null
     }.onStart {
         _isLoading.value = true
