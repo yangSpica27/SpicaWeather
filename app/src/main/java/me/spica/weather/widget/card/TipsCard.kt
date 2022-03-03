@@ -1,13 +1,12 @@
 package me.spica.weather.widget.card
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.RelativeLayout
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,8 +26,14 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    override var animatorView: View = this
+
+    override var enterAnim: AnimatorSet = AnimatorSet()
+    override var index: Int = 4
+    override var hasInScreen: Boolean = false
+
     init {
-        alpha = 0f
+        resetAnim()
         context
             .dividerBuilder()
             .colorRes(R.color.line_divider)
@@ -47,16 +52,5 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
             })
         }
 
-    override var enterAnim: MutableList<Animator> = mutableListOf(
-        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        },
-        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        }
-    )
+
 }

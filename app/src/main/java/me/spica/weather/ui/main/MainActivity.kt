@@ -252,26 +252,45 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         ActivityMainBinding.inflate(inflater)
 
     private val scrollBounds = Rect()
+
     private fun checkAnim() {
         viewBinding.scrollView.getHitRect(scrollBounds)
-        if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
-            viewBinding.nowWeatherCard.startEnterAnim()
+
+        viewBinding.nowWeatherCard.apply {
+            checkEnterScreen(getLocalVisibleRect(scrollBounds))
+        }
+        viewBinding.dailyWeatherCard.apply {
+            checkEnterScreen(getLocalVisibleRect(scrollBounds))
+        }
+        viewBinding.hourlyWeatherCard.apply {
+            checkEnterScreen(getLocalVisibleRect(scrollBounds))
+        }
+        viewBinding.sunriseCard.apply {
+            checkEnterScreen(getLocalVisibleRect(scrollBounds))
+        }
+        viewBinding.containerTips.apply {
+            checkEnterScreen(getLocalVisibleRect(scrollBounds))
         }
 
-        if (viewBinding.dailyWeatherCard.getLocalVisibleRect(scrollBounds)) {
-            viewBinding.dailyWeatherCard.startEnterAnim()
-        }
 
-        if (viewBinding.hourlyWeatherCard.getLocalVisibleRect(scrollBounds)) {
-            viewBinding.hourlyWeatherCard.startEnterAnim()
-        }
-
-        if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
-            viewBinding.containerTips.startEnterAnim()
-        }
-        if (viewBinding.sunriseCard.getLocalVisibleRect(scrollBounds)) {
-            viewBinding.sunriseCard.startEnterAnim()
-        }
+//        if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
+//
+//        }
+//
+//        if (viewBinding.dailyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+//            viewBinding.dailyWeatherCard.startEnterAnim()
+//        }
+//
+//        if (viewBinding.hourlyWeatherCard.getLocalVisibleRect(scrollBounds)) {
+//            viewBinding.hourlyWeatherCard.startEnterAnim()
+//        }
+//
+//        if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
+//            viewBinding.containerTips.startEnterAnim()
+//        }
+//        if (viewBinding.sunriseCard.getLocalVisibleRect(scrollBounds)) {
+//            viewBinding.sunriseCard.startEnterAnim()
+//        }
     }
 
     private fun syncNewCity(cityName: String) {

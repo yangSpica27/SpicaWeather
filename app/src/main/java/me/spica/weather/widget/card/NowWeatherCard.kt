@@ -1,16 +1,13 @@
 package me.spica.weather.widget.card
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import coil.load
-import coil.request.ImageRequest
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.common.getThemeColor
@@ -30,21 +27,15 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
     private val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
-    override var enterAnim: MutableList<Animator> = mutableListOf(
-        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        },
-        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        }
-    )
+    override var animatorView: View = this
+
+    override var enterAnim: AnimatorSet = AnimatorSet()
+    override var index: Int = 0
+    override var hasInScreen: Boolean = false
+
 
     init {
-        alpha = 0f
+        resetAnim()
     }
 
     // 12:00
@@ -66,7 +57,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
 
         binding.tvTemp.text = nowWeatherBean.temp.toString() + "℃"
-        binding.tvNow.text = "早上好！"
+        binding.tvNow.text = "玻璃晴朗，橘子辉煌"
         binding.tvWeather.text = nowWeatherBean.weatherName
         binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
         binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime)
@@ -74,4 +65,6 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"
         binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"
     }
+
+
 }

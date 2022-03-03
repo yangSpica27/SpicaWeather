@@ -1,12 +1,11 @@
 package me.spica.weather.widget.card
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import android.view.View
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.spica.weather.databinding.CardHourlyWeatherBinding
@@ -27,21 +26,15 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
         HourWeatherAdapter()
     }
 
-    override var enterAnim: MutableList<Animator> = mutableListOf(
-        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        },
-        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        }
-    )
+
+    override var animatorView: View = this
+
+    override var enterAnim: AnimatorSet = AnimatorSet()
+    override var index: Int = 1
+    override var hasInScreen: Boolean = false
 
     init {
-        alpha = 0f
+        resetAnim()
         binding.rvHourWeather.adapter = hourWeatherAdapter
     }
 

@@ -131,6 +131,7 @@ dependencies {
 
   // App startup
   implementation "androidx.startup:startup-runtime:1.1.1"
+  implementation 'com.drakeet.multitype:multitype:4.3.0'
 
   // Preference MMKV
   implementation 'com.tencent:mmkv-static:1.2.12'

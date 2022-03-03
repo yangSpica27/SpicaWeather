@@ -1,12 +1,11 @@
 package me.spica.weather.widget.card
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.spica.weather.R
 import me.spica.weather.databinding.CardSunriseBinding
 import java.text.SimpleDateFormat
@@ -14,18 +13,6 @@ import java.util.*
 
 class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
-    override var enterAnim: MutableList<Animator> = mutableListOf(
-        ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        },
-        ObjectAnimator.ofFloat(this, "translationY", 100F, 0F).apply {
-            duration = 400
-            startDelay = 100
-            interpolator = FastOutSlowInInterpolator()
-        }
-    )
 
     private val binding = CardSunriseBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -35,9 +22,15 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
-    init {
-        alpha = 0f
+    override var animatorView: View = this
 
+    override var enterAnim: AnimatorSet = AnimatorSet()
+    override var index: Int = 3
+
+    override var hasInScreen: Boolean = false
+
+    init {
+        resetAnim()
     }
 
 
@@ -52,11 +45,8 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
         binding.tvSubtitle.text = subTitle
     }
 
-
     override fun startEnterAnim() {
-        if (enterAnim.size != 0) {
-            binding.sunriseView.startAnim()
-        }
         super.startEnterAnim()
+        binding.sunriseView.startAnim()
     }
 }
