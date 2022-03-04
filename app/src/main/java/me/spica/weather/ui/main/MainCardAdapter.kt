@@ -3,16 +3,22 @@ package me.spica.weather.ui.main
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
-import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.widget.card.DailyWeatherCard
 import me.spica.weather.widget.card.HomeCardType
 import me.spica.weather.widget.card.HourWeatherCard
 import me.spica.weather.widget.card.NowWeatherCard
+import me.spica.weather.widget.card.SunriseCard
 import me.spica.weather.widget.card.TipsCard
 import timber.log.Timber
 
-class MainCardAdapter(private val recyclerView: RecyclerView) : RecyclerView.Adapter<AbstractMainViewHolder>() {
+class MainCardAdapter(
+    private val recyclerView: RecyclerView,
+    private val scope: CoroutineScope
+) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
     private var items = HomeCardType.values().toList()
 
@@ -51,7 +57,7 @@ class MainCardAdapter(private val recyclerView: RecyclerView) : RecyclerView.Ada
                 return AbstractMainViewHolder(itemView, itemView)
             }
             HomeCardType.SUNRISE.code -> {
-                val itemView = DailyWeatherCard(parent.context)
+                val itemView = SunriseCard(parent.context)
                 itemView.layoutParams = lp
                 return AbstractMainViewHolder(itemView, itemView)
             }
@@ -71,9 +77,9 @@ class MainCardAdapter(private val recyclerView: RecyclerView) : RecyclerView.Ada
     override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
         holder.reset()
         weather?.let {
-            doOnMainThreadIdle({
+            scope.launch(Dispatchers.Default) {
                 holder.bindView(it)
-            })
+            }
         }
         Timber.e("绑定视图${position}")
         recyclerView.post {

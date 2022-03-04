@@ -6,6 +6,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
+import kotlinx.coroutines.CoroutineScope
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
 

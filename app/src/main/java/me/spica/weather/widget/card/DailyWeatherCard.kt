@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import kotlinx.coroutines.Job
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -19,6 +20,11 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     private val dailyWeatherAdapter by lazy {
         DailWeatherAdapter()
     }
+
+    private val job = Job()
+
+
+
 
     private val binding = CardDailyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -42,20 +48,22 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-   override fun bindData(weather: Weather) {
-        val items = weather.dailyWeather
-        dailyWeatherAdapter.items.clear()
-        dailyWeatherAdapter.items.addAll(items)
-        dailyWeatherAdapter.syncTempMaxAndMin()
-        doOnMainThreadIdle({
-            dailyWeatherAdapter.notifyDataSetChanged()
-            binding.rvWeather.postDelayed(
-                {
-                    binding.layoutLoading.hide()
-                    binding.rvWeather.show()
-                }, 100
-            )
-        })
+    override fun bindData(weather: Weather) {
+            val items = weather.dailyWeather
+            dailyWeatherAdapter.items.clear()
+            dailyWeatherAdapter.items.addAll(items)
+            dailyWeatherAdapter.syncTempMaxAndMin()
+            doOnMainThreadIdle({
+                dailyWeatherAdapter.notifyDataSetChanged()
+                binding.rvWeather.postDelayed(
+                    {
+                        binding.layoutLoading.hide()
+                        binding.rvWeather.show()
+                    }, 100
+                )
+            })
+        }
 
-    }
+
+
 }

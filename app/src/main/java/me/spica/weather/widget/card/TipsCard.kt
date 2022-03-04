@@ -8,15 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import kotlinx.coroutines.Job
 import me.spica.weather.R
 import me.spica.weather.databinding.CardLifeIndexBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.home.TipAdapter
 
-class TipsCard : RelativeLayout, SpicaWeatherCard {
+class TipsCard : RelativeLayout, SpicaWeatherCard{
 
     private val tipAdapter = TipAdapter()
+
+
+    private val job = Job()
+
+
 
     private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -42,13 +48,17 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun bindData(weather: Weather) {
-        val items = weather.lifeIndexes
-        tipAdapter.items.clear()
-        tipAdapter.items.addAll(items)
-        doOnMainThreadIdle({
-            tipAdapter.notifyDataSetChanged()
-        })
+            val items = weather.lifeIndexes
+            tipAdapter.items.clear()
+            tipAdapter.items.addAll(items)
+            doOnMainThreadIdle({
+                tipAdapter.notifyDataSetChanged()
+            })
     }
 
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        job.cancel()
+    }
 }
