@@ -6,21 +6,17 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import me.spica.weather.R
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
-    private  var job: Job
+
 
     private val binding = CardSunriseBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -39,7 +35,6 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     init {
         resetAnim()
-        job = Job()
     }
 
 

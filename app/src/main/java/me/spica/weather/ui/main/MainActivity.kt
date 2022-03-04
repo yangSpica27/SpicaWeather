@@ -182,7 +182,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
     private fun initView() {
-
         mainCardAdapter = MainCardAdapter(viewBinding.rvMain, lifecycleScope)
         // 滑动检测
         viewBinding.rvMain.setOnScrollChangeListener { _, _, _, _, _ ->

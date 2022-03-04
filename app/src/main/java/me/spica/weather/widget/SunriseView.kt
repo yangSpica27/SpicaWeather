@@ -150,7 +150,6 @@ class SunriseView : View {
     }
 
     fun startAnim() {
-
         val animator = ValueAnimator.ofInt(0, currentTime - startTime)
         animator.duration = 1500
         animator.addUpdateListener {

@@ -79,6 +79,7 @@ class MainCardAdapter(
         weather?.let {
             scope.launch(Dispatchers.Default) {
                 holder.bindView(it)
+                holder.itemView.requestLayout()
             }
         }
         Timber.e("绑定视图${position}")
@@ -91,7 +92,6 @@ class MainCardAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun notifyData(weather: Weather) {
         this.weather = weather
-        Timber.i("更新视图")
         notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
     }
