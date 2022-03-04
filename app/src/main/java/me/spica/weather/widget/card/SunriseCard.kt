@@ -18,14 +18,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class SunriseCard : SpicaWeatherCard, ConstraintLayout, CoroutineScope {
+class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     private  var job: Job
 
     private val binding = CardSunriseBinding.inflate(LayoutInflater.from(context), this, true)
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default + job
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -47,7 +45,6 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout, CoroutineScope {
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
     override fun bindData(weather: Weather) {
-        launch(Dispatchers.Default) {
             val startTime = weather.dailyWeather[0].sunriseDate
             val endTime = weather.dailyWeather[0].sunsetDate
             val subTitle = weather.dailyWeather[0].moonParse
@@ -60,7 +57,7 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout, CoroutineScope {
                 )
                 binding.tvSubtitle.text = subTitle
             })
-        }
+
     }
 
     override fun startEnterAnim() {
@@ -68,8 +65,5 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout, CoroutineScope {
         binding.sunriseView.startAnim()
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        job.cancel()
-    }
+
 }
