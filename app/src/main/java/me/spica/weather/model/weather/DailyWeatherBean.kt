@@ -1,6 +1,7 @@
 package me.spica.weather.model.weather
 
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
@@ -8,6 +9,7 @@ import java.util.*
 private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 private val sdf2 = SimpleDateFormat("HH:mm", Locale.CHINA)
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class DailyWeatherBean(
     val fxTime: Date = Date(), // 更新时间
     val maxTemp: Int, // 当日最高的温度

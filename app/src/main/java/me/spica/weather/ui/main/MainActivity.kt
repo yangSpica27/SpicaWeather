@@ -203,21 +203,24 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
         lifecycleScope.launch {
             viewModel.weatherFlow.collectLatest {
-                if (it != null) {
-                    viewBinding.dailyWeatherCard.bindData(it.dailyWeather)
-                    viewBinding.nowWeatherCard.bindData(it.todayWeather)
-                    viewBinding.containerTips.bindData(it.lifeIndexes)
-                    viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
-                    viewBinding.sunriseCard.bindTime(
-                        it.dailyWeather[0].sunriseDate,
-                        it.dailyWeather[0].sunsetDate,
-                        it.dailyWeather[0].moonParse
-                    )
-                } else {
+                if (it == null) {
                     errorTip.show()
                 }
                 viewBinding.swipeRefreshLayout.isRefreshing = false
+            }
+        }
 
+        lifecycleScope.launch {
+            viewModel.weatherCacheFlow.filterNotNull().collectLatest {
+                viewBinding.dailyWeatherCard.bindData(it.dailyWeather)
+                viewBinding.nowWeatherCard.bindData(it.todayWeather)
+                viewBinding.containerTips.bindData(it.lifeIndexes)
+                viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
+                viewBinding.sunriseCard.bindTime(
+                    it.dailyWeather[0].sunriseDate,
+                    it.dailyWeather[0].sunsetDate,
+                    it.dailyWeather[0].moonParse
+                )
             }
         }
 

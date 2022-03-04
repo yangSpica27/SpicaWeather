@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -19,6 +18,7 @@ import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.LifeIndexBean
 import me.spica.weather.model.weather.NowWeatherBean
 import me.spica.weather.model.weather.Weather
+import me.spica.weather.persistence.dao.WeatherDao
 import me.spica.weather.persistence.repository.CityRepository
 import me.spica.weather.repository.HeRepository
 import timber.log.Timber
@@ -27,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val repository: HeRepository,
-    private val cityRepository: CityRepository
+    private val cityRepository: CityRepository,
+    private val weatherDao: WeatherDao
 ) : ViewModel() {
 
     // 错误信息
@@ -99,6 +100,7 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
+    val weatherCacheFlow = weatherDao.getWeatherFlowDistinctUntilChanged()
 
     val weatherFlow = combine(
         nowWeatherFlow,
@@ -110,24 +112,29 @@ class WeatherViewModel @Inject constructor(
             && dailyWeather != null
             && hourWeather != null &&
             lifeIndexes != null
-        )
-            return@combine Weather(
+        ) {
+            val result = Weather(
                 nowWeather,
                 dailyWeather,
                 hourWeather,
                 lifeIndexes
             )
+            viewModelScope.launch(Dispatchers.IO) {
+                weatherDao.insertWeather(result)
+            }
+            return@combine result
+        }
 
-        if (nowWeather==null){
+        if (nowWeather == null) {
             Timber.e("now==nu;;")
         }
-        if (dailyWeather==null){
+        if (dailyWeather == null) {
             Timber.e("daily==null")
         }
-        if (hourWeather==null){
+        if (hourWeather == null) {
             Timber.e("hourWeather==null")
         }
-        if (lifeIndexes==null){
+        if (lifeIndexes == null) {
             Timber.e("lifeIndex==null")
         }
         return@combine null

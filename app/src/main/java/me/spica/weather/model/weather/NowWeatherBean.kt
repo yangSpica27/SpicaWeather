@@ -1,12 +1,14 @@
 package me.spica.weather.model.weather
 
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class NowWeatherBean(
     val obsTime: Date = Date(), // 更新时间

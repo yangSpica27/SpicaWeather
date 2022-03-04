@@ -1,5 +1,6 @@
 package me.spica.weather.model.weather
 
+import com.squareup.moshi.JsonClass
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,6 +9,7 @@ private val sdf = SimpleDateFormat(
     Locale.CHINA
 )
 
+@JsonClass(generateAdapter = true)
 data class HourlyWeatherBean(
     val fxTime: Date = Date(), // 更新时间
     val temp: Int, // 当前的温度

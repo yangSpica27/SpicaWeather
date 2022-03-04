@@ -2,9 +2,12 @@ package me.spica.weather.model.weather
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.squareup.moshi.JsonClass
 import me.spica.weather.R
 import me.spica.weather.tools.IndicesUtils
 
+
+@JsonClass(generateAdapter = true)
 data class LifeIndexBean(
     val type: Int, // 类型
     val name: String, // 指数名称

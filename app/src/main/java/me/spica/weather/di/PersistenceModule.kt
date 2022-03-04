@@ -41,6 +41,11 @@ object PersistenceModule {
     @Singleton
     fun provideCityDao(appDatabase: AppDatabase) = appDatabase.cityDao()
 
+
+    @Provides
+    @Singleton
+    fun provideWeatherDao(appDatabase: AppDatabase) = appDatabase.weatherDao()
+
     @Provides
     @Singleton
     fun provideProvinces(application: Application): List<CityBean> {
