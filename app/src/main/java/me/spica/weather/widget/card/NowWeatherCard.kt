@@ -12,7 +12,7 @@ import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardWeatherBinding
-import me.spica.weather.model.weather.NowWeatherBean
+import me.spica.weather.model.weather.Weather
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,16 +42,16 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
     @SuppressLint("SetTextI18n")
-    fun bindData(nowWeatherBean: NowWeatherBean) {
+    override fun bindData(weather: Weather) {
+        val nowWeatherBean = weather.todayWeather
         val themeColor = WeatherCodeUtils
             .getWeatherCode(nowWeatherBean.iconId.toString()).getThemeColor()
-
         // 设置主题颜色
         binding.root.setBackgroundColor(themeColor)
         // 加载图标
         binding.icWeather.load(
             WeatherCodeUtils.getWeatherCode(nowWeatherBean.iconId.toString()).getIconRes()
-        ){
+        ) {
             crossfade(true)
         }
 

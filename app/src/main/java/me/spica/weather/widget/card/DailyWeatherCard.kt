@@ -6,10 +6,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import me.spica.weather.databinding.CardDailyWeatherBinding
-import me.spica.weather.model.weather.DailyWeatherBean
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
@@ -44,7 +42,8 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    suspend fun bindData(items: List<DailyWeatherBean>)= withContext(Dispatchers.Default) {
+   override fun bindData(weather: Weather) {
+        val items = weather.dailyWeather
         dailyWeatherAdapter.items.clear()
         dailyWeatherAdapter.items.addAll(items)
         dailyWeatherAdapter.syncTempMaxAndMin()

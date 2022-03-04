@@ -6,6 +6,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
 
 interface SpicaWeatherCard {
@@ -68,5 +69,8 @@ interface SpicaWeatherCard {
         }
     }
 
+
+    // 绑定数据
+    fun bindData(weather: Weather)
 
 }

@@ -36,74 +36,18 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_main"
             android:layout_width="match_parent"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
             android:layout_height="match_parent"
-            android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:animateLayoutChanges="true"
-                android:orientation="vertical">
+        </androidx.recyclerview.widget.RecyclerView>
 
-                <me.spica.weather.widget.card.NowWeatherCard
-                    android:id="@+id/now_weather_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    style="@style/spica_card"
-                    android:layout_marginEnd="14dp" />
-
-                <me.spica.weather.widget.card.HourWeatherCard
-                    android:id="@+id/hourly_weather_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    style="@style/spica_card"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="14dp" />
-
-                <me.spica.weather.widget.card.DailyWeatherCard
-                    android:id="@+id/daily_weather_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    style="@style/spica_card"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="14dp" />
-
-                <me.spica.weather.widget.card.SunriseCard
-                    android:id="@+id/sunrise_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    style="@style/spica_card"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="14dp" />
-
-                <me.spica.weather.widget.card.TipsCard
-                    android:id="@+id/container_tips"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="14dp"
-                    style="@style/spica_card"
-                    android:animateLayoutChanges="true"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="12dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -115,7 +59,7 @@
         android:tintMode="multiply"
         app:fabSize="normal"
         app:backgroundTint="@color/textColorPrimary"
-        app:layout_anchor="@id/scrollView"
+        app:layout_anchor="@id/rv_main"
         android:layout_margin="20dp"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"

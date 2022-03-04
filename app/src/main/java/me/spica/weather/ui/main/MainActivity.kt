@@ -2,7 +2,6 @@ package me.spica.weather.ui.main
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
+import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +28,6 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
@@ -58,6 +57,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     @Inject
     lateinit var cityList: List<CityBean>
+
+    private lateinit var mainCardAdapter: MainCardAdapter
 
 
     private val permissionDialog by lazy {
@@ -181,18 +182,20 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
     private fun initView() {
-        viewBinding.scrollView.post {
-            doOnMainThreadIdle({
-                checkAnim()
-            })
+        mainCardAdapter = MainCardAdapter(viewBinding.rvMain)
+        // 滑动检测
+        viewBinding.rvMain.setOnScrollChangeListener { _, _, _, _, _ ->
+            mainCardAdapter.onScroll()
         }
+        // 设置适配器
+        viewBinding.rvMain.adapter = mainCardAdapter
 
-        viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
-            doOnMainThreadIdle({
-                checkAnim()
-            })
-        }
-
+        dividerBuilder()
+            .colorRes(android.R.color.transparent)
+            .size(12.dp.toInt())
+            .showFirstDivider()
+            .showLastDivider()
+            .build().addTo(viewBinding.rvMain)
 
         // 设置下拉刷新
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
@@ -212,15 +215,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
         lifecycleScope.launch {
             viewModel.weatherCacheFlow.filterNotNull().collectLatest {
-                viewBinding.dailyWeatherCard.bindData(it.dailyWeather)
-                viewBinding.nowWeatherCard.bindData(it.todayWeather)
-                viewBinding.containerTips.bindData(it.lifeIndexes)
-                viewBinding.hourlyWeatherCard.bindData(it.hourlyWeather)
-                viewBinding.sunriseCard.bindTime(
-                    it.dailyWeather[0].sunriseDate,
-                    it.dailyWeather[0].sunsetDate,
-                    it.dailyWeather[0].moonParse
-                )
+//                viewBinding.dailyWeatherCard.bindData(it)
+//                viewBinding.nowWeatherCard.bindData(it)
+//                viewBinding.containerTips.bindData(it)
+//                viewBinding.hourlyWeatherCard.bindData(it)
+//                viewBinding.sunriseCard.bindData(it)
+                mainCardAdapter.notifyData(it)
             }
         }
 
@@ -254,47 +254,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding =
         ActivityMainBinding.inflate(inflater)
 
-    private val scrollBounds = Rect()
-
-    private fun checkAnim() {
-        viewBinding.scrollView.getHitRect(scrollBounds)
-
-        viewBinding.nowWeatherCard.apply {
-            checkEnterScreen(getLocalVisibleRect(scrollBounds))
-        }
-        viewBinding.dailyWeatherCard.apply {
-            checkEnterScreen(getLocalVisibleRect(scrollBounds))
-        }
-        viewBinding.hourlyWeatherCard.apply {
-            checkEnterScreen(getLocalVisibleRect(scrollBounds))
-        }
-        viewBinding.sunriseCard.apply {
-            checkEnterScreen(getLocalVisibleRect(scrollBounds))
-        }
-        viewBinding.containerTips.apply {
-            checkEnterScreen(getLocalVisibleRect(scrollBounds))
-        }
-
-
-//        if (viewBinding.nowWeatherCard.getLocalVisibleRect(scrollBounds)) {
-//
-//        }
-//
-//        if (viewBinding.dailyWeatherCard.getLocalVisibleRect(scrollBounds)) {
-//            viewBinding.dailyWeatherCard.startEnterAnim()
-//        }
-//
-//        if (viewBinding.hourlyWeatherCard.getLocalVisibleRect(scrollBounds)) {
-//            viewBinding.hourlyWeatherCard.startEnterAnim()
-//        }
-//
-//        if (viewBinding.containerTips.getLocalVisibleRect(scrollBounds)) {
-//            viewBinding.containerTips.startEnterAnim()
-//        }
-//        if (viewBinding.sunriseCard.getLocalVisibleRect(scrollBounds)) {
-//            viewBinding.sunriseCard.startEnterAnim()
-//        }
-    }
 
     private fun syncNewCity(cityName: String) {
         lifecycleScope.launch(Dispatchers.Default) {

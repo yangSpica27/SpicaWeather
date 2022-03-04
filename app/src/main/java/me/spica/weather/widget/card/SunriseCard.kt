@@ -8,6 +8,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import me.spica.weather.R
 import me.spica.weather.databinding.CardSunriseBinding
+import me.spica.weather.model.weather.Weather
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +36,10 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
-    fun bindTime(startTime: Date, endTime: Date, subTitle: String) {
+    override fun bindData(weather: Weather) {
+        val startTime = weather.dailyWeather[0].sunriseDate
+        val endTime = weather.dailyWeather[0].sunsetDate
+        val subTitle = weather.dailyWeather[0].moonParse
         binding.sunriseView.bindTime(startTime, endTime)
         binding.tvTitle.text = String.format(
             context.getString(R.string.sunrise_sunset_time),
