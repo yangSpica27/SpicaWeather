@@ -1,5 +1,6 @@
 package me.spica.weather.ui.main
 
+import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.weather.model.weather.Weather
@@ -17,12 +18,13 @@ open class AbstractMainViewHolder(val card: SpicaWeatherCard, itemView: View) :
         card.resetAnim()
     }
 
+    private val rect = Rect()
     fun checkEnterScreen(host: RecyclerView) {
-        if (!itemView.isLaidOut || itemView.top >= host.measuredHeight) {
-            return
-        }
-
-        card.checkEnterScreen(true)
+//        if (!ViewCompat.isLaidOut(itemView) && itemView.top >= host.measuredHeight) {
+//            return
+//        }
+        val isVisible = itemView.getGlobalVisibleRect(rect)
+        card.checkEnterScreen(isVisible&&rect.bottom-rect.top>=itemView.height/10f)
     }
 
 }

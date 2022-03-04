@@ -11,6 +11,7 @@ import me.spica.weather.R
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,6 +58,7 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     override fun startEnterAnim() {
         super.startEnterAnim()
+        Timber.i("Sunrise Anim start")
         binding.sunriseView.startAnim()
     }
 
