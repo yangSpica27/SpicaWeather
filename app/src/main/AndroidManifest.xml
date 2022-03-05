@@ -111,6 +111,19 @@
             android:foregroundServiceType="location"
             android:process=":remote" />
 
+        <receiver
+            android:name=".widget.NowWeatherProvider"
+            android:label="now_weather"
+            android:exported="true">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_now_weather" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.ACTION_APPWIDGET_DISABLED" />
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

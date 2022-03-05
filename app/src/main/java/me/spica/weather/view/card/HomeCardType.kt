@@ -1,4 +1,4 @@
-package me.spica.weather.widget.card
+package me.spica.weather.view.card
 
 enum class HomeCardType(val code: Int) {
     NOW_WEATHER(0),// 现在的天气

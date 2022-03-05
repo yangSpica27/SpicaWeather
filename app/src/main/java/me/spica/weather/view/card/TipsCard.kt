@@ -1,4 +1,4 @@
-package me.spica.weather.widget.card
+package me.spica.weather.view.card
 
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint

@@ -1,15 +1,7 @@
-package me.spica.weather.widget
+package me.spica.weather.view
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Rect
-import android.graphics.Shader
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -18,7 +10,8 @@ import me.spica.weather.R
 import me.spica.weather.tools.dp
 import timber.log.Timber
 
-class TempLineItem : View {
+class MinTempLineItem : View {
+
     var maxValue = 0 // 最高值
 
     var minValue = 0 // 最低值
@@ -29,12 +22,21 @@ class TempLineItem : View {
 
     var nextValue = 0 // 下一个数值
 
-    var currentPop = 0 // 当前的降雨概率
-
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    }
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+//        shader = LinearGradient(
+//            0F,
+//            0F,
+//            0F,
+//            height/2F,
+//            ContextCompat.getColor(
+//                context,
+//                R.color.black
+//            ),
+//            Color.TRANSPARENT,
+//            Shader.TileMode.CLAMP
+//        )
         color = ContextCompat.getColor(context, R.color.pathBgColor)
         style = Paint.Style.FILL
     }
@@ -54,11 +56,6 @@ class TempLineItem : View {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
 //        maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
-    }
-
-    private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = 12.dp
-        color = ContextCompat.getColor(context, R.color.rainRectColor)
     }
 
     private var viewHeight = 0
@@ -94,19 +91,6 @@ class TempLineItem : View {
         pointX = viewWidth / 2F // 中心
         pointTopY = paddingTop + 10.dp
         pointBottomY = viewHeight - 10.dp - paddingBottom
-
-        pathPaint.shader = LinearGradient(
-            0F,
-            0F,
-            0F,
-            viewHeight.toFloat(),
-            ContextCompat.getColor(
-                context,
-                R.color.black
-            ),
-            Color.TRANSPARENT,
-            Shader.TileMode.CLAMP
-        )
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -114,7 +98,6 @@ class TempLineItem : View {
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
             (pointBottomY - pointTopY)
-        drawRainPop(canvas)
         drawDottedLine(canvas)
         drawGraph(canvas)
         drawPoint(canvas)
@@ -125,20 +108,12 @@ class TempLineItem : View {
 
     // 绘制数字
     private fun drawValue(canvas: Canvas) {
+
         textPaint.getTextBounds(tempName, 0, tempName.length, textRect)
-        val baseLine1 = pointY - textRect.height() - 2.dp
+
+        val baseLine1 = pointY + textRect.height() * 2 + 2.dp
 
         canvas.drawText("$currentValue℃", viewWidth / 2F, baseLine1, textPaint)
-    }
-
-    private fun drawRainPop(canvas: Canvas) {
-        canvas.drawLine(
-            width / 2f,
-            height * 1F,
-            width / 2f,
-            height * 1f - height * (currentPop / 100f),
-            rainPaint
-        )
     }
 
     private var pathLeft = Path()
@@ -154,35 +129,46 @@ class TempLineItem : View {
             context,
             R.color.textColorPrimaryHintLight
         )
+
         linePaint.strokeWidth = 2.dp
         linePaint.isAntiAlias = true
+
         linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+
+        Timber.i("======================")
 
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
                 (pointBottomY - pointTopY)
+
             pathLeft = Path()
 
-            // 七点
             pathLeft.moveTo(pointX, pointY)
 
-            pathLeft.lineTo(pointX, viewHeight.toFloat())
+            pathLeft.lineTo(pointX, 0F)
 
-            pathLeft.lineTo(0F, viewHeight.toFloat())
+            pathLeft.lineTo(0F, 0F)
 
             pathLeft.lineTo(0F, (lastPointY + pointY) / 2F)
 
             pathLeft.close()
 
             // 绘制背景
-            canvas.drawPath(pathLeft, pathPaint)
-
-            canvas.drawLine(pointX, pointY, 0F, (lastPointY + pointY) / 2F, linePaint)
+            canvas.drawPath(
+                pathLeft,
+                pathPaint
+            )
 
             canvas.drawLine(
-                pointX, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, 0F, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, dottedLinePaint
+                pointX, pointY,
+                0F,
+                (lastPointY + pointY) / 2F,
+                linePaint
             )
+            Timber.i("lastP$lastPointY")
         }
+
+        Timber.i("currentP$pointY")
 
         if (drawRightLine) {
 
@@ -194,8 +180,8 @@ class TempLineItem : View {
 
             pathRight = Path()
             pathRight.moveTo(pointX, pointY)
-            pathRight.lineTo(pointX, viewHeight.toFloat())
-            pathRight.lineTo(viewWidth.toFloat(), height.toFloat())
+            pathRight.lineTo(pointX, 0F)
+            pathRight.lineTo(viewWidth.toFloat(), 0F)
             pathRight.lineTo(viewWidth.toFloat(), (pointY + nextPointY) / 2F)
 
             canvas.drawPath(
@@ -211,14 +197,6 @@ class TempLineItem : View {
                 linePaint
             )
 
-            canvas.drawLine(
-                pointX,
-                viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
-                viewWidth.toFloat(),
-                viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
-                dottedLinePaint
-            )
-
             Timber.i("lastP$nextPointY")
         }
 
@@ -228,9 +206,9 @@ class TempLineItem : View {
     private fun drawDottedLine(canvas: Canvas) {
         canvas.drawLine(
             pointX,
-            pointY,
+            0F,
             pointX,
-            viewHeight.toFloat(),
+            pointY,
             dottedLinePaint
         )
     }

@@ -25,7 +25,7 @@
         android:textColor="@color/textColorPrimaryLight"
         android:layout_marginTop="4dp" />
 
-    <me.spica.weather.widget.MaxTempLineItem
+    <me.spica.weather.view.MaxTempLineItem
         android:id="@+id/item_line_max"
         android:layout_height="55dp"
         android:paddingTop="12dp"
@@ -33,14 +33,14 @@
         android:layout_width="match_parent"
         android:paddingBottom="12dp" />
 
-    <me.spica.weather.widget.MinTempLineItem
+    <me.spica.weather.view.MinTempLineItem
         android:id="@+id/item_line_min"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp" />
 
-    <me.spica.weather.widget.RainImageView
+    <me.spica.weather.view.RainImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
         android:layout_height="60dp"

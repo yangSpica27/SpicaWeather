@@ -1,5 +1,5 @@
 @file:Suppress("unused")
-package me.spica.weather.widget
+package me.spica.weather.view
 
 import android.animation.ValueAnimator
 import android.content.Context

@@ -1,13 +1,10 @@
-package me.spica.weather.widget.weatherIcon
+package me.spica.weather.view.weatherIcon
 
 import android.content.Context
 import android.view.View
 
-/**
- * 晴天的图标
- */
 @Suppress("unused")
-class ClearIcon : WeatherIconView.DrawDelegate {
+class FogIcon : WeatherIconView.DrawDelegate {
 
     override fun init(context: Context, view: View) {
     }

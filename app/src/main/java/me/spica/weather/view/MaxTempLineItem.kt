@@ -1,4 +1,4 @@
-package me.spica.weather.widget
+package me.spica.weather.view
 
 import android.content.Context
 import android.graphics.BlurMaskFilter

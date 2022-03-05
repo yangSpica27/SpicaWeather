@@ -1,5 +1,5 @@
 @file:Suppress("unused")
-package me.spica.weather.widget.weatherIcon
+package me.spica.weather.view.weatherIcon
 
 import android.content.Context
 import android.graphics.Canvas

@@ -18,7 +18,7 @@
         android:textStyle="bold"
         android:gravity="center" />
 
-    <me.spica.weather.widget.TempLineItem
+    <me.spica.weather.view.TempLineItem
         android:id="@+id/item_line"
         android:layout_width="match_parent"
         android:layout_height="75dp"

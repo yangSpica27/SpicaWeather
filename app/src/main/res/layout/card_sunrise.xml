@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <me.spica.weather.widget.SunriseView
+    <me.spica.weather.view.SunriseView
         android:id="@+id/sunrise_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package me.spica.weather.widget.card
+package me.spica.weather.view.card
 
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
@@ -8,10 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import coil.load
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getIconRes
 import me.spica.weather.common.getThemeColor
@@ -20,7 +16,6 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 /**
  *  用于展示现在的天气

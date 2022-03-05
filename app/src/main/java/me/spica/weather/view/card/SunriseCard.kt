@@ -1,4 +1,4 @@
-package me.spica.weather.widget.card
+package me.spica.weather.view.card
 
 import android.animation.AnimatorSet
 import android.content.Context
@@ -6,12 +6,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.coroutines.Job
 import me.spica.weather.R
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,7 +56,6 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-        Timber.i("Sunrise Anim start")
         binding.sunriseView.startAnim()
     }
 

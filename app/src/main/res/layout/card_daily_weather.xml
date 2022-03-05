@@ -39,7 +39,7 @@
 
     </LinearLayout>
 
-    <me.spica.weather.widget.HorizontalRecyclerView
+    <me.spica.weather.view.HorizontalRecyclerView
         android:id="@+id/rv_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

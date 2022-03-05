@@ -7,12 +7,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
-import me.spica.weather.widget.card.DailyWeatherCard
-import me.spica.weather.widget.card.HomeCardType
-import me.spica.weather.widget.card.HourWeatherCard
-import me.spica.weather.widget.card.NowWeatherCard
-import me.spica.weather.widget.card.SunriseCard
-import me.spica.weather.widget.card.TipsCard
+import me.spica.weather.view.card.DailyWeatherCard
+import me.spica.weather.view.card.HomeCardType
+import me.spica.weather.view.card.HourWeatherCard
+import me.spica.weather.view.card.NowWeatherCard
+import me.spica.weather.view.card.SunriseCard
+import me.spica.weather.view.card.TipsCard
 import timber.log.Timber
 
 class MainCardAdapter(
