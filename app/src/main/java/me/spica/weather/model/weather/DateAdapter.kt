@@ -5,6 +5,7 @@ import com.squareup.moshi.ToJson
 import java.util.*
 
 
+@Suppress("unused")
 object DateAdapter {
 
     @ToJson

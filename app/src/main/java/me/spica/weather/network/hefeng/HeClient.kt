@@ -1,6 +1,7 @@
 package me.spica.weather.network.hefeng
 
 import com.skydoves.sandwich.ApiResponse
+import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
@@ -35,6 +36,13 @@ class HeClient @Inject constructor(private val heService: HeService) {
         lon: String,
         lat: String
     ): ApiResponse<LifeIndex> = heService.get1dIndex(
+        location = "$lon,$lat"
+    )
+
+    suspend fun getAirNow(
+        lon: String,
+        lat: String
+    ): ApiResponse<Air> = heService.getNowAir(
         location = "$lon,$lat"
     )
 }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import me.spica.weather.model.city.CityBean
+import me.spica.weather.model.weather.AirBean
 import me.spica.weather.model.weather.DailyWeatherBean
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.LifeIndexBean
@@ -100,6 +101,19 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
+    val nowAir: Flow<AirBean?> =
+        cityFlow
+            .filterNotNull()
+            .flatMapLatest {
+                repository.fetchNowAir(
+                    lon = it.lon,
+                    lat = it.lat,
+                    onError = { message ->
+                        _errorMessage.value = message
+                    }
+                )
+            }
+
     val weatherCacheFlow = weatherDao.getWeatherFlowDistinctUntilChanged()
 
     val weatherFlow = combine(
@@ -107,17 +121,20 @@ class WeatherViewModel @Inject constructor(
         dailyWeatherFlow,
         hourlyWeatherFlow,
         currentIndices,
-    ) { nowWeather, dailyWeather, hourWeather, lifeIndexes ->
+        nowAir,
+    ) { nowWeather, dailyWeather, hourWeather, lifeIndexes, nowAir ->
         if (nowWeather != null
             && dailyWeather != null
             && hourWeather != null &&
-            lifeIndexes != null
+            lifeIndexes != null &&
+            nowAir != null
         ) {
             val result = Weather(
                 nowWeather,
                 dailyWeather,
                 hourWeather,
-                lifeIndexes
+                lifeIndexes,
+                nowAir
             )
             viewModelScope.launch(Dispatchers.IO) {
                 weatherDao.insertWeather(result)
@@ -136,6 +153,9 @@ class WeatherViewModel @Inject constructor(
         }
         if (lifeIndexes == null) {
             Timber.e("lifeIndex==null")
+        }
+        if (nowAir == null) {
+            Timber.e("nowAir===null")
         }
         return@combine null
     }.onStart {

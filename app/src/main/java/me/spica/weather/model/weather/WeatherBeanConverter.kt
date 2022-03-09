@@ -3,6 +3,8 @@ package me.spica.weather.model.weather
 import androidx.room.TypeConverter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import me.spica.weather.network.hefeng.air.Air
+import timber.log.Timber
 
 @Suppress("unused")
 class WeatherBeanConverter {
@@ -13,6 +15,9 @@ class WeatherBeanConverter {
         .build()
 
     private val nowWeatherAdapter = moshi.adapter(NowWeatherBean::class.java)
+
+
+    private val airAdapter = moshi.adapter(AirBean::class.java)
 
     private val listOfHourlyType = Types.newParameterizedType(
         List::class.java, HourlyWeatherBean::class.java
@@ -77,6 +82,17 @@ class WeatherBeanConverter {
     @TypeConverter
     fun stringToLifeIndex(string: String): List<LifeIndexBean> {
         return lifeIndexWeatherAdapter.fromJson(string) ?: listOf()
+    }
+
+    @TypeConverter
+    fun nowAirToAirBean(airBean: AirBean): String {
+        return airAdapter.toJson(airBean)
+    }
+
+
+    @TypeConverter
+    fun stringToAirBean(value: String): AirBean? {
+        return airAdapter.fromJson(value)
     }
 
 }

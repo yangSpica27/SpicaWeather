@@ -2,6 +2,7 @@ package me.spica.weather.network.hefeng
 
 import com.skydoves.sandwich.ApiResponse
 import me.spica.weather.BuildConfig
+import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
@@ -57,4 +58,16 @@ interface HeService {
         @Query("key")
         key: String = BuildConfig.HE_WEB_KEY
     ): ApiResponse<LifeIndex>
+
+
+    @GET("air/now")
+    suspend fun getNowAir(
+        @Query("type")
+        type: String = "1,2,3,10",
+        @Query("location")
+        location: String,
+        @Query("key")
+        key: String = BuildConfig.HE_WEB_KEY
+    ): ApiResponse<Air>
+
 }

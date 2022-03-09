@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import me.spica.weather.network.hefeng.HeClient
+import me.spica.weather.network.hefeng.mapper.SuccessAirMapper
 import me.spica.weather.network.hefeng.mapper.SuccessDailyWeatherMapper
 import me.spica.weather.network.hefeng.mapper.SuccessHourlyWeatherMapper
 import me.spica.weather.network.hefeng.mapper.SuccessLifeIndexWeatherMapper
@@ -98,4 +99,21 @@ class HeRepository(private val heClient: HeClient) : Repository {
             onError(message())
         }
     }.flowOn(Dispatchers.IO)
+
+
+    override fun fetchNowAir(lon: String, lat: String, onError: (String?) -> Unit) =
+        flow {
+            val response = heClient.getAirNow(lon, lat)
+            response.suspendOnSuccess(SuccessAirMapper) {
+                emit(this)
+            }.suspendOnFailure {
+                emit(null)
+                Timber.e(this)
+                onError(this)
+            }.suspendOnError {
+                emit(null)
+                Timber.e(message())
+                onError(message())
+            }
+        }.flowOn(Dispatchers.IO)
 }

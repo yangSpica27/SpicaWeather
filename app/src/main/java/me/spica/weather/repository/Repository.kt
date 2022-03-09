@@ -1,5 +1,6 @@
 package me.spica.weather.repository
 
+import me.spica.weather.model.weather.AirBean
 import me.spica.weather.model.weather.DailyWeatherBean
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.LifeIndexBean
@@ -34,4 +35,13 @@ interface Repository {
         lat: String,
         onError: (String?) -> Unit,
     ): kotlinx.coroutines.flow.Flow<List<LifeIndexBean>?>
+
+
+    // 获取空气当前的空气质量信息
+    fun fetchNowAir(
+        lon: String,
+        lat: String,
+        onError: (String?) -> Unit,
+    ): kotlinx.coroutines.flow.Flow<AirBean?>
+
 }

@@ -2,15 +2,18 @@ package me.spica.weather.network.hefeng.mapper
 
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.ApiSuccessModelMapper
+import me.spica.weather.model.weather.AirBean
 import me.spica.weather.model.weather.DailyWeatherBean
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.LifeIndexBean
 import me.spica.weather.model.weather.NowWeatherBean
+import me.spica.weather.model.weather.toAir
 import me.spica.weather.model.weather.toDailyWeatherBean
 import me.spica.weather.model.weather.toHourlyWeatherBean
 import me.spica.weather.model.weather.toLifeIndexBean
 import me.spica.weather.model.weather.toNowWeatherBean
 import me.spica.weather.network.hefeng.HeCode
+import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
@@ -75,4 +78,18 @@ object SuccessLifeIndexWeatherMapper : ApiSuccessModelMapper<LifeIndex, List<Lif
             throw RuntimeException(apiErrorResponse.data.code)
         }
     }
+}
+
+
+object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
+
+    @Throws(RuntimeException::class)
+    override fun map(apiErrorResponse: ApiResponse.Success<Air>): AirBean {
+        if (apiErrorResponse.data.code == HeCode.Ok.code) {
+            return apiErrorResponse.data.now.toAir()
+        } else {
+            throw java.lang.RuntimeException(apiErrorResponse.data.code)
+        }
+    }
+
 }

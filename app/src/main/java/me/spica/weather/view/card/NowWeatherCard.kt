@@ -59,7 +59,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
             }
             doOnMainThreadIdle({
                 binding.tvTemp.text = nowWeatherBean.temp.toString() + "℃"
-                binding.tvNow.text = "玻璃晴朗，橘子辉煌"
+                binding.tvNow.text = "空气质量：${weather.air.category}"
                 binding.tvWeather.text = nowWeatherBean.weatherName
                 binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
                 binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime)

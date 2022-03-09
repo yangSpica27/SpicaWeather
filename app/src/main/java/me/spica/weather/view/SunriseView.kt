@@ -107,8 +107,10 @@ class SunriseView : View {
         val radius = (width / 2 / Math.cos(deltaRadians)).toInt()
         val height = (radius - width / 2 * Math.tan(deltaRadians)).toInt()
         setMeasuredDimension(
-            MeasureSpec.makeMeasureSpec((width + 2 * mMargin).toInt(), MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec((height + 2 * mMargin).toInt(), MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec((width + 2 * mMargin).toInt(),
+                MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec((height + 2 * mMargin).toInt(),
+                MeasureSpec.EXACTLY)
         )
 
         val centerX = measuredWidth / 2F

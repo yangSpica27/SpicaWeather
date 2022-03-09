@@ -12,6 +12,7 @@ data class Weather(
     val dailyWeather: List<DailyWeatherBean>,
     val hourlyWeather: List<HourlyWeatherBean>,
     val lifeIndexes: List<LifeIndexBean>,
+    val air: AirBean,
     @PrimaryKey(autoGenerate = false)
     val id: Long = 1L
 )
