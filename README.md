@@ -4,7 +4,7 @@
 ## Screenshots
 <p align="center">
 <img src="/img/screen.jpg" width="32%"/>
-<img src="/img/2.jpg" width="32%"/>
+<img src="/img/s2.jpg" width="32%"/>
 </p>
 
 ## 技术栈及其使用的开源库
