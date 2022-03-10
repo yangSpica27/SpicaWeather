@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
+import me.spica.weather.view.card.AirCard
 import me.spica.weather.view.card.DailyWeatherCard
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.HourWeatherCard
@@ -58,6 +59,11 @@ class MainCardAdapter(
             }
             HomeCardType.SUNRISE.code -> {
                 val itemView = SunriseCard(parent.context)
+                itemView.layoutParams = lp
+                return AbstractMainViewHolder(itemView, itemView)
+            }
+            HomeCardType.AIR.code -> {
+                val itemView = AirCard(parent.context)
                 itemView.layoutParams = lp
                 return AbstractMainViewHolder(itemView, itemView)
             }

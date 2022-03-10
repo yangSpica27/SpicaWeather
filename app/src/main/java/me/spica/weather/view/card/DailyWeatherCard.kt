@@ -21,8 +21,6 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
         DailWeatherAdapter()
     }
 
-    private val job = Job()
-
 
 
 

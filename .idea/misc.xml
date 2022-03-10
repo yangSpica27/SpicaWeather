@@ -59,6 +59,9 @@
         <entry key="app/src/main/res/layout/activity_city.xml" value="0.18796296296296297" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.175" />
         <entry key="app/src/main/res/layout/activity_today_weather.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/card.xml" value="0.1361111111111111" />
+        <entry key="app/src/main/res/layout/card_air.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/card_daily_weather.xml" value="0.1675925925925926" />
         <entry key="app/src/main/res/layout/card_life_index.xml" value="0.19907407407407407" />
         <entry key="app/src/main/res/layout/card_sunrise.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/layout/card_weather.xml" value="0.175" />

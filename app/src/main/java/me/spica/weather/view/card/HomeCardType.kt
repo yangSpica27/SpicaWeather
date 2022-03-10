@@ -5,5 +5,6 @@ enum class HomeCardType(val code: Int) {
     HOUR_WEATHER(1), // 小时天气
     DAY_WEATHER(2), // 日级天气
     SUNRISE(3),// 日出日落
-    LIFE_INDEX(4);// 生活指数
+    AIR(4),
+    LIFE_INDEX(5);// 生活指数
 }
