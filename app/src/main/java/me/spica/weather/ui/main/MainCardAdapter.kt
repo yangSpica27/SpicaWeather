@@ -85,7 +85,6 @@ class MainCardAdapter(
         weather?.let {
             scope.launch(Dispatchers.Default) {
                 holder.bindView(it)
-                holder.itemView.requestLayout()
             }
         }
         Timber.e("绑定视图${position}")

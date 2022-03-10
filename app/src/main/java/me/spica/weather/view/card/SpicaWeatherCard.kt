@@ -22,7 +22,7 @@ interface SpicaWeatherCard {
         enterAnim.doOnEnd {
             enterAnim = AnimatorSet()
         }
-        enterAnim.startDelay = 200
+        enterAnim.startDelay = 150
         enterAnim.start()
     }
 
@@ -50,7 +50,10 @@ interface SpicaWeatherCard {
                 interpolator = DecelerateInterpolator(1f)
             }
         )
-        enterAnim.duration = 500
+        enterAnim.duration = 450
+        enterAnim.doOnEnd {
+            animatorView.requestLayout()
+        }
     }
 
     var hasInScreen: Boolean
