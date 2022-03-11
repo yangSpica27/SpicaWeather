@@ -7,7 +7,6 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -32,9 +31,18 @@ class AirCircleProgressView : View {
 
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 50.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
-        setTypeface(Typeface.DEFAULT_BOLD)
+        color = ContextCompat.getColor(context, R.color.textColorPrimary)
     }
+
+
+    private val secondTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = 16.dp
+        color = ContextCompat.getColor(context, R.color.textColorPrimary)
+    }
+
+    private val startColor = ContextCompat.getColor(context, R.color.line_default)
+
+    private val endColor = ContextCompat.getColor(context, R.color.l8)
 
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = 6.dp
@@ -59,8 +67,11 @@ class AirCircleProgressView : View {
 
     private var progress = 0f
 
-    fun bindProgress(lv: Int) {
+    private var category = "良"
+
+    fun bindProgress(lv: Int, category: String) {
         this.lv = lv
+        this.category = category
         ViewCompat.postInvalidateOnAnimation(this)
     }
 
@@ -111,7 +122,8 @@ class AirCircleProgressView : View {
             false,
             bgPaint
         )
-
+        // 根据进度变色
+        linePaint.color = evaluate(progress, startColor, endColor)
         // progress弧
         canvas.drawArc(
             mRectF,
@@ -122,15 +134,57 @@ class AirCircleProgressView : View {
         )
 
         // 绘制中心文本
-        val tip = (progress * lv).toInt().toString()
-        textPaint.getTextBounds(tip, 0, tip.length, textBound)
+        val valueText = (progress * lv).toInt().toString()
+        textPaint.getTextBounds(valueText, 0, valueText.length, textBound)
         canvas.drawText(
-            tip,
+            valueText,
             mRectF.centerX() - textBound.width() / 2f,
             mRectF.centerY() + textBound.height() / 2f,
             textPaint
         )
+        val tipText = category
+        secondTextPaint.getTextBounds(tipText, 0, tipText.length, textBound)
+        canvas.drawText(
+            tipText,
+            mRectF.centerX() - textBound.width() / 2f,
+            mRectF.bottom - textBound.height(),
+            secondTextPaint
+        )
     }
 
+
+    private fun evaluate(fraction: Float, startValue: Int, endValue: Int): Int {
+        val startInt = startValue
+        val startA = (startInt shr 24 and 0xff) / 255.0f
+        var startR = (startInt shr 16 and 0xff) / 255.0f
+        var startG = (startInt shr 8 and 0xff) / 255.0f
+        var startB = (startInt and 0xff) / 255.0f
+        val endInt = endValue
+        val endA = (endInt shr 24 and 0xff) / 255.0f
+        var endR = (endInt shr 16 and 0xff) / 255.0f
+        var endG = (endInt shr 8 and 0xff) / 255.0f
+        var endB = (endInt and 0xff) / 255.0f
+
+        // convert from sRGB to linear
+        startR = Math.pow(startR.toDouble(), 2.2).toFloat()
+        startG = Math.pow(startG.toDouble(), 2.2).toFloat()
+        startB = Math.pow(startB.toDouble(), 2.2).toFloat()
+        endR = Math.pow(endR.toDouble(), 2.2).toFloat()
+        endG = Math.pow(endG.toDouble(), 2.2).toFloat()
+        endB = Math.pow(endB.toDouble(), 2.2).toFloat()
+
+        // compute the interpolated color in linear space
+        var a = startA + fraction * (endA - startA)
+        var r = startR + fraction * (endR - startR)
+        var g = startG + fraction * (endG - startG)
+        var b = startB + fraction * (endB - startB)
+
+        // convert back to sRGB in the [0..255] range
+        a = a * 255.0f
+        r = Math.pow(r.toDouble(), 1.0 / 2.2).toFloat() * 255.0f
+        g = Math.pow(g.toDouble(), 1.0 / 2.2).toFloat() * 255.0f
+        b = Math.pow(b.toDouble(), 1.0 / 2.2).toFloat() * 255.0f
+        return Math.round(a) shl 24 or (Math.round(r) shl 16) or (Math.round(g) shl 8) or Math.round(b)
+    }
 
 }

@@ -57,7 +57,7 @@
         <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.1205" />
         <entry key="app/src/main/res/drawable/ic_sunny.xml" value="0.1205" />
         <entry key="app/src/main/res/layout/activity_city.xml" value="0.18796296296296297" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.175" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_today_weather.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card.xml" value="0.1361111111111111" />
         <entry key="app/src/main/res/layout/card_air.xml" value="0.375" />

@@ -2,6 +2,7 @@ package me.spica.weather.ui.main
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,8 @@ import timber.log.Timber
 
 class MainCardAdapter(
     private val recyclerView: RecyclerView,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val scrollview: NestedScrollView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
     private var items = HomeCardType.values().toList()
@@ -89,7 +91,7 @@ class MainCardAdapter(
         }
         Timber.e("绑定视图${position}")
         recyclerView.post {
-            holder.checkEnterScreen(recyclerView)
+            holder.checkEnterScreen(scrollview)
         }
     }
 
@@ -107,7 +109,7 @@ class MainCardAdapter(
         for (i in 0 until itemCount) {
             if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
                 holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
-                holder.checkEnterScreen(recyclerView)
+                holder.checkEnterScreen(scrollview)
             }
         }
     }

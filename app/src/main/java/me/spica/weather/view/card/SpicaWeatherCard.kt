@@ -51,9 +51,9 @@ interface SpicaWeatherCard {
             }
         )
         enterAnim.duration = 450
-        enterAnim.doOnEnd {
-            animatorView.requestLayout()
-        }
+//        enterAnim.doOnEnd {
+//            animatorView.requestLayout()
+//        }
     }
 
     var hasInScreen: Boolean

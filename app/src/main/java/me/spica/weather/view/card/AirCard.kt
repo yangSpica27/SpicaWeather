@@ -27,7 +27,7 @@ class AirCard : ConstraintLayout, SpicaWeatherCard {
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
-        binding.progressView.bindProgress(weather.air.aqi)
+        binding.progressView.bindProgress(weather.air.aqi,weather.air.category)
         binding.tvC0Value.text = "${weather.air.co}微克/m³"
         binding.tvNo2Value.text = "${weather.air.no2}微克/m³"
         binding.tvPm25Value.text = "${weather.air.pm2p5}微克/m³"

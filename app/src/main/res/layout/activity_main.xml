@@ -36,17 +36,23 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_main"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="50dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -59,7 +65,7 @@
         android:tintMode="multiply"
         app:fabSize="normal"
         app:backgroundTint="@color/textColorPrimary"
-        app:layout_anchor="@id/rv_main"
+        app:layout_anchor="@id/scrollView"
         android:layout_margin="20dp"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
