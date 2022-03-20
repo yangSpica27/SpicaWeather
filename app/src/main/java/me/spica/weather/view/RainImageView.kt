@@ -14,11 +14,11 @@ import me.spica.weather.tools.dp
 class RainImageView : AppCompatImageView {
 
     // 降雨概率
-    var rainfallProbability = 60
+    var rainfallProbability = 60f
         set(value) {
             field = value
             text = "${rainfallProbability}mm"
-            invalidate()
+           postInvalidate()
         }
 
     private var text = ""
@@ -38,6 +38,7 @@ class RainImageView : AppCompatImageView {
         super.onDrawForeground(canvas)
         if (rainfallProbability > 0F) {
             textPaint.getTextBounds(text, 0, text.length, textBound)
+            //
             canvas.drawText(
                 text,
                 width - textBound.width() * 1f,

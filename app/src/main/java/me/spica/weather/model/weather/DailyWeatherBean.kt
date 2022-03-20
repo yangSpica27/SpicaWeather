@@ -19,7 +19,7 @@ data class DailyWeatherBean(
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherNameDay: String,
-    val precip: Int, // 降水量
+    val precip: Float, // 降水量
     val sunriseDate: Date,
     val sunsetDate: Date,
     val moonParse: String,
@@ -45,7 +45,7 @@ fun me.spica.weather.network.hefeng.daily.Daily.toDailyWeatherBean(): DailyWeath
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
         weatherNameDay = textDay,
-        precip = precip.toIntOrNull() ?: 0,
+        precip = precip.toFloatOrNull() ?: 0f,
         sunriseDate = sdf2.parse(sunrise) ?: sdf2.parse("06:00"),
         sunsetDate = sdf2.parse(sunset) ?: sdf2.parse("18:00"),
         moonParse = moonPhase,
