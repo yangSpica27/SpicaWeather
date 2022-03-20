@@ -35,7 +35,6 @@ class TempLineItem : View {
     }
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.pathBgColor)
         style = Paint.Style.FILL
     }
 
@@ -102,7 +101,7 @@ class TempLineItem : View {
             viewHeight.toFloat(),
             ContextCompat.getColor(
                 context,
-                R.color.black
+                R.color.textColorPrimaryHintLight
             ),
             Color.TRANSPARENT,
             Shader.TileMode.CLAMP
@@ -157,14 +156,20 @@ class TempLineItem : View {
         linePaint.strokeWidth = 2.dp
         linePaint.isAntiAlias = true
         linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+        val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
+                (pointBottomY - pointTopY)
+        val nextPointY = pointBottomY -
+                ((nextValue * 1f - minValue) / (maxValue - minValue)) *
+                (pointBottomY - pointTopY)
+
 
         if (drawLeftLine) {
-            val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+
             pathLeft = Path()
 
             // 七点
             pathLeft.moveTo(pointX, pointY)
+
 
             pathLeft.lineTo(pointX, viewHeight.toFloat())
 
@@ -185,11 +190,6 @@ class TempLineItem : View {
         }
 
         if (drawRightLine) {
-
-            val nextPointY = pointBottomY -
-                ((nextValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
-
             // 绘制背景
 
             pathRight = Path()
@@ -197,6 +197,8 @@ class TempLineItem : View {
             pathRight.lineTo(pointX, viewHeight.toFloat())
             pathRight.lineTo(viewWidth.toFloat(), height.toFloat())
             pathRight.lineTo(viewWidth.toFloat(), (pointY + nextPointY) / 2F)
+
+            pathRight.close()
 
             canvas.drawPath(
                 pathRight,
