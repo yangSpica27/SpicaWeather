@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="accurate_location"
+        app:summary="可能造成耗电量的增加"
+        app:title="精准定位" />
+
+    <ListPreference
+        app:key="source"
+        app:entries="@array/source"
+        app:entryValues="@array/source"
+        app:title="天气源" />
+
+    <MultiSelectListPreference
+        app:key="cards"
+        app:title="功能卡片"
+        app:entryValues="@array/cards"
+        app:entries="@array/cards"
+        />
+
+    <Preference
+        app:key="feedback"
+        app:summary="告诉我们您的建议"
+        app:title="反馈" />
+
+    <Preference
+        app:key="about"
+        app:title="关于" />
+
+</PreferenceScreen>
