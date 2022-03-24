@@ -8,4 +8,20 @@
     <string name="rationale_location_ok">好的</string>
     <string name="rationale_location_cancel">取消</string>
     <string name="sunrise_sunset_time">日出%1$s\n日落%2$s</string>
+    <string name="hint_city_name">城市名称</string>
+    <string name="cancel">取消</string>
+
+    <string-array name="cards">
+        <item>当前天气</item>
+        <item>小时级别天气</item>
+        <item>日级别天气</item>
+        <item>空气质量信息</item>
+        <item>生活指数</item>
+    </string-array>
+
+    <string-array name="source">
+        <item>和风天气</item>
+        <item>Accu天气</item>
+    </string-array>
+
 </resources>

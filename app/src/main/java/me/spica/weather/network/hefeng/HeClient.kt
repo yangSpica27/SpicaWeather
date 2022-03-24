@@ -11,6 +11,7 @@ import javax.inject.Inject
 @Suppress("unused")
 class HeClient @Inject constructor(private val heService: HeService) {
 
+    // 获取当前的天气信息
     suspend fun getNowWeather(
         lon: String,
         lat: String
@@ -18,6 +19,7 @@ class HeClient @Inject constructor(private val heService: HeService) {
         location = "$lon,$lat"
     )
 
+    // 获取近7天的天气信息
     suspend fun get7DWeather(
         lon: String,
         lat: String
@@ -25,6 +27,7 @@ class HeClient @Inject constructor(private val heService: HeService) {
         location = "$lon,$lat"
     )
 
+    // 获取24小时的天气信息
     suspend fun get24HWeather(
         lon: String,
         lat: String
@@ -32,6 +35,7 @@ class HeClient @Inject constructor(private val heService: HeService) {
         location = "$lon,$lat"
     )
 
+    // 获取生活指数
     suspend fun getLifeIndex(
         lon: String,
         lat: String
@@ -39,6 +43,7 @@ class HeClient @Inject constructor(private val heService: HeService) {
         location = "$lon,$lat"
     )
 
+    // 获取空气质量信息
     suspend fun getAirNow(
         lon: String,
         lat: String

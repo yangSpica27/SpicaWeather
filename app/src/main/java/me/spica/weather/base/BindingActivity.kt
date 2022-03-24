@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.viewbinding.ViewBinding
 
+
 abstract class BindingActivity<ViewBindingType : ViewBinding> : AppCompatActivity() {
 
     private var _binding: ViewBindingType? = null

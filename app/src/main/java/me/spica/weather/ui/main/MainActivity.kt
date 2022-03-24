@@ -31,9 +31,9 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
-import me.spica.weather.ui.about.AboutActivity
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
+import me.spica.weather.ui.setting.SettingActivity
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,6 +46,7 @@ private val LOCATION_PERMISSION = arrayOf(
     Manifest.permission.ACCESS_FINE_LOCATION,
     Manifest.permission.ACCESS_COARSE_LOCATION
 )
+
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(),
     EasyPermissions.RationaleCallbacks,
@@ -132,7 +133,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         }
 
         viewBinding.toolbar.iconAbout.setOnClickListener {
-            startActivity(Intent(this, AboutActivity::class.java))
+            startActivity(Intent(this, SettingActivity::class.java))
         }
 
         viewBinding.btnPlus.setOnClickListener {

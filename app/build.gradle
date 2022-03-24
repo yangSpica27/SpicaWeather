@@ -61,8 +61,8 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_11
-    targetCompatibility JavaVersion.VERSION_11
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
   buildFeatures {
     viewBinding true
@@ -157,6 +157,8 @@ dependencies {
   def appCenterSdkVersion = '4.4.2'
   implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
   implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+
+  implementation("androidx.preference:preference:1.1.0")
 
 
   //  testImplementation 'junit:junit:4.13.2'
