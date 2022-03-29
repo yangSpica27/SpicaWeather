@@ -1,6 +1,7 @@
 package me.spica.weather.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
@@ -12,18 +13,14 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityMainBinding
@@ -52,15 +49,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     EasyPermissions.RationaleCallbacks,
     EasyPermissions.PermissionCallbacks {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
-    private var currentCity: CityBean? = null
+
+    private val mainPagerAdapter = MainPagerAdapter(this)
 
     @Inject
     lateinit var cityList: List<CityBean>
-
-    private lateinit var mainCardAdapter: MainCardAdapter
-
 
     private val permissionDialog by lazy {
         MaterialAlertDialogBuilder(this)
@@ -85,12 +80,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         override fun onReceiveLocation(result: BDLocation) {
             Timber.e("定位${result.city}")
             if (result.hasAddr()) {
-                syncNewCity(result.city)
+//                syncNewCity(result.city)
             } else {
                 toast("获取地理位置失败")
-                viewModel.changedCity(
-                    cityList.first()
-                )
+//                viewModel.changedCity(
+//                    cityList.first()
+//                )
             }
         }
     }
@@ -143,8 +138,15 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     override fun initializer() {
         FluidContentResizer.listen(this)
+        initSetting()
         initView()
         initTitle()
+    }
+
+
+    // 初始化设置项
+    private fun initSetting() {
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
 
@@ -182,101 +184,52 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
-        mainCardAdapter = MainCardAdapter(
-            viewBinding.rvMain, lifecycleScope,
-            viewBinding.scrollView
-        )
-        // 滑动检测
-        viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
-            mainCardAdapter.onScroll()
-        }
-        // 设置适配器
-        viewBinding.rvMain.adapter = mainCardAdapter
 
-        dividerBuilder()
-            .colorRes(android.R.color.transparent)
-            .size(12.dp.toInt())
-            .showFirstDivider()
-            .showLastDivider()
-            .build().addTo(viewBinding.rvMain)
-
-        // 设置下拉刷新
-        viewBinding.swipeRefreshLayout.setOnRefreshListener {
-            currentCity?.let {
-                viewModel.changedCity(it)
+        viewBinding.viewPager.adapter = mainPagerAdapter
+        
+        lifecycleScope.launch {
+            viewModel.allCityFlow.collectLatest {
+                mainPagerAdapter.cities.clear()
+                mainPagerAdapter.cities.addAll(it)
+                mainPagerAdapter.notifyDataSetChanged()
             }
         }
-
-        lifecycleScope.launch {
-            viewModel.weatherFlow.collectLatest {
-                if (it == null) {
-                    errorTip.show()
-                }
-                viewBinding.swipeRefreshLayout.isRefreshing = false
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.weatherCacheFlow.filterNotNull().collectLatest {
-//                viewBinding.dailyWeatherCard.bindData(it)
-//                viewBinding.nowWeatherCard.bindData(it)
-//                viewBinding.containerTips.bindData(it)
-//                viewBinding.hourlyWeatherCard.bindData(it)
-//                viewBinding.sunriseCard.bindData(it)
-                mainCardAdapter.notifyData(it)
-            }
-        }
-
-
-        // 获取当前城市
-        lifecycleScope.launch {
-            viewModel
-                .cityFlow
-                .filterNotNull()
-                .collectLatest {
-                    if (currentCity?.cityName != it.cityName) {
-                        val text = "中国，" + it.cityName
-                        viewBinding.toolbar.tsLocation.setText(text)
-                    }
-                    currentCity = it
-                }
-        }
-
 
     }
 
-    private val errorTip by lazy {
-        Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
-            .setAction("重试") {
-                currentCity?.let {
-                    viewModel.changedCity(it)
-                }
-            }
-    }
+//    private val errorTip by lazy {
+//        Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
+//            .setAction("重试") {
+//                currentCity?.let {
+//                    viewModel.changedCity(it)
+//                }
+//            }
+//    }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding =
         ActivityMainBinding.inflate(inflater)
 
 
-    private fun syncNewCity(cityName: String) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            cityList.forEach {
-                if (cityName.contains(it.cityName)) {
-                    if (currentCity?.cityName != it.cityName)
-                        withContext(Dispatchers.IO) {
-                            Snackbar.make(
-                                viewBinding.root,
-                                "检查到您目前的城市在${it.cityName}，正在切换",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
-                    viewModel.changedCity(it)
-                    return@launch
-                }
-            }
-        }
-    }
+//    private fun syncNewCity(cityName: String) {
+//        lifecycleScope.launch(Dispatchers.Default) {
+//            cityList.forEach {
+//                if (cityName.contains(it.cityName)) {
+//                    if (currentCity?.cityName != it.cityName)
+//                        withContext(Dispatchers.IO) {
+//                            Snackbar.make(
+//                                viewBinding.root,
+//                                "检查到您目前的城市在${it.cityName}，正在切换",
+//                                Snackbar.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    viewModel.changedCity(it)
+//                    return@launch
+//                }
+//            }
+//        }
+//    }
 
 
     override fun onBackPressed() {

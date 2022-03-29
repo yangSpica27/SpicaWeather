@@ -6,6 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="cloud_color">#80FFFFFF</color>
     <color name="nav_select_color">#CC000000</color>
     <color name="water_color">#64B5F6</color>
     <color name="error_color">#E91E63</color>
