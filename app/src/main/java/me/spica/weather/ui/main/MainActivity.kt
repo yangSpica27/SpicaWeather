@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import androidx.viewpager2.widget.ViewPager2
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
@@ -188,13 +189,24 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     private fun initView() {
 
         viewBinding.viewPager.adapter = mainPagerAdapter
-        
+
+
+
         lifecycleScope.launch {
+
             viewModel.allCityFlow.collectLatest {
                 mainPagerAdapter.cities.clear()
                 mainPagerAdapter.cities.addAll(it)
                 mainPagerAdapter.notifyDataSetChanged()
             }
+
+            viewBinding.viewPager.unregisterOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewBinding.toolbar.tsLocation.setText( "中国，${mainPagerAdapter.cities[position].cityName}")
+                }
+            })
         }
 
     }

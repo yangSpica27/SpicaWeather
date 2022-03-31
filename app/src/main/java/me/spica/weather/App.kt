@@ -30,25 +30,28 @@ class App : Application() {
 
     private fun handlerDelegate() {
         // 接管主线程loop
-        Handler(Looper.getMainLooper()).post {
-            while (true) {
-                try {
-                    Looper.loop()
-                } catch (e: Throwable) {
-                    val stack = Log.getStackTraceString(e)
-                    if (e is SecurityException) {
-                        Timber.tag("SecurityException").w(e)
-                    } else if (stack.contains("Toast") ||
-                        stack.contains("SFEffectsAPI") ||
-                        stack.contains("BadTokenException")
-                    ) {
-                        Timber.tag("warning!").w(e.message!!)
-                    } else {
-                        // 其他错误可以进行上报...
-                        throw e
+        if (BuildConfig.DEBUG==false){
+            Handler(Looper.getMainLooper()).post {
+                while (true) {
+                    try {
+                        Looper.loop()
+                    } catch (e: Throwable) {
+                        val stack = Log.getStackTraceString(e)
+                        if (e is SecurityException) {
+                            Timber.tag("SecurityException").w(e)
+                        } else if (stack.contains("Toast") ||
+                            stack.contains("SFEffectsAPI") ||
+                            stack.contains("BadTokenException")
+                        ) {
+                            Timber.tag("warning!").w(e.message!!)
+                        } else {
+                            // 其他错误可以进行上报...
+                            throw e
+                        }
                     }
                 }
             }
         }
+
     }
 }

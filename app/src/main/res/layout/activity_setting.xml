@@ -18,6 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ic_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_left"

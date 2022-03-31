@@ -1,4 +1,4 @@
-package me.spica.weather.ui.home
+package me.spica.weather.ui.weather
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

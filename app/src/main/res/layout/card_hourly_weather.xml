@@ -7,7 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:visibility="visible"
-    android:animateLayoutChanges="true"
     android:background="@color/white">
 
     <androidx.appcompat.widget.AppCompatTextView

@@ -6,13 +6,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import kotlinx.coroutines.Job
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
-import me.spica.weather.ui.home.DailWeatherAdapter
+import me.spica.weather.ui.weather.DailWeatherAdapter
 import me.spica.weather.ui.today.TodayWeatherActivity
 
 class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {

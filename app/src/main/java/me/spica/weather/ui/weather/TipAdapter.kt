@@ -1,4 +1,4 @@
-package me.spica.weather.ui.home
+package me.spica.weather.ui.weather
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

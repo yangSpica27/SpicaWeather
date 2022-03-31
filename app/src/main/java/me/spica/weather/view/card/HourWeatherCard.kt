@@ -11,7 +11,7 @@ import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
-import me.spica.weather.ui.home.HourWeatherAdapter
+import me.spica.weather.ui.weather.HourWeatherAdapter
 
 class HourWeatherCard : CardLinearlayout, SpicaWeatherCard{
 

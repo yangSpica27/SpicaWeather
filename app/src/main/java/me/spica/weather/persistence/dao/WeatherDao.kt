@@ -5,20 +5,21 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import me.spica.weather.model.weather.Weather
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import me.spica.weather.model.weather.Weather
 
 
 @Dao
 interface WeatherDao {
 
 
-    @Query("SELECT * FROM weather WHERE id == 1 LIMIT 0,1")
-    fun getWeather(): Flow<Weather?>
+    @Query("SELECT * FROM weather WHERE cityName == (:cityName)")
+    fun getWeather(cityName: String): Flow<Weather?>
 
     @ExperimentalCoroutinesApi
-    fun getWeatherFlowDistinctUntilChanged()= getWeather().distinctUntilChanged()
+    fun getWeatherFlowDistinctUntilChanged(cityName: String) =
+        getWeather(cityName).distinctUntilChanged()
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -13,7 +13,7 @@ import me.spica.weather.R
 import me.spica.weather.databinding.CardLifeIndexBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
-import me.spica.weather.ui.home.TipAdapter
+import me.spica.weather.ui.weather.TipAdapter
 
 class TipsCard : RelativeLayout, SpicaWeatherCard{
 
