@@ -20,6 +20,8 @@ import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zhpan.indicator.enums.IndicatorSlideMode
+import com.zhpan.indicator.enums.IndicatorStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -198,7 +200,22 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             viewModel.allCityFlow.collectLatest {
                 val isFirst = mainPagerAdapter.diffUtil.currentList.size == 0
                 mainPagerAdapter.diffUtil.submitList(it)
-
+                viewBinding.indicatorView.apply {
+                    setSliderColor(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.textColorPrimaryHintLight
+                        ),     ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.textColorPrimaryHint
+                    ))
+                    setSliderWidth(10.dp)
+                    setSliderHeight(5.dp)
+                    setSlideMode(IndicatorSlideMode.SMOOTH)
+                    setIndicatorStyle(IndicatorStyle.ROUND_RECT)
+                    setPageSize(mainPagerAdapter.diffUtil.currentList.size)
+                    notifyDataChanged()
+                }
             }
         }
 
@@ -208,6 +225,25 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 viewModel.selectCity(mainPagerAdapter.diffUtil.currentList[position])
+                viewBinding.indicatorView.onPageSelected(position)
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                viewBinding.indicatorView.onPageScrolled(
+                    position,
+                    positionOffset,
+                    positionOffsetPixels
+                )
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                viewBinding.indicatorView.onPageScrollStateChanged(state)
             }
         })
 
