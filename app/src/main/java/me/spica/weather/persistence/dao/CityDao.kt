@@ -22,10 +22,10 @@ interface CityDao {
     @Query("SELECT * FROM t_city WHERE isSelected =:isSelect LIMIT 0,1")
     fun getSelectCity(isSelect: Boolean = true): Flow<CityBean?>
 
-    @Query("SELECT * FROM t_city")
+    @Query("SELECT * FROM t_city ORDER  by cityName")
     fun getCities(): Flow<List<CityBean>>
 
-    @Query("SELECT * FROM t_city")
+    @Query("SELECT * FROM t_city ORDER  by cityName")
     fun getAllList(): List<CityBean>
 
     @ExperimentalCoroutinesApi

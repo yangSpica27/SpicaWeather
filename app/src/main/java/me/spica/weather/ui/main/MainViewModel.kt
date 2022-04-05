@@ -1,7 +1,11 @@
 package me.spica.weather.ui.main
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import me.spica.weather.model.city.CityBean
 import me.spica.weather.persistence.repository.CityRepository
 import javax.inject.Inject
 
@@ -16,5 +20,26 @@ class MainViewModel @Inject constructor(
 
 
     val allCityFlow = cityRepository.allCityFlow()
+
+
+    val selectCityFlow = cityRepository.selectedCityFlow()
+
+
+    fun  getAllCity() = cityRepository.allCityList()
+
+
+ fun selectCity(cityBean: CityBean){
+     viewModelScope.launch(Dispatchers.IO) {
+         cityRepository.selected(cityBean)
+     }
+ }
+
+
+    fun changeCity(cityBean: CityBean){
+        viewModelScope.launch(Dispatchers.IO){
+            cityRepository.selected(cityBean)
+        }
+
+    }
 
 }

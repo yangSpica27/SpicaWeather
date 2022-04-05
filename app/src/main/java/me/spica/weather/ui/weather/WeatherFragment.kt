@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.databinding.FragmentListBinding
 import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.ui.main.MainCardAdapter
 
@@ -78,7 +79,9 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
 
         lifecycleScope.launch {
             viewModel.weatherCacheFlow.filterNotNull().collectLatest {
-                mainCardAdapter.notifyData(it)
+                doOnMainThreadIdle({
+                    mainCardAdapter.notifyData(it)
+                })
             }
         }
 

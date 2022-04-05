@@ -19,8 +19,11 @@ import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
@@ -81,12 +84,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         override fun onReceiveLocation(result: BDLocation) {
             Timber.e("定位${result.city}")
             if (result.hasAddr()) {
-//                syncNewCity(result.city)
+                syncNewCity(result.city)
             } else {
                 toast("获取地理位置失败")
-//                viewModel.changedCity(
-//                    cityList.first()
-//                )
+                viewModel.changeCity(
+                    cityList.first()
+                )
             }
         }
     }
@@ -190,23 +193,28 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
         viewBinding.viewPager.adapter = mainPagerAdapter
 
-
-
         lifecycleScope.launch {
 
             viewModel.allCityFlow.collectLatest {
-                mainPagerAdapter.cities.clear()
-                mainPagerAdapter.cities.addAll(it)
-                mainPagerAdapter.notifyDataSetChanged()
-            }
+                val isFirst = mainPagerAdapter.diffUtil.currentList.size == 0
+                mainPagerAdapter.diffUtil.submitList(it)
 
-            viewBinding.viewPager.unregisterOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    viewBinding.toolbar.tsLocation.setText( "中国，${mainPagerAdapter.cities[position].cityName}")
-                }
-            })
+            }
+        }
+
+
+        viewBinding.viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewModel.selectCity(mainPagerAdapter.diffUtil.currentList[position])
+            }
+        })
+
+        lifecycleScope.launch {
+            viewModel.selectCityFlow.filterNotNull().collect {
+                viewBinding.toolbar.tsLocation.setText("中国，${it.cityName}")
+            }
         }
 
     }
@@ -224,24 +232,23 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         ActivityMainBinding.inflate(inflater)
 
 
-//    private fun syncNewCity(cityName: String) {
-//        lifecycleScope.launch(Dispatchers.Default) {
-//            cityList.forEach {
-//                if (cityName.contains(it.cityName)) {
-//                    if (currentCity?.cityName != it.cityName)
-//                        withContext(Dispatchers.IO) {
-//                            Snackbar.make(
-//                                viewBinding.root,
-//                                "检查到您目前的城市在${it.cityName}，正在切换",
-//                                Snackbar.LENGTH_SHORT
-//                            ).show()
-//                        }
-//                    viewModel.changedCity(it)
-//                    return@launch
-//                }
-//            }
-//        }
-//    }
+    private fun syncNewCity(cityName: String) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            cityList.forEach {
+                if (cityName.contains(it.cityName)) {
+                    if (viewModel.getAllCity().contains(it)) {
+                        Snackbar.make(
+                            viewBinding.root,
+                            "检测您所在城市在${it.cityName},正在切换",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        viewModel.changeCity(it)
+                        return@launch
+                    }
+                }
+            }
+        }
+    }
 
 
     override fun onBackPressed() {

@@ -14,6 +14,9 @@ class CityRepository @Inject constructor(
 
     fun allCityFlow() = cityDao.getAllDistinctUntilChanged()
 
+
+    fun allCityList() = cityDao.getAllList()
+
     @WorkerThread
     suspend fun addCity(cityBean: CityBean): String {
         var result = "添加成功"
