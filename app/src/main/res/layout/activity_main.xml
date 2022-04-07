@@ -15,8 +15,6 @@
         android:layout_width="match_parent"
         android:background="@android:color/transparent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
-        app:elevation="0dp"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -29,12 +27,6 @@
                 android:id="@+id/toolbar"
                 layout="@layout/layout_main_top_bar" />
 
-            <com.zhpan.indicator.IndicatorView
-                android:id="@+id/indicatorView"
-                android:layout_margin="12dp"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

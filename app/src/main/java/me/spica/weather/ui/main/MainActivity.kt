@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -15,17 +16,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.zhpan.indicator.enums.IndicatorSlideMode
-import com.zhpan.indicator.enums.IndicatorStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
@@ -126,6 +125,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             textView.isSingleLine = true
             textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
             textView.ellipsize = TextUtils.TruncateAt.END
+            textView.gravity = Gravity.CENTER
             textView
         }
 
@@ -187,6 +187,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
+
     }
 
 
@@ -198,24 +199,19 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         lifecycleScope.launch {
 
             viewModel.allCityFlow.collectLatest {
-                val isFirst = mainPagerAdapter.diffUtil.currentList.size == 0
                 mainPagerAdapter.diffUtil.submitList(it)
-                viewBinding.indicatorView.apply {
-                    setSliderColor(
-                        ContextCompat.getColor(
-                            this@MainActivity,
-                            R.color.textColorPrimaryHintLight
-                        ),     ContextCompat.getColor(
-                            this@MainActivity,
-                            R.color.textColorPrimaryHint
-                    ))
-                    setSliderWidth(10.dp)
-                    setSliderHeight(5.dp)
-                    setSlideMode(IndicatorSlideMode.SMOOTH)
-                    setIndicatorStyle(IndicatorStyle.ROUND_RECT)
-                    setPageSize(mainPagerAdapter.diffUtil.currentList.size)
-                    notifyDataChanged()
+                if (viewBinding.viewPager.scrollState == SCROLL_STATE_IDLE) {
+
+                        mainPagerAdapter.diffUtil.currentList.forEachIndexed { index, city ->
+                           kotlin.run {
+                                if (city.isSelected) {
+                                    viewBinding.viewPager.currentItem = index
+                                    return@forEachIndexed
+                                }
+                            }
+                        }
                 }
+
             }
         }
 
@@ -224,34 +220,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                viewModel.selectCity(mainPagerAdapter.diffUtil.currentList[position])
-                viewBinding.indicatorView.onPageSelected(position)
+                viewBinding.toolbar.tsLocation.setText(mainPagerAdapter.diffUtil.currentList[position].cityName)
             }
 
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                viewBinding.indicatorView.onPageScrolled(
-                    position,
-                    positionOffset,
-                    positionOffsetPixels
-                )
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-                viewBinding.indicatorView.onPageScrollStateChanged(state)
-            }
         })
 
-        lifecycleScope.launch {
-            viewModel.selectCityFlow.filterNotNull().collect {
-                viewBinding.toolbar.tsLocation.setText("中国，${it.cityName}")
-            }
-        }
 
     }
 
