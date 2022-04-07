@@ -36,6 +36,11 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
     ): FragmentListBinding = FragmentListBinding.inflate(layoutInflater, container, false)
 
 
+    override fun onResume() {
+        super.onResume()
+        mainCardAdapter.onScroll()
+    }
+
     override fun init() {
         currentCity = arguments?.getParcelable("city")
         currentCity?.let {
@@ -50,6 +55,8 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
         viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
             mainCardAdapter.onScroll()
         }
+
+
         // 设置适配器
         viewBinding.rvList.adapter = mainCardAdapter
 

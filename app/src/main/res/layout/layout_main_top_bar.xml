@@ -22,15 +22,15 @@
 
     <TextSwitcher
         android:id="@+id/ts_location"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingStart="30dp"
+        android:paddingStart="100dp"
         android:inAnimation="@anim/message_in_anim"
         android:outAnimation="@anim/message_out_anim"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingEnd="30dp"
+        android:paddingEnd="100dp"
         android:gravity="center" />
 
     <androidx.appcompat.widget.AppCompatImageView

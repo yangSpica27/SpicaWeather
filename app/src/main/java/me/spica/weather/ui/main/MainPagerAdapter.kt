@@ -17,7 +17,8 @@ class MainPagerAdapter(fragmentActivity: FragmentActivity) :
         this,
         object : DiffUtil.ItemCallback<CityBean>() {
             override fun areItemsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = oldItem.cityName == newItem.cityName
-            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = true
+            override fun areContentsTheSame(oldItem: CityBean, newItem: CityBean): Boolean = false
+
         }
     )
 
