@@ -15,6 +15,10 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.weather.TipAdapter
 
+
+/**
+ * 生活指数卡
+ */
 class TipsCard : RelativeLayout, SpicaWeatherCard{
 
     private val tipAdapter = TipAdapter()

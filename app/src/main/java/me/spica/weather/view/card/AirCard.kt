@@ -10,6 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import me.spica.weather.databinding.CardAirBinding
 import me.spica.weather.model.weather.Weather
 
+
+/**
+ * 空气质量卡片
+ */
 class AirCard : ConstraintLayout, SpicaWeatherCard {
 
     override var animatorView: View = this

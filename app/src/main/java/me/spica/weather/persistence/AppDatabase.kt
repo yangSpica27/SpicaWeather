@@ -7,6 +7,10 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.persistence.dao.CityDao
 import me.spica.weather.persistence.dao.WeatherDao
 
+
+/**
+ * 数据库
+ */
 @Database(entities = [CityBean::class, Weather::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 

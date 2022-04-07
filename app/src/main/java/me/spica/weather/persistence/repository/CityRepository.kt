@@ -12,11 +12,22 @@ class CityRepository @Inject constructor(
     private val cityDao: CityDao
 ) {
 
+
+    /**
+     * 获取所有城市的flow
+     */
     fun allCityFlow() = cityDao.getAllDistinctUntilChanged()
 
 
+    /**
+     * 获取所有城市的列表
+     */
     fun allCityList() = cityDao.getAllList()
 
+
+    /**
+     * 添加城市
+     */
     @WorkerThread
     suspend fun addCity(cityBean: CityBean): String {
         var result = "添加成功"
@@ -30,6 +41,10 @@ class CityRepository @Inject constructor(
         return result
     }
 
+
+    /**
+     * 选择城市
+     */
     @WorkerThread
     suspend fun selected(cityBean: CityBean) = withContext(Dispatchers.IO) {
         cityDao.getAllList().forEach {
@@ -40,10 +55,14 @@ class CityRepository @Inject constructor(
         cityDao.insert(cityBean)
     }
 
+    /**
+     * 删除城市
+     */
     @WorkerThread
     fun deleteCity(cityBean: CityBean) {
         cityDao.deleteCity(cityBean = cityBean)
     }
 
+    // 选择的城市
     fun selectedCityFlow() = cityDao.getSelectCity()
 }

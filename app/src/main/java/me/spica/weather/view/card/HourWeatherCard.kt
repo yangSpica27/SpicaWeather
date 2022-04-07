@@ -13,6 +13,10 @@ import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.weather.HourWeatherAdapter
 
+
+/**
+ * 小时级的天气信息卡片
+ */
 class HourWeatherCard : CardLinearlayout, SpicaWeatherCard{
 
     constructor(context: Context?) : super(context)

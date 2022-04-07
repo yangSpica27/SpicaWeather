@@ -13,6 +13,10 @@ import me.spica.weather.tools.doOnMainThreadIdle
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+/**
+ * 日出日落卡片
+ */
 class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
 

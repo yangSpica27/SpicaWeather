@@ -11,9 +11,13 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
-import me.spica.weather.ui.weather.DailWeatherAdapter
 import me.spica.weather.ui.today.TodayWeatherActivity
+import me.spica.weather.ui.weather.DailWeatherAdapter
 
+
+/**
+ * 天级的天气信息卡
+ */
 class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
     private val dailyWeatherAdapter by lazy {
