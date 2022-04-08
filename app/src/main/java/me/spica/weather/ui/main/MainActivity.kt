@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
@@ -197,29 +196,27 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         viewBinding.viewPager.adapter = mainPagerAdapter
 
         lifecycleScope.launch {
-
             viewModel.allCityFlow.collectLatest {
+                // 刷新城市列表
                 mainPagerAdapter.diffUtil.submitList(it)
-                if (viewBinding.viewPager.scrollState == SCROLL_STATE_IDLE) {
-
-                        mainPagerAdapter.diffUtil.currentList.forEachIndexed { index, city ->
-                           kotlin.run {
-                                if (city.isSelected) {
-                                    viewBinding.viewPager.currentItem = index
-                                    return@forEachIndexed
-                                }
-                            }
-                        }
-                }
-
             }
         }
+
+        mainPagerAdapter.diffUtil.addListListener { _, currentList ->
+            kotlin.run {
+                // 回到选中的城市的天气页面
+                val index = currentList.indexOfFirst { it.isSelected }
+                viewBinding.viewPager.currentItem = index
+            }
+        }
+
 
 
         viewBinding.viewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                // 根据当前的页面切换顶栏城市名称
                 viewBinding.toolbar.tsLocation.setText(mainPagerAdapter.diffUtil.currentList[position].cityName)
             }
 

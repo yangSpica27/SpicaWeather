@@ -2,10 +2,10 @@ package me.spica.weather.ui.weather
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
@@ -16,6 +16,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.ui.main.MainCardAdapter
+import javax.inject.Inject
 
 /**
  * 天气单元页面
@@ -29,6 +30,9 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
 
     private var currentCity: CityBean? = null
 
+
+    @Inject
+    lateinit var cityList: List<CityBean>
 
     override fun setupViewBinding(
         inflater: LayoutInflater,
@@ -56,6 +60,8 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
             mainCardAdapter.onScroll()
         }
 
+        viewBinding.swipeRefreshLayout.isEnabled = false
+
 
         // 设置适配器
         viewBinding.rvList.adapter = mainCardAdapter
@@ -70,15 +76,17 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
 
         // 设置下拉刷新
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
-            currentCity?.let {
-                viewModel.changeCity(it)
+            currentCity?.let { city->
+
+                viewModel.changeCity(city)
+
             }
         }
 
         lifecycleScope.launch {
             viewModel.weatherFlow.collectLatest {
                 if (it == null) {
-                    Toast.makeText(requireContext(), "请求错误", Toast.LENGTH_SHORT).show()
+                    errorTip.show()
                 }
                 viewBinding.swipeRefreshLayout.isRefreshing = false
             }
@@ -92,5 +100,15 @@ class WeatherFragment : BindingFragment<FragmentListBinding>() {
             }
         }
 
+    }
+
+
+        private val errorTip by lazy {
+        Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
+            .setAction("重试") {
+                currentCity?.let {
+                    viewModel.changeCity(it)
+                }
+            }
     }
 }

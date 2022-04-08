@@ -24,8 +24,19 @@ class WeatherViewModel @Inject constructor(
     private val cityFlow: MutableStateFlow<CityBean?> = MutableStateFlow(null)
 
     // 设置城市
+
+
     fun changeCity(cityBean: CityBean) {
-        cityFlow.value = cityBean
+        Timber.d("请求进入")
+        viewModelScope.launch {
+            cityFlow.value = CityBean(
+                cityName = cityBean.cityName,
+                sortName = cityBean.sortName,
+                lon = cityBean.lon,
+                lat = cityBean.lat,
+                isSelected = cityBean.isSelected
+            )
+        }
     }
 
     private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -33,7 +44,7 @@ class WeatherViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
 
     // 即时天气
-    val nowWeatherFlow: Flow<NowWeatherBean?> =
+    private val nowWeatherFlow: Flow<NowWeatherBean?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
@@ -47,8 +58,8 @@ class WeatherViewModel @Inject constructor(
             }
 
 
-    val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
-        cityFlow.filterNotNull().flatMapLatest { it ->
+    private val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
+        cityFlow.filterNotNull().flatMapLatest {
             repository.fetchDailyWeather(
                 lon = it.lon,
                 lat = it.lat,
@@ -58,7 +69,7 @@ class WeatherViewModel @Inject constructor(
             )
         }
 
-    val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
+    private val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
@@ -71,7 +82,7 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
-    val currentIndices: Flow<List<LifeIndexBean>?> =
+    private val currentIndices: Flow<List<LifeIndexBean>?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
@@ -84,7 +95,7 @@ class WeatherViewModel @Inject constructor(
                 )
             }
 
-    val nowAir: Flow<AirBean?> =
+    private val nowAir: Flow<AirBean?> =
         cityFlow
             .filterNotNull()
             .flatMapLatest {
@@ -114,6 +125,7 @@ class WeatherViewModel @Inject constructor(
             lifeIndexes != null &&
             nowAir != null
         ) {
+            Timber.e("触发请求")
             val result = Weather(
                 nowWeather,
                 dailyWeather,
