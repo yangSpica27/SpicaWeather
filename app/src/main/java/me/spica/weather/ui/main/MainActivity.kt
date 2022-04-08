@@ -101,6 +101,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 绑定定位监听
+        window.setBackgroundDrawableResource(R.color.window_background)
         locationClint.registerLocationListener(locationListener)
         requestPermission()
     }
