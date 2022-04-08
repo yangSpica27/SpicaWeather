@@ -225,14 +225,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     }
 
-//    private val errorTip by lazy {
-//        Snackbar.make(viewBinding.root, "请求过程中发生错误！", Snackbar.LENGTH_LONG)
-//            .setAction("重试") {
-//                currentCity?.let {
-//                    viewModel.changedCity(it)
-//                }
-//            }
-//    }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding =
         ActivityMainBinding.inflate(inflater)
@@ -246,7 +238,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                         Snackbar.make(
                             viewBinding.root,
                             "检测您所在城市在${it.cityName},正在切换",
-                            Snackbar.LENGTH_LONG
+                            Snackbar.LENGTH_SHORT
                         ).show()
                         viewModel.changeCity(it)
                         return@launch

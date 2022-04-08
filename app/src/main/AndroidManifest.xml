@@ -49,6 +49,7 @@
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
             android:exported="true"
+            android:theme="@style/SplashTheme"
             android:launchMode="singleTask"
             tools:ignore="LockedOrientationActivity">
 
