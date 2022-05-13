@@ -19,11 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.BoolRes
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.IntegerRes
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.app.ActivityOptionsCompat
@@ -203,7 +199,8 @@ fun AppCompatActivity.addNewFragment(
     transaction.show(new_add_fragment) // 显示
 
     if (need_back_from_stack) {
-        transaction.addToBackStack(null) // 加入回退栈。                   //TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
+        transaction.addToBackStack(null) // 加入回退栈。
+    // TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
     }
     transaction.commit() // 最终提交。
 }

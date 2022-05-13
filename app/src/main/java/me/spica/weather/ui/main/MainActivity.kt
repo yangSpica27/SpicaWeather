@@ -235,7 +235,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         lifecycleScope.launch(Dispatchers.Default) {
             cityList.forEach {
                 if (cityName.contains(it.cityName)) {
-                    if (viewModel.getAllCity().contains(it)) {
+                    if (viewModel.getAllCity().contains(it) || viewModel.getAllCity().isEmpty()) {
                         Snackbar.make(
                             viewBinding.root,
                             "检测您所在城市在${it.cityName},正在切换",
