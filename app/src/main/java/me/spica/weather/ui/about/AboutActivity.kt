@@ -30,8 +30,16 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
         val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down)
         viewBinding.rvLicence.layoutAnimation = animation
         viewBinding.rvLicence.adapter = adapter
+        initToolBar()
         initData()
         viewBinding.tvVersionCode.text = BuildConfig.VERSION_NAME
+    }
+
+    private fun initToolBar() {
+        setSupportActionBar(viewBinding.toolbar)
+        viewBinding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -78,5 +86,5 @@ class AboutActivity : BindingActivity<ActivityAboutMeBinding>() {
     }
 
     override fun setupViewBinding(inflater: LayoutInflater):
-        ActivityAboutMeBinding = ActivityAboutMeBinding.inflate(inflater)
+            ActivityAboutMeBinding = ActivityAboutMeBinding.inflate(inflater)
 }

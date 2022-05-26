@@ -7,4 +7,16 @@ enum class HomeCardType(val code: Int) {
     SUNRISE(3),// 日出日落
     AIR(4),
     LIFE_INDEX(5);// 生活指数
+
+}
+fun Int.toHomeCardType(): HomeCardType {
+    return when (this) {
+        HomeCardType.NOW_WEATHER.code -> HomeCardType.NOW_WEATHER
+        HomeCardType.HOUR_WEATHER.code -> HomeCardType.HOUR_WEATHER
+        HomeCardType.DAY_WEATHER.code -> HomeCardType.DAY_WEATHER
+        HomeCardType.SUNRISE.code -> HomeCardType.SUNRISE
+        HomeCardType.AIR.code -> HomeCardType.AIR
+        HomeCardType.LIFE_INDEX.code -> HomeCardType.LIFE_INDEX
+        else -> HomeCardType.NOW_WEATHER
+    }
 }

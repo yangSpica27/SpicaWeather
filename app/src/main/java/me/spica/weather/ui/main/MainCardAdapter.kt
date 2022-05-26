@@ -8,13 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
-import me.spica.weather.view.card.AirCard
-import me.spica.weather.view.card.DailyWeatherCard
-import me.spica.weather.view.card.HomeCardType
-import me.spica.weather.view.card.HourWeatherCard
-import me.spica.weather.view.card.NowWeatherCard
-import me.spica.weather.view.card.SunriseCard
-import me.spica.weather.view.card.TipsCard
+import me.spica.weather.view.card.*
 import timber.log.Timber
 
 class MainCardAdapter(
@@ -23,13 +17,19 @@ class MainCardAdapter(
     private val scrollview: NestedScrollView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
-    private var items = HomeCardType.values().toList()
+    private val items  = arrayListOf<HomeCardType>()
 
     private var weather: Weather? = null
 
 
     init {
         recyclerView.setItemViewCacheSize(10)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItems(items:List<HomeCardType>){
+        this.items.clear()
+        this.items.addAll(items)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
@@ -115,6 +115,7 @@ class MainCardAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
 
 
 }

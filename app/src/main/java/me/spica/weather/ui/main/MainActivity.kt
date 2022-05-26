@@ -3,6 +3,7 @@ package me.spica.weather.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
+import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.dp
@@ -51,7 +53,7 @@ private val LOCATION_PERMISSION = arrayOf(
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(),
     EasyPermissions.RationaleCallbacks,
-    EasyPermissions.PermissionCallbacks {
+    EasyPermissions.PermissionCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -153,6 +155,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     // 初始化设置项
     private fun initSetting() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
+        val showCards = sp.getStringSet("cards", null)
+        if (showCards == null) {
+            sp.edit().putStringSet(Preference.CARDS.key, setOf("0", "1", "2", "3", "4", "5"))
+                .commit()
+        }
     }
 
 
@@ -278,4 +285,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     }
 
     override fun onRationaleDenied(requestCode: Int) = Unit
+
+    override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
+        Timber.tag("更变设定").i(key)
+        if (key == "cards") {
+            // 更改卡片的显示
+        }
+    }
 }
