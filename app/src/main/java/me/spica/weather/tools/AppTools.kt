@@ -43,14 +43,16 @@ fun Context.getVersion(): String {
 
 // 隐藏软键盘
 fun View.hideKeyboard() {
-    val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager =
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
 // 显示软键盘
 fun View.showKeyboard() {
     if (requestFocus()) {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
 }
@@ -88,7 +90,8 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
 @SuppressLint("RestrictedApi")
 fun View.expand(dx: Int, dy: Int) {
     // 将刚才定义代理类放到方法内部，调用方不需要了解这些细节
-    class MultiTouchDelegate(bound: Rect? = null, delegateView: View) : TouchDelegate(bound, delegateView) {
+    class MultiTouchDelegate(bound: Rect? = null, delegateView: View) :
+        TouchDelegate(bound, delegateView) {
         val delegateViewMap = mutableMapOf<View, Rect>()
         private var delegateView: View? = null
 
@@ -123,7 +126,8 @@ fun View.expand(dx: Int, dy: Int) {
     parentView ?: return
 
     // 若父控件未设置触摸代理，则构建 MultiTouchDelegate 并设置给它
-    if (parentView.touchDelegate == null) parentView.touchDelegate = MultiTouchDelegate(delegateView = this)
+    if (parentView.touchDelegate == null) parentView.touchDelegate =
+        MultiTouchDelegate(delegateView = this)
     post {
         val rect = Rect()
         // 获取子控件在父控件中的区域
@@ -135,13 +139,17 @@ fun View.expand(dx: Int, dy: Int) {
     }
 }
 
-fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, text, duration).show() }
+fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
+    this?.let { Toast.makeText(it, text, duration).show() }
 
-fun Context?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, textId, duration).show() }
+fun Context?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
+    this?.let { Toast.makeText(it, textId, duration).show() }
 
-fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(text, duration) }
+fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
+    this?.let { activity.toast(text, duration) }
 
-fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(textId, duration) }
+fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
+    this?.let { activity.toast(textId, duration) }
 
 fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
@@ -152,13 +160,20 @@ fun Context.getInteger(@IntegerRes id: Int) = resources.getInteger(id)
 fun Context.getBoolean(@BoolRes id: Int) = resources.getBoolean(id)
 
 // startActivityWithAnimation
-inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0) {
+inline fun <reified T : Activity> Context.startActivityWithAnimation(
+    enterResId: Int = 0,
+    exitResId: Int = 0
+) {
     val intent = Intent(this, T::class.java)
     val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
     ContextCompat.startActivity(this, intent, bundle)
 }
 
-inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0, intentBody: Intent.() -> Unit) {
+inline fun <reified T : Activity> Context.startActivityWithAnimation(
+    enterResId: Int = 0,
+    exitResId: Int = 0,
+    intentBody: Intent.() -> Unit
+) {
     val intent = Intent(this, T::class.java)
     intent.intentBody()
     val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
@@ -200,7 +215,7 @@ fun AppCompatActivity.addNewFragment(
 
     if (need_back_from_stack) {
         transaction.addToBackStack(null) // 加入回退栈。
-    // TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
+        // TODO 并且，如果按照默认模式来的话，返回键，就会从栈顶一直清空到栈底的。（默认的【返回操作】）。（当然，你也可以自己在onBackPress里面玩些花样）
     }
     transaction.commit() // 最终提交。
 }
@@ -208,7 +223,7 @@ fun AppCompatActivity.addNewFragment(
 fun AppCompatActivity.showOldFragment(
     show_old_fragment: Fragment,
     hide_fragment_list:
-        List<Fragment> = listOf()
+    List<Fragment> = listOf()
 ) {
 
     val transaction = this.supportFragmentManager.beginTransaction()
@@ -219,4 +234,15 @@ fun AppCompatActivity.showOldFragment(
     transaction.show(show_old_fragment) // 显示
 
     transaction.commit() // 提交
+}
+
+
+fun AppCompatActivity.getStatusBarHeight(): Int {
+    var height = 0
+    val resourceId =
+        applicationContext.resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        height = applicationContext.resources.getDimensionPixelSize(resourceId)
+    }
+    return height
 }

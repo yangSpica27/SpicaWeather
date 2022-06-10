@@ -7,10 +7,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import coil.load
-import me.spica.weather.common.WeatherCodeUtils
-import me.spica.weather.common.getIconRes
-import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -47,20 +43,13 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
             val nowWeatherBean = weather.todayWeather
-            val themeColor = WeatherCodeUtils
-                .getWeatherCode(nowWeatherBean.iconId.toString()).getThemeColor()
+
             // 设置主题颜色
-            binding.root.setBackgroundColor(themeColor)
-            // 加载图标
-            binding.icWeather.load(
-                WeatherCodeUtils.getWeatherCode(nowWeatherBean.iconId.toString()).getIconRes()
-            ) {
-                crossfade(true)
-            }
+
             doOnMainThreadIdle({
                 binding.tvTemp.text = nowWeatherBean.temp.toString() + "℃"
                 binding.tvNow.text = "空气质量：${weather.air.category}"
-                binding.tvWeather.text = nowWeatherBean.weatherName
+                binding.tvWeather.text = nowWeatherBean.weatherName+","
                 binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
                 binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime)
                 binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"

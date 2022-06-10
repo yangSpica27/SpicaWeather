@@ -1,6 +1,5 @@
 package me.spica.weather.ui.weather
 
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -123,7 +122,7 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
+    @Suppress("NotifyDataSetChanged")
     private fun initCards(sp: SharedPreferences, needRefresh: Boolean = false) {
         // 根据情况隐藏卡片
         val cards = mutableListOf<HomeCardType>()

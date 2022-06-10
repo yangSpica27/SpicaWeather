@@ -10,10 +10,12 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
@@ -32,6 +34,7 @@ import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.dp
+import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
 import me.spica.weather.ui.city.CitySelectActivity
@@ -104,6 +107,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         super.onCreate(savedInstanceState)
         // 绑定定位监听
         window.setBackgroundDrawableResource(R.color.window_background)
+        viewBinding.statusLl.updateLayoutParams<LinearLayout.LayoutParams> {
+            height = getStatusBarHeight()
+        }
         locationClint.registerLocationListener(locationListener)
         requestPermission()
     }

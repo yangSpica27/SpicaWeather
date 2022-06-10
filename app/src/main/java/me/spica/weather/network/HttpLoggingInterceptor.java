@@ -1,5 +1,7 @@
 package me.spica.weather.network;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.util.IOUtils;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -24,7 +26,6 @@ import timber.log.Timber;
  * @Author Spica2 7
  * @Date 2021/8/30 16:43
  */
-@SuppressWarnings("unused")
 public class HttpLoggingInterceptor implements Interceptor {
 
   private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -52,6 +53,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     Timber.v(message);
   }
 
+  @NonNull
   @Override
   public Response intercept(Chain chain) throws IOException {
     Request request = chain.request();
@@ -77,7 +79,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     return logForResponse(response, tookMs);
   }
 
-  private void logForRequest(Request request, Connection connection) throws IOException {
+  private void logForRequest(Request request, Connection connection) {
     boolean logBody = (printLevel == Level.BODY);
     boolean logHeaders = (printLevel == Level.BODY || printLevel == Level.HEADERS);
     RequestBody requestBody = request.body();
@@ -139,7 +141,7 @@ public class HttpLoggingInterceptor implements Interceptor {
           log("\t" + headers.name(i) + ": " + headers.value(i));
         }
         log(" ");
-        if (logBody && HttpHeaders.hasBody(clone)) {
+        if (logBody && HttpHeaders.promisesBody(clone)) {
           if (responseBody == null) return response;
 
           if (isPlaintext(responseBody.contentType())) {
@@ -150,7 +152,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 
             log("\tbody:" + decode(body));
 
-            responseBody = ResponseBody.create(responseBody.contentType(), bytes);
+            responseBody = ResponseBody.create(bytes,responseBody.contentType());
 
             return response.newBuilder().body(responseBody).build();
           } else {
@@ -176,7 +178,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     if (unicodeStr == null) {
       return null;
     }
-    StringBuffer retBuf = new StringBuffer();
+    StringBuilder retBuf = new StringBuilder();
     int maxLoop = unicodeStr.length();
     for (int i = 0; i < maxLoop; i++) {
       if (unicodeStr.charAt(i) == '\\') {
@@ -202,16 +204,14 @@ public class HttpLoggingInterceptor implements Interceptor {
    */
   private static boolean isPlaintext(MediaType mediaType) {
     if (mediaType == null) return false;
-    if (mediaType.type() != null && mediaType.type().equals("text")) {
+    mediaType.type();
+    if (mediaType.type().equals("text")) {
       return true;
     }
     String subtype = mediaType.subtype();
-    if (subtype != null) {
-      subtype = subtype.toLowerCase();
-      if (subtype.contains("x-www-form-urlencoded") || subtype.contains("json") || subtype.contains("xml") || subtype.contains("html")) //
-      { return true; }
-    }
-    return false;
+    subtype = subtype.toLowerCase();
+    //
+    return subtype.contains("x-www-form-urlencoded") || subtype.contains("json") || subtype.contains("xml") || subtype.contains("html");
   }
 
   private void bodyToString(Request request) {

@@ -2,10 +2,7 @@ package me.spica.weather.view.weatherIcon
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -163,18 +160,29 @@ class RainIcon : View {
         mLeftCloudPath.reset()
         mRightCloudPath.reset()
 
-        val leftCloudHeight = h / 2f
 
-        val rightCloudHeight = h / 2f
+        mLeftCloudPath.addArc(RectF(
+            0f,0f,w/3f,h/2f
+        ),0f,120f)
 
-        val leftCloudWeight = w / 4f
+        mLeftCloudPath.close()
 
-        val rightCloudWeight = w / 4f
+        mRightCloudPath.addArc(RectF(
+            0f,0f,w/3f,h/2f
+        ),0f,120f)
+
+        mRightCloudPath.close()
+
 
         // 动画重置
         setupAnimator()
     }
 
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+    }
 
     private data class RainDrop(
         var speedX: Float = 0f,  //雨滴x轴移动速度

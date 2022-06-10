@@ -1,213 +1,214 @@
 plugins {
-  id 'com.android.application'
-  id 'org.jetbrains.kotlin.android'
-  id 'dagger.hilt.android.plugin'
-  id 'kotlin-android'
-  id 'kotlin-parcelize'
-  id 'kotlin-kapt'
-  id 'AndResGuard'
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'AndResGuard'
 }
 
 android {
-  compileSdk 32
+    compileSdk 32
 
-  defaultConfig {
-    applicationId "me.spica.weather"
-    minSdk 23
-    targetSdk 32
-    versionCode 1
-    versionName "1.0"
+    defaultConfig {
+        applicationId "me.spica.weather"
+        minSdk 23
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
 
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    resConfigs 'en'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs 'en'
 
-    ndk {
-      //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-      abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
+        buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("bd8a590d691a45f389a23b52c20453d0")
+        buildConfigField 'String', 'BAIDU_AK', quotWrapper("9fokNjwZ20sOccj7GXblgLHEWagrebQr")
+        buildConfigField 'String', 'He_KEY', quotWrapper("01425b0eb61144c9966b38093f648765")
+        buildConfigField 'String', 'Accu_Key', quotWrapper("y4vUOQUcDlRS3QGzuPhEFur8uQEggG2H")
+        buildConfigField 'String', 'HE_ID', quotWrapper("HE2112081349381915")
+        buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
+        buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("3afb30f9-48ce-4e88-8d79-5316f004b653")
     }
 
-    javaCompileOptions {
-      annotationProcessorOptions {
-        arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-      }
+    signingConfigs {
+        signingConfig {
+            storeFile rootProject.file("key.jks")
+            storePassword 'SPICa27'
+            keyAlias 'wuqi'
+            keyPassword 'SPICa27'
+        }
     }
 
-    buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("bd8a590d691a45f389a23b52c20453d0")
-    buildConfigField 'String', 'BAIDU_AK', quotWrapper("9fokNjwZ20sOccj7GXblgLHEWagrebQr")
-    buildConfigField 'String', 'He_KEY', quotWrapper("01425b0eb61144c9966b38093f648765")
-    buildConfigField 'String', 'HE_ID', quotWrapper("HE2112081349381915")
-    buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
-    buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("3afb30f9-48ce-4e88-8d79-5316f004b653")
-  }
-
-  signingConfigs {
-    signingConfig {
-      storeFile rootProject.file("key.jks")
-      storePassword 'SPICa27'
-      keyAlias 'wuqi'
-      keyPassword 'SPICa27'
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.signingConfig
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.signingConfig
+        }
     }
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled true
-      shrinkResources true
-      signingConfig signingConfigs.signingConfig
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-    debug {
-      signingConfig signingConfigs.signingConfig
+    buildFeatures {
+        viewBinding true
     }
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-  buildFeatures {
-    viewBinding true
-  }
 
-  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlin.time.ExperimentalTime"]
-    kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"]
-  }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlin.time.ExperimentalTime"]
+        kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"]
+    }
 
-  kotlinOptions {
-    jvmTarget = '11'
-    useIR = true
-  }
+    kotlinOptions {
+        jvmTarget = '11'
+        useIR = true
+    }
 }
 
 static String quotWrapper(key) {
-  if (key == null) {
-    return "\"\""
-  }
-  return "\"".concat(key).concat("\"")
+    if (key == null) {
+        return "\"\""
+    }
+    return "\"".concat(key).concat("\"")
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  implementation 'androidx.core:core-ktx:1.7.0'
-  implementation 'androidx.appcompat:appcompat:1.4.1'
-  implementation 'com.google.android.material:material:1.5.0'
-  implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-  implementation 'com.github.zhpanvip:viewpagerindicator:1.2.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'com.github.zhpanvip:viewpagerindicator:1.2.1'
 
-  // hilt
-  implementation 'com.google.dagger:hilt-android:2.41'
-  kapt 'com.google.dagger:hilt-compiler:2.41'
+    // hilt
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-compiler:2.41'
 
-  // 图片加载
-  implementation("io.coil-kt:coil:1.4.0")
+    // 图片加载
+    implementation("io.coil-kt:coil:1.4.0")
 
-  def roomVersion = "2.4.1"
-  implementation("androidx.room:room-runtime:$roomVersion")
-  kapt("androidx.room:room-compiler:$roomVersion")
-  implementation("androidx.room:room-ktx:$roomVersion")
+    def roomVersion = "2.4.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
-  // 协程支持
-  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
-  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
-  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
+    // 协程支持
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
 
-  // 生命周期+协程
-  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-  implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
-  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    // 生命周期+协程
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
 
-  // activity & fragment ktx
-  implementation 'androidx.fragment:fragment-ktx:1.4.1'
-  implementation 'androidx.activity:activity-ktx:1.4.0'
+    // activity & fragment ktx
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.activity:activity-ktx:1.4.0'
 
-  // App startup
-  implementation "androidx.startup:startup-runtime:1.1.1"
+    // App startup
+    implementation "androidx.startup:startup-runtime:1.1.1"
 
-  // Timber 日志
-  implementation 'com.jakewharton.timber:timber:5.0.1'
+    // Timber 日志
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 
-  //  //日期格式化
-  //  implementation 'org.ocpsoft.prettytime:prettytime:5.0.2.Final'
+    //  //日期格式化
+    //  implementation 'org.ocpsoft.prettytime:prettytime:5.0.2.Final'
 
-  // App startup
-  implementation "androidx.startup:startup-runtime:1.1.1"
-  implementation 'com.drakeet.multitype:multitype:4.3.0'
+    // App startup
+    implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation 'com.drakeet.multitype:multitype:4.3.0'
 
-  // Preference MMKV
-  implementation 'com.tencent:mmkv-static:1.2.12'
+    // Preference MMKV
+    implementation 'com.tencent:mmkv-static:1.2.12'
 
-  //Json解析
-  implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'
-  kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
+    //Json解析
+    implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
 
-  //network 网络请求相关
-  implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
-  implementation "com.squareup.retrofit2:retrofit:2.9.0"
-  implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-  implementation 'com.github.skydoves:sandwich:1.2.3'
+    //network 网络请求相关
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation 'com.github.skydoves:sandwich:1.2.3'
 
-  implementation 'com.github.SilenceDut:jpinyin:v1.0'
+    implementation 'com.github.SilenceDut:jpinyin:v1.0'
 
-  implementation "com.github.fondesa:recycler-view-divider:3.5.0"
+    implementation "com.github.fondesa:recycler-view-divider:3.5.0"
 
-  implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-  implementation 'pub.devrel:easypermissions:3.0.0'
-
-
-  def appCenterSdkVersion = '4.4.2'
-  implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
-  implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
-
-  implementation("androidx.preference:preference:1.1.0")
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
 
-  //  testImplementation 'junit:junit:4.13.2'
-  //  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-  //  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    def appCenterSdkVersion = '4.4.2'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+
+    implementation("androidx.preference:preference:1.1.0")
+
+
+    //  testImplementation 'junit:junit:4.13.2'
+    //  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    //  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
 kapt {
-  correctErrorTypes true
+    correctErrorTypes true
 }
 
 andResGuard {
-  mappingFile = null
-  use7zip = true
-  useSign = true
-  // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
-  keepRoot = false
-  // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
-  fixedResName = "arg"
-  // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
-  mergeDuplicatedRes = true
-  compressFilePattern = ["*.png",
-                         "*.jpg",
-                         "*.jpeg",
-                         "*.gif",]
-  sevenzip {
-    artifact = 'com.tencent.mm:SevenZip:1.2.21'
-  }
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+    keepRoot = false
+    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
+    fixedResName = "arg"
+    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
+    mergeDuplicatedRes = true
+    compressFilePattern = ["*.png",
+                           "*.jpg",
+                           "*.jpeg",
+                           "*.gif",]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.2.21'
+    }
 }
 
 configurations {
-  ktlint
+    ktlint
 }
 
 dependencies {
-  ktlint 'com.pinterest:ktlint:0.44.0'
+    ktlint 'com.pinterest:ktlint:0.44.0'
 }
 task ktlint(type: JavaExec, group: "verification") {
-  description = "Check Kotlin code style."
-  classpath = configurations.ktlint
-  main = "com.pinterest.ktlint.Main"
-  args "src/**/*.kt"
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
 }
 check.dependsOn ktlint
 
 task ktlintFormat(type: JavaExec, group: "formatting") {
-  description = "Fix Kotlin code style deviations."
-  classpath = configurations.ktlint
-  main = "com.pinterest.ktlint.Main"
-  args "-F", "src/**/*.kt"
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
 }
