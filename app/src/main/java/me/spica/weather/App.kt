@@ -30,7 +30,7 @@ class App : Application() {
 
     private fun handlerDelegate() {
         // 接管主线程loop
-        if (BuildConfig.DEBUG==false){
+        if (!BuildConfig.DEBUG){
             Handler(Looper.getMainLooper()).post {
                 while (true) {
                     try {

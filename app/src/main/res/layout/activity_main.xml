@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_view"
     android:layout_width="match_parent"
+    android:background="@color/window_background"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_an"
-    android:backgroundTint="#1F787474"
     tools:context=".ui.main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout

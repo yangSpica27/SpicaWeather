@@ -82,11 +82,12 @@
         <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.1205" />
         <entry key="app/src/main/res/drawable/ic_sunny.xml" value="0.1205" />
         <entry key="app/src/main/res/layout/activity_city.xml" value="0.18796296296296297" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_today_weather.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card.xml" value="0.1361111111111111" />
         <entry key="app/src/main/res/layout/card_air.xml" value="0.375" />
         <entry key="app/src/main/res/layout/card_daily_weather.xml" value="0.1675925925925926" />
+        <entry key="app/src/main/res/layout/card_hourly_weather.xml" value="0.18333333333333332" />
         <entry key="app/src/main/res/layout/card_life_index.xml" value="0.19907407407407407" />
         <entry key="app/src/main/res/layout/card_sunrise.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/layout/card_weather.xml" value="0.175" />
@@ -98,6 +99,7 @@
         <entry key="app/src/main/res/layout/item_day_weather.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/layout/item_weather_city.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/layout_current_city.xml" value="0.2175925925925926" />
+        <entry key="app/src/main/res/layout/layout_main_top_bar.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/layout/widget_now_weather.xml" value="0.14444444444444443" />
         <entry key="app/src/main/res/xml/widget_now_weat.xml" value="0.14444444444444443" />
       </map>

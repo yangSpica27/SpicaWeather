@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -16,14 +18,18 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zhpan.indicator.enums.IndicatorSlideMode
+import com.zhpan.indicator.enums.IndicatorStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -106,10 +112,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 绑定定位监听
-        window.setBackgroundDrawableResource(R.color.window_background)
-        viewBinding.statusLl.updateLayoutParams<LinearLayout.LayoutParams> {
-            height = getStatusBarHeight()
-        }
         locationClint.registerLocationListener(locationListener)
         requestPermission()
     }
@@ -128,7 +130,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     private fun initTitle() {
         viewBinding.toolbar.tsLocation.setFactory {
             val textView = TextView(this)
-            textView.setTextColor(ContextCompat.getColor(this, R.color.textColorPrimary))
+            textView.setTextColor(ContextCompat.getColor(this, R.color.white))
             textView.textSize = 6.dp
             textView.isSingleLine = true
             textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
@@ -207,7 +209,21 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
 
+        viewBinding.statusLl.updateLayoutParams<LinearLayout.LayoutParams> {
+            height = getStatusBarHeight()
+        }
         viewBinding.viewPager.adapter = mainPagerAdapter
+
+
+        mainPagerAdapter.onColorChange = {
+            val originDrawable = ContextCompat.getDrawable(this, R.drawable.bg_an)
+            if (originDrawable != null) {
+                originDrawable.colorFilter = PorterDuffColorFilter(it, PorterDuff.Mode.SRC)
+                viewBinding.contentView.background = originDrawable
+            }
+
+
+        }
 
         lifecycleScope.launch {
             viewModel.allCityFlow.collectLatest {

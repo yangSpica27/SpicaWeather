@@ -1,16 +1,23 @@
 package me.spica.weather.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import me.spica.weather.R
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.ui.weather.WeatherFragment
 
 class MainPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
+
+    var onColorChange: (Int) -> Unit = {}
+
+
+    private var backgroundColor = Color.parseColor("#1F787474")
 
 
     val diffUtil = AsyncListDiffer(
@@ -28,6 +35,12 @@ class MainPagerAdapter(fragmentActivity: FragmentActivity) :
         val fragment = WeatherFragment()
         fragment.arguments = Bundle().apply {
             putParcelable("city", diffUtil.currentList[position])
+        }
+        fragment.onColorChange = {
+            if (it != backgroundColor) {
+                backgroundColor = it
+                onColorChange(it)
+            }
         }
         return fragment
     }

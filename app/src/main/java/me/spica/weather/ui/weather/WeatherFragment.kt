@@ -1,6 +1,7 @@
 package me.spica.weather.ui.weather
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -12,8 +13,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.Preference
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.FragmentListBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -22,7 +26,6 @@ import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.toHomeCardType
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * 天气单元页面
@@ -35,15 +38,17 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
 
     private lateinit var mainCardAdapter: MainCardAdapter
 
+    private var currentColor = Color.parseColor("#1F787474")
+
     private var currentCity: CityBean? = null
+
+    // 更改颜色
+    var onColorChange:(Int)->Unit = {}
 
 
     private val sp by lazy {
         PreferenceManager.getDefaultSharedPreferences(requireContext())
     }
-
-    @Inject
-    lateinit var cityList: List<CityBean>
 
     override fun setupViewBinding(
         inflater: LayoutInflater,
@@ -54,6 +59,7 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
     override fun onResume() {
         super.onResume()
         mainCardAdapter.onScroll()
+        onColorChange(currentColor)
     }
 
 
@@ -116,10 +122,15 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
             viewModel.weatherCacheFlow.filterNotNull().collectLatest {
                 doOnMainThreadIdle({
                     mainCardAdapter.notifyData(it)
+                    currentColor =  WeatherCodeUtils.getWeatherCode(
+                        it.todayWeather.iconId.toString()
+                    ).getThemeColor()
+                    onColorChange(currentColor)
                 })
             }
         }
     }
+
 
 
     @Suppress("NotifyDataSetChanged")
