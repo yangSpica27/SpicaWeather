@@ -42,12 +42,12 @@ fun WeatherType.getIconRes(): Int {
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
         WeatherType.WEATHER_CLOUDY
-        -> Color.rgb(96, 121, 136)
-        WeatherType.WEATHER_CLOUD -> Color.rgb(0, 165, 217)
-        WeatherType.WEATHER_THUNDER -> Color.rgb(43, 29, 69)
+        -> Color.parseColor("#7986CB")
+        WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")
+        WeatherType.WEATHER_THUNDER -> Color.parseColor("#3F51B5")
         WeatherType.WEATHER_FOG
-        -> Color.rgb(79, 93, 104)
-        WeatherType.WEATHER_HAZE -> Color.rgb(66, 66, 66)
+        -> Color.parseColor("#5A5A5A")
+        WeatherType.WEATHER_HAZE -> Color.parseColor("#424242")
         else -> {
             Color.parseColor("#7986CB")
         }
