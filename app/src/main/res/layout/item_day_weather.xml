@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="75dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:layout_height="wrap_content"
     android:paddingTop="4dp"
@@ -43,8 +44,10 @@
     <me.spica.weather.view.RainImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
+        app:lottie_repeatCount="1"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         android:layout_height="60dp"
-        android:padding="12dp"
-        android:src="@drawable/ic_fog" />
+        android:padding="12dp" />
 
 </LinearLayout>

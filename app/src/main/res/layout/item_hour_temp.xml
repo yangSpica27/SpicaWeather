@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="75dp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/selectableItemBackground"
     android:paddingTop="4dp"
     android:paddingBottom="6dp"
-    android:clickable="true"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -26,12 +26,13 @@
         android:layout_marginTop="12dp"
         android:paddingBottom="12dp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ic_weather"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_rain"
         android:layout_marginTop="12dp"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
         android:layout_gravity="center"
         android:gravity="center" />
 

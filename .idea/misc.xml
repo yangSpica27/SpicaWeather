@@ -97,6 +97,7 @@
         <entry key="app/src/main/res/layout/fragment_city.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16296296296296298" />
         <entry key="app/src/main/res/layout/item_day_weather.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/layout/item_hour_temp.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/item_weather_city.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/layout_current_city.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/layout_main_top_bar.xml" value="0.18802083333333333" />

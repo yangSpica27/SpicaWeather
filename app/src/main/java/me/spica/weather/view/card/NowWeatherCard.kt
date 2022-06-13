@@ -7,6 +7,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import me.spica.weather.R
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getAnimRes
 import me.spica.weather.databinding.CardWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -55,7 +58,11 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
                 binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"
                 binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"
                 binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"
+                binding.lottieView.setAnimation(WeatherCodeUtils.getWeatherCode(nowWeatherBean.iconId.toString()).getAnimRes())
+                binding.lottieView.playAnimation()
             })
+
+
     }
 
 

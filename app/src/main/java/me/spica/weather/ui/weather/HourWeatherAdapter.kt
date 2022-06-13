@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getAnimRes
 import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemHourTempBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
@@ -66,8 +67,8 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
             holder.itemHourTempBinding.tvPercent.text = "${it.pop}%"
 
-            holder.itemHourTempBinding.icWeather.load(
-                WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getIconRes()
+            holder.itemHourTempBinding.icWeather.setAnimation(
+                WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getAnimRes()
             )
 
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp

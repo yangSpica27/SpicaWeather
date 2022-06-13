@@ -8,10 +8,11 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import me.spica.weather.R
 import me.spica.weather.tools.dp
 
-class RainImageView : AppCompatImageView {
+class RainImageView : LottieAnimationView {
 
     // 降雨概率
     var rainfallProbability = 60f

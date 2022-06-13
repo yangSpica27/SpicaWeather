@@ -161,6 +161,7 @@ dependencies {
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
     implementation("androidx.preference:preference:1.1.0")
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
 
     //  testImplementation 'junit:junit:4.13.2'

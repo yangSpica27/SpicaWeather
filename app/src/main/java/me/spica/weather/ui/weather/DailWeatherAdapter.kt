@@ -1,11 +1,13 @@
 package me.spica.weather.ui.weather
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getAnimRes
 import me.spica.weather.common.getIconRes
 import me.spica.weather.databinding.ItemDayWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
@@ -104,9 +106,10 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
             Timber.e("precip=="+items[position].precip)
             holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
 //            holder.itemDayWeatherBinding.icon.rainfallProbability = 60
-            holder.itemDayWeatherBinding.icon.load(
-                WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getIconRes()
+            holder.itemDayWeatherBinding.icon.setAnimation(
+                WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getAnimRes()
             )
+            holder.itemDayWeatherBinding.icon.repeatCount = ValueAnimator.INFINITE
 
             if (position == items.size - 1) {
                 // 末尾item不绘制左半部分

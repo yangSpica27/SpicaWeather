@@ -3,6 +3,7 @@ package me.spica.weather.common
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import me.spica.weather.R
 
 enum class WeatherType {
@@ -35,6 +36,23 @@ fun WeatherType.getIconRes(): Int {
         WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
         WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
         WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
+    }
+}
+
+@RawRes
+fun WeatherType.getAnimRes():Int{
+    return when (this) {
+        WeatherType.WEATHER_CLEAR -> R.raw.sunny
+        WeatherType.WEATHER_CLOUDY -> R.raw.windy
+        WeatherType.WEATHER_CLOUD -> R.raw.foggy
+        WeatherType.WEATHER_RAINY -> R.raw.shower
+        WeatherType.WEATHER_SNOW -> R.raw.snow
+        WeatherType.WEATHER_SLEET -> R.raw.shower
+        WeatherType.WEATHER_FOG -> R.raw.foggy
+        WeatherType.WEATHER_HAZE -> R.raw.mist
+        WeatherType.WEATHER_HAIL -> R.raw.shower
+        WeatherType.WEATHER_THUNDER -> R.raw.storm
+        WeatherType.WEATHER_THUNDERSTORM -> R.raw.storm
     }
 }
 
