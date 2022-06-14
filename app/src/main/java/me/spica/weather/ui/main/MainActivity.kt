@@ -1,11 +1,9 @@
 package me.spica.weather.ui.main
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -35,6 +33,7 @@ import me.spica.weather.base.BindingActivity
 import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.SpicaColorEvaluator
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.tools.keyboard.FluidContentResizer
@@ -58,7 +57,7 @@ private val LOCATION_PERMISSION = arrayOf(
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(),
     EasyPermissions.RationaleCallbacks,
-    EasyPermissions.PermissionCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
+    EasyPermissions.PermissionCallbacks {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -109,6 +108,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         super.onCreate(savedInstanceState)
         // 绑定定位监听
         locationClint.registerLocationListener(locationListener)
+        setScreen()
         requestPermission()
     }
 
@@ -121,6 +121,23 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         }
     }
 
+
+    @Suppress("DEPRECATION")
+    private fun setScreen() {
+        // 获取系统window支持的模式
+        val modes = window.windowManager.defaultDisplay.supportedModes
+        // 对获取的模式，基于刷新率的大小进行排序，从小到大排序
+        modes.sortBy {
+            it.refreshRate
+        }
+
+        window.let {
+            val lp = it.attributes
+            // 取出最大的那一个刷新率，直接设置给window
+            lp.preferredDisplayModeId = modes.last().modeId
+            it.attributes = lp
+        }
+    }
 
     // 初始化Toolbar
     private fun initTitle() {
@@ -157,6 +174,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
     // 初始化设置项
+    @SuppressLint("ApplySharedPref")
     private fun initSetting() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
         val showCards = sp.getStringSet("cards", null)
@@ -201,6 +219,18 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     }
 
+    // 背景颜色切换动画
+    private val bgColorAnim by lazy {
+        ObjectAnimator.ofInt(ContextCompat.getColor(this, R.color.window_background))
+            .apply {
+                duration = 450
+                setEvaluator(SpicaColorEvaluator())
+                addUpdateListener {
+                    viewBinding.contentView.setBackgroundColor(it.animatedValue as Int)
+                }
+            }
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
@@ -211,14 +241,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         viewBinding.viewPager.adapter = mainPagerAdapter
 
 
+        // 根据当前天气切换背景颜色
         mainPagerAdapter.onColorChange = {
-            val originDrawable = ContextCompat.getDrawable(this, R.drawable.bg_an)
-            if (originDrawable != null) {
-                originDrawable.colorFilter = PorterDuffColorFilter(it, PorterDuff.Mode.SRC)
-                viewBinding.contentView.background = originDrawable
-            }
-
-
+            if (bgColorAnim.isRunning) bgColorAnim.cancel()
+            bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, it)
+            bgColorAnim.start()
         }
 
         lifecycleScope.launch {
@@ -304,10 +331,5 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     override fun onRationaleDenied(requestCode: Int) = Unit
 
-    override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
-        Timber.tag("更变设定").i(key)
-        if (key == "cards") {
-            // 更改卡片的显示
-        }
-    }
+
 }

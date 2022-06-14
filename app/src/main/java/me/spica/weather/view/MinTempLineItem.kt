@@ -22,21 +22,18 @@ class MinTempLineItem : View {
 
     var nextValue = 0 // 下一个数值
 
+
+    var themeColor = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
+        set(value) {
+            field = value
+            pathPaint.color = getColorWithAlpha(.1f, themeColor)
+            dottedLinePaint.color = getColorWithAlpha(.7f,themeColor)
+            postInvalidate()
+        }
+
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-//        shader = LinearGradient(
-//            0F,
-//            0F,
-//            0F,
-//            height/2F,
-//            ContextCompat.getColor(
-//                context,
-//                R.color.black
-//            ),
-//            Color.TRANSPARENT,
-//            Shader.TileMode.CLAMP
-//        )
         color = ContextCompat.getColor(context, R.color.pathBgColor)
         style = Paint.Style.FILL
     }
@@ -78,7 +75,11 @@ class MinTempLineItem : View {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -97,10 +98,10 @@ class MinTempLineItem : View {
         super.onDraw(canvas)
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
-            (pointBottomY - pointTopY)
+                (pointBottomY - pointTopY)
         drawDottedLine(canvas)
         drawGraph(canvas)
-        drawPoint(canvas)
+//        drawPoint(canvas)
         drawValue(canvas)
     }
 
@@ -125,21 +126,18 @@ class MinTempLineItem : View {
         linePaint.pathEffect = null
 
         linePaint.style = Paint.Style.FILL
-        linePaint.color = ContextCompat.getColor(
-            context,
-            R.color.textColorPrimaryHintLight
-        )
+        linePaint.color = themeColor
 
-        linePaint.strokeWidth = 2.dp
+        linePaint.strokeWidth = 3.dp
         linePaint.isAntiAlias = true
 
-        linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+        linePaint.maskFilter = BlurMaskFilter(1.dp, BlurMaskFilter.Blur.SOLID)
 
         Timber.i("======================")
 
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+                    (pointBottomY - pointTopY)
 
             pathLeft = Path()
 
@@ -173,8 +171,8 @@ class MinTempLineItem : View {
         if (drawRightLine) {
 
             val nextPointY = pointBottomY -
-                ((nextValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+                    ((nextValue * 1f - minValue) / (maxValue - minValue)) *
+                    (pointBottomY - pointTopY)
 
             // 绘制背景
 
@@ -224,5 +222,11 @@ class MinTempLineItem : View {
         pointPaint.strokeWidth = 3.dp
         pointPaint.style = Paint.Style.STROKE
         canvas.drawCircle(pointX, pointY, 5.dp, pointPaint)
+    }
+
+    private fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+        val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
+        val rgb = 0x00ffffff and baseColor
+        return a + rgb
     }
 }

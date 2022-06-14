@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import me.spica.weather.R
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -20,13 +22,16 @@ import java.util.*
 class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
 
-
     private val binding = CardSunriseBinding.inflate(LayoutInflater.from(context), this, true)
 
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
 
     override var animatorView: View = this
@@ -43,18 +48,20 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
     override fun bindData(weather: Weather) {
-            val startTime = weather.dailyWeather[0].sunriseDate
-            val endTime = weather.dailyWeather[0].sunsetDate
-            val subTitle = weather.dailyWeather[0].moonParse
-            binding.sunriseView.bindTime(startTime, endTime)
-            doOnMainThreadIdle({
-                binding.tvTitle.text = String.format(
-                    context.getString(R.string.sunrise_sunset_time),
-                    sdf.format(startTime),
-                    sdf.format(endTime)
-                )
-                binding.tvSubtitle.text = subTitle
-            })
+        val startTime = weather.dailyWeather[0].sunriseDate
+        val endTime = weather.dailyWeather[0].sunsetDate
+        val subTitle = weather.dailyWeather[0].moonParse
+        binding.sunriseView.bindTime(startTime, endTime)
+        binding.sunriseView.themeColor =
+            WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor()
+        doOnMainThreadIdle({
+            binding.tvTitle.text = String.format(
+                context.getString(R.string.sunrise_sunset_time),
+                sdf.format(startTime),
+                sdf.format(endTime)
+            )
+            binding.tvSubtitle.text = subTitle
+        })
 
     }
 

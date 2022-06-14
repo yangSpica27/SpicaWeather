@@ -4,10 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getAnimRes
-import me.spica.weather.common.getIconRes
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.ItemHourTempBinding
 import me.spica.weather.model.weather.HourlyWeatherBean
 import java.text.SimpleDateFormat
@@ -60,6 +59,7 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
 
         items[position].let {
 
+            holder.itemHourTempBinding.itemLine.themeColor = WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getThemeColor()
             holder.itemHourTempBinding.tvTime.text = sdfAfter.format(it.fxTime)
             if (divisionDate.time.before(it.fxTime)) {
                 holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(it.fxTime)
@@ -70,6 +70,13 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
             holder.itemHourTempBinding.icWeather.setAnimation(
                 WeatherCodeUtils.getWeatherCode(it.iconId.toString()).getAnimRes()
             )
+
+            holder.itemHourTempBinding.icWeather.progress = .5f
+
+            holder.itemHourTempBinding.icWeather.setMaxProgress(.5f)
+            holder.itemHourTempBinding.icWeather.setOnClickListener {
+                holder.itemHourTempBinding.icWeather.playAnimation()
+            }
 
             holder.itemHourTempBinding.itemLine.maxValue = maxTemp
             holder.itemHourTempBinding.itemLine.minValue = minTemp

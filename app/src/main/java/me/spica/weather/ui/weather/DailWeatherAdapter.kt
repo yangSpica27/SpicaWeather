@@ -1,14 +1,12 @@
 package me.spica.weather.ui.weather
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getAnimRes
-import me.spica.weather.common.getIconRes
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.ItemDayWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
 import timber.log.Timber
@@ -71,10 +69,14 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     @Suppress("DEPRECATION")
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val themeColor = WeatherCodeUtils.getWeatherCode(items[0].iconId.toString()).getThemeColor()
         items[position].let {
 
             holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime)
             holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime)
+
+            holder.itemDayWeatherBinding.itemLineMax.themeColor = themeColor
+            holder.itemDayWeatherBinding.itemLineMin.themeColor = themeColor
 
             holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
             holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
@@ -103,13 +105,19 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
 
             holder.itemDayWeatherBinding.itemLineMin.currentValue =
                 items[position].minTemp
-            Timber.e("precip=="+items[position].precip)
+            Timber.e("precip==" + items[position].precip)
             holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
 //            holder.itemDayWeatherBinding.icon.rainfallProbability = 60
             holder.itemDayWeatherBinding.icon.setAnimation(
                 WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getAnimRes()
             )
-            holder.itemDayWeatherBinding.icon.repeatCount = ValueAnimator.INFINITE
+
+            holder.itemDayWeatherBinding.icon.progress = .5f
+            holder.itemDayWeatherBinding.icon.setMaxProgress(.5f)
+            holder.itemDayWeatherBinding.icon.setOnClickListener {
+                holder.itemDayWeatherBinding.icon.playAnimation()
+            }
+
 
             if (position == items.size - 1) {
                 // 末尾item不绘制左半部分

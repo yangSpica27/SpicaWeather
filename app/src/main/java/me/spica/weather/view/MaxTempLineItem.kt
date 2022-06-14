@@ -1,13 +1,7 @@
 package me.spica.weather.view
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Rect
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -28,10 +22,20 @@ class MaxTempLineItem : View {
 
     var nextValue = 0 // 下一个数值
 
+
+    var themeColor = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
+        set(value) {
+            field = value
+            pathPaint.color = getColorWithAlpha(.1f, themeColor)
+            dottedLinePaint.color = getColorWithAlpha(.7f,themeColor)
+            postInvalidate()
+        }
+
+
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.pathBgColor)
+        color = getColorWithAlpha(.5f, themeColor)
         style = Paint.Style.FILL
     }
 
@@ -45,7 +49,7 @@ class MaxTempLineItem : View {
 
     private val textPaint = TextPaint().apply {
         textSize = 12.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
+        color = ContextCompat.getColor(context, R.color.textColorPrimary)
         strokeWidth = 0F
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
@@ -72,7 +76,11 @@ class MaxTempLineItem : View {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -91,10 +99,10 @@ class MaxTempLineItem : View {
         super.onDraw(canvas)
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
-            (pointBottomY - pointTopY)
+                (pointBottomY - pointTopY)
         drawDottedLine(canvas)
         drawGraph(canvas)
-        drawPoint(canvas)
+//        drawPoint(canvas)
         drawValue(canvas)
     }
 
@@ -119,21 +127,18 @@ class MaxTempLineItem : View {
         linePaint.pathEffect = null
 
         linePaint.style = Paint.Style.FILL
-        linePaint.color = ContextCompat.getColor(
-            context,
-            R.color.textColorPrimaryHintLight
-        )
+        linePaint.color = themeColor
 
-        linePaint.strokeWidth = 2.dp
+        linePaint.strokeWidth = 3.dp
         linePaint.isAntiAlias = true
 
-        linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+        linePaint.maskFilter = BlurMaskFilter(1.dp, BlurMaskFilter.Blur.SOLID)
 
         Timber.i("======================")
 
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+                    (pointBottomY - pointTopY)
 
             pathLeft = Path()
 
@@ -167,8 +172,8 @@ class MaxTempLineItem : View {
         if (drawRightLine) {
 
             val nextPointY = pointBottomY -
-                ((nextValue * 1f - minValue) / (maxValue - minValue)) *
-                (pointBottomY - pointTopY)
+                    ((nextValue * 1f - minValue) / (maxValue - minValue)) *
+                    (pointBottomY - pointTopY)
 
             // 绘制背景
 
@@ -219,4 +224,13 @@ class MaxTempLineItem : View {
         pointPaint.style = Paint.Style.STROKE
         canvas.drawCircle(pointX, pointY, 5.dp, pointPaint)
     }
+
+
+    private fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+        val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
+        val rgb = 0x00ffffff and baseColor
+        return a + rgb
+    }
+
+
 }

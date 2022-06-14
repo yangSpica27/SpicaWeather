@@ -6,7 +6,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import kotlinx.coroutines.Job
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.hide
@@ -25,7 +24,7 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard{
 
     private val binding = CardHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val job = Job()
+
 
 
 

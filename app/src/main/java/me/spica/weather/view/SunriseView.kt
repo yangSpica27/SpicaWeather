@@ -1,19 +1,10 @@
 @file:Suppress("unused")
+
 package me.spica.weather.view
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.RectF
-import android.graphics.Shader
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.animation.doOnEnd
@@ -39,7 +30,7 @@ class SunriseView : View {
 
     private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    private val iconSize = 32.dp
+    private val iconSize = 40.dp
 
     // =========各个文本的bound========
 
@@ -48,6 +39,23 @@ class SunriseView : View {
 
     // 用于清除绘制内容
     private val clearfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+
+    var themeColor = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        set(value) {
+            field = value
+            shader = LinearGradient(
+                0F,
+                0F,
+                0F,
+                height * 1f,
+                getColorWithAlpha(.5f, themeColor),
+                Color.TRANSPARENT,
+                Shader.TileMode.CLAMP
+            )
+            dottedLinePaint.color = getColorWithAlpha(.5f, value)
+            linePaint.color = value
+            postInvalidate()
+        }
 
 
     // 区域绘制
@@ -74,7 +82,11 @@ class SunriseView : View {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     init {
         val option = BitmapFactory.Options()
@@ -107,10 +119,14 @@ class SunriseView : View {
         val radius = (width / 2 / Math.cos(deltaRadians)).toInt()
         val height = (radius - width / 2 * Math.tan(deltaRadians)).toInt()
         setMeasuredDimension(
-            MeasureSpec.makeMeasureSpec((width + 2 * mMargin).toInt(),
-                MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec((height + 2 * mMargin).toInt(),
-                MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(
+                (width + 2 * mMargin).toInt(),
+                MeasureSpec.EXACTLY
+            ),
+            MeasureSpec.makeMeasureSpec(
+                (height + 2 * mMargin).toInt(),
+                MeasureSpec.EXACTLY
+            )
         )
 
         val centerX = measuredWidth / 2F
@@ -142,10 +158,7 @@ class SunriseView : View {
             0F,
             0F,
             height * 1f,
-            ContextCompat.getColor(
-                context,
-                R.color.pathBgColor
-            ),
+            getColorWithAlpha(.5f, themeColor),
             Color.TRANSPARENT,
             Shader.TileMode.CLAMP
         )
@@ -198,7 +211,9 @@ class SunriseView : View {
         ).toFloat()
 
 
-        val deltaHeight = Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble()))).toFloat()
+        val deltaHeight =
+            Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble())))
+                .toFloat()
 
 
         val iconPositionX =
@@ -255,7 +270,7 @@ class SunriseView : View {
             false,
             dottedLinePaint
         )
-        
+
         // 途径线
         canvas.drawArc(
             mRectF,
@@ -294,5 +309,10 @@ class SunriseView : View {
         return time.hours * 60 + time.minutes
     }
 
+    private fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+        val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
+        val rgb = 0x00ffffff and baseColor
+        return a + rgb
+    }
 
 }

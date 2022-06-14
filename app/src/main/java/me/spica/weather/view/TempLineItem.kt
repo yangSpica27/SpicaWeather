@@ -1,15 +1,7 @@
 package me.spica.weather.view
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Rect
-import android.graphics.Shader
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -31,6 +23,14 @@ class TempLineItem : View {
 
     var currentPop = 0 // 当前的降雨概率
 
+    var themeColor = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
+        set(value) {
+            field = value
+            rainPaint.color = getColorWithAlpha(.5F, value)
+            dottedLinePaint.color = getColorWithAlpha(.7f,themeColor)
+            initViewValue()
+            postInvalidate()
+        }
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     }
 
@@ -48,7 +48,7 @@ class TempLineItem : View {
 
     private val textPaint = TextPaint().apply {
         textSize = 12.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryLight)
+        color = ContextCompat.getColor(context, R.color.textColorPrimary)
         strokeWidth = 0F
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
@@ -80,7 +80,11 @@ class TempLineItem : View {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -99,10 +103,7 @@ class TempLineItem : View {
             0F,
             0F,
             viewHeight.toFloat(),
-            ContextCompat.getColor(
-                context,
-                R.color.textColorPrimaryHintLight
-            ),
+            getColorWithAlpha(.5F, themeColor),
             Color.TRANSPARENT,
             Shader.TileMode.CLAMP
         )
@@ -112,11 +113,11 @@ class TempLineItem : View {
         super.onDraw(canvas)
 
         pointY = pointBottomY - ((currentValue * 1f - minValue) / (maxValue - minValue)) *
-            (pointBottomY - pointTopY)
+                (pointBottomY - pointTopY)
         drawRainPop(canvas)
         drawDottedLine(canvas)
         drawGraph(canvas)
-        drawPoint(canvas)
+//        drawPoint(canvas)
         drawValue(canvas)
     }
 
@@ -131,6 +132,7 @@ class TempLineItem : View {
     }
 
     private fun drawRainPop(canvas: Canvas) {
+
         canvas.drawLine(
             width / 2f,
             height * 1F,
@@ -149,13 +151,10 @@ class TempLineItem : View {
         linePaint.pathEffect = null
 
         linePaint.style = Paint.Style.FILL
-        linePaint.color = ContextCompat.getColor(
-            context,
-            R.color.textColorPrimaryHintLight
-        )
-        linePaint.strokeWidth = 2.dp
+        linePaint.color = themeColor
+        linePaint.strokeWidth = 3.dp
         linePaint.isAntiAlias = true
-        linePaint.maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
+        linePaint.maskFilter = BlurMaskFilter(1.dp, BlurMaskFilter.Blur.SOLID)
         val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
                 (pointBottomY - pointTopY)
         val nextPointY = pointBottomY -
@@ -185,7 +184,11 @@ class TempLineItem : View {
             canvas.drawLine(pointX, pointY, 0F, (lastPointY + pointY) / 2F, linePaint)
 
             canvas.drawLine(
-                pointX, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, 0F, viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F, dottedLinePaint
+                pointX,
+                viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
+                0F,
+                viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
+                dottedLinePaint
             )
         }
 
@@ -248,5 +251,11 @@ class TempLineItem : View {
         pointPaint.strokeWidth = 3.dp
         pointPaint.style = Paint.Style.STROKE
         canvas.drawCircle(pointX, pointY, 5.dp, pointPaint)
+    }
+
+    private fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+        val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
+        val rgb = 0x00ffffff and baseColor
+        return a + rgb
     }
 }

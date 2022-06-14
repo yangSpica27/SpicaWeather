@@ -31,8 +31,6 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginTop="12dp"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
         android:layout_gravity="center"
         android:gravity="center" />
 

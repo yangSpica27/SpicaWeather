@@ -44,9 +44,6 @@
     <me.spica.weather.view.RainImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
-        app:lottie_repeatCount="1"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
         android:layout_height="60dp"
         android:padding="12dp" />
 
