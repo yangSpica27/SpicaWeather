@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_view"
     android:layout_width="match_parent"
-    android:background="@color/window_background"
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
@@ -20,8 +19,8 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
+            >
+<!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
             <View
                 android:id="@+id/status_ll"
                 android:layout_width="wrap_content"
@@ -37,8 +36,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
 
     </androidx.viewpager2.widget.ViewPager2>

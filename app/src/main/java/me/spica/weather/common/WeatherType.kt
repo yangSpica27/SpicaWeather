@@ -59,6 +59,7 @@ fun WeatherType.getAnimRes():Int{
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
+        WeatherType.WEATHER_CLEAR->Color.parseColor("#FFC107")
         WeatherType.WEATHER_CLOUDY
         -> Color.parseColor("#03A9F4")
         WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")

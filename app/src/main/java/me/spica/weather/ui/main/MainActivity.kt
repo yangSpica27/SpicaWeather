@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
@@ -61,8 +63,55 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     private val viewModel: MainViewModel by viewModels()
 
+    private var mFirstCardMarginTop = 0
+    private var mScrollY = 0
+    private var mLastAppBarTranslationY = 0f
+    private val listScrollerListener =
+        View.OnScrollChangeListener { view, scrollX, scrollY, oldscrollX, oldscrollY ->
 
-    private val mainPagerAdapter = MainPagerAdapter(this)
+            run {
+                mFirstCardMarginTop = if ((view as RecyclerView).childCount > 0) {
+                    view.getChildAt(0).measuredHeight
+                } else {
+                    -1
+                }
+                mScrollY = scrollY
+                mLastAppBarTranslationY = viewBinding.appbarLayout.translationY
+
+                if (mFirstCardMarginTop > 0) {
+                    if (mFirstCardMarginTop >= viewBinding.appbarLayout.measuredHeight
+                        + MainCardAdapter.firsItemMargin
+                    ) {
+                        when {
+                            mScrollY < (mFirstCardMarginTop
+                                    - MainCardAdapter.firsItemMargin*2
+                                    - viewBinding.appbarLayout.measuredHeight) -> {
+                                viewBinding.appbarLayout.translationY = 0f
+                            }
+                            mScrollY > mFirstCardMarginTop - viewBinding.appbarLayout.y -> {
+                                viewBinding.appbarLayout.translationY =
+                                    -viewBinding.appbarLayout.measuredHeight.toFloat()
+//                                viewBinding.viewPager.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
+                            }
+                            else -> {
+                                viewBinding.appbarLayout.translationY = (
+                                        mFirstCardMarginTop
+                                                - MainCardAdapter.firsItemMargin*2
+                                                - mScrollY
+                                                - viewBinding.appbarLayout.measuredHeight
+                                        )
+
+                            }
+                        }
+                    } else {
+                        viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
+                    }
+                }
+
+            }
+        }
+
+    private val mainPagerAdapter = MainPagerAdapter(this, listScrollerListener)
 
     @Inject
     lateinit var cityList: List<CityBean>
@@ -125,6 +174,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     @Suppress("DEPRECATION")
     private fun setScreen() {
         // 获取系统window支持的模式
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.window_background))
         val modes = window.windowManager.defaultDisplay.supportedModes
         // 对获取的模式，基于刷新率的大小进行排序，从小到大排序
         modes.sortBy {
@@ -238,6 +288,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         viewBinding.statusLl.updateLayoutParams<LinearLayout.LayoutParams> {
             height = getStatusBarHeight()
         }
+
         viewBinding.viewPager.adapter = mainPagerAdapter
 
 

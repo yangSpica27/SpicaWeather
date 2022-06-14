@@ -3,6 +3,7 @@ package me.spica.weather.ui.weather
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import me.spica.weather.R
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.Preference
 import me.spica.weather.common.WeatherCodeUtils
@@ -31,7 +31,11 @@ import timber.log.Timber
  * 天气单元页面
  */
 @AndroidEntryPoint
-class WeatherFragment : BindingFragment<FragmentListBinding>(),
+class WeatherFragment(
+    val scrollListener: View.OnScrollChangeListener
+) : BindingFragment<FragmentListBinding>(
+
+),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val viewModel by viewModels<WeatherViewModel>()
@@ -43,7 +47,7 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
     private var currentCity: CityBean? = null
 
     // 更改颜色
-    var onColorChange:(Int)->Unit = {}
+    var onColorChange: (Int) -> Unit = {}
 
 
     private val sp by lazy {
@@ -58,7 +62,8 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
 
     override fun onResume() {
         super.onResume()
-        mainCardAdapter.onScroll()
+        viewBinding.scrollView.smoothScrollTo(0, 0)
+//        mainCardAdapter.onScroll()
         onColorChange(currentColor)
     }
 
@@ -79,8 +84,9 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
         )
 
         // 滑动检测
-        viewBinding.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
+        viewBinding.scrollView.setOnScrollChangeListener { view, x, y, ox, oy ->
             mainCardAdapter.onScroll()
+            scrollListener.onScrollChange(viewBinding.rvList, x, y, ox, oy)
         }
 
         viewBinding.swipeRefreshLayout.isEnabled = false
@@ -105,7 +111,6 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
             currentCity?.let { city ->
 
                 viewModel.changeCity(city)
-
             }
         }
 
@@ -122,7 +127,7 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
             viewModel.weatherCacheFlow.filterNotNull().collectLatest {
                 doOnMainThreadIdle({
                     mainCardAdapter.notifyData(it)
-                    currentColor =  WeatherCodeUtils.getWeatherCode(
+                    currentColor = WeatherCodeUtils.getWeatherCode(
                         it.todayWeather.iconId.toString()
                     ).getThemeColor()
                     onColorChange(currentColor)
@@ -130,7 +135,6 @@ class WeatherFragment : BindingFragment<FragmentListBinding>(),
             }
         }
     }
-
 
 
     @Suppress("NotifyDataSetChanged")

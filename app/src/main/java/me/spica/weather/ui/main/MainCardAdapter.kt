@@ -2,12 +2,14 @@ package me.spica.weather.ui.main
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
+import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
+import me.spica.weather.tools.dp
 import me.spica.weather.view.card.*
 import timber.log.Timber
 
@@ -17,7 +19,11 @@ class MainCardAdapter(
     private val scrollview: NestedScrollView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
-    private val items  = arrayListOf<HomeCardType>()
+    companion object {
+        val firsItemMargin = 100.dp
+    }
+
+    private val items = arrayListOf<HomeCardType>()
 
     private var weather: Weather? = null
 
@@ -27,7 +33,7 @@ class MainCardAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(items:List<HomeCardType>){
+    fun setItems(items: List<HomeCardType>) {
         this.items.clear()
         this.items.addAll(items)
     }
@@ -83,6 +89,11 @@ class MainCardAdapter(
     }
 
     override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
+        if (position == 0) {
+            holder.itemView.updatePadding(
+                top = firsItemMargin.toInt()*2
+            )
+        }
         holder.reset()
         weather?.let {
             scope.launch(Dispatchers.Default) {
@@ -115,7 +126,6 @@ class MainCardAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
 
 
 }
