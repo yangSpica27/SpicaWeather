@@ -5,6 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import me.spica.weather.R
+import me.spica.weather.view.weather_bg.NowWeatherView
 
 enum class WeatherType {
     WEATHER_CLEAR,
@@ -68,5 +69,21 @@ fun WeatherType.getThemeColor(): Int {
         WeatherType.WEATHER_HAZE -> Color.parseColor("#FF5722")
         else -> Color.parseColor("#00BCD4")
 
+    }
+}
+
+fun WeatherType.getWeatherAnimType():NowWeatherView.WeatherType{
+    return when(this){
+        WeatherType.WEATHER_CLEAR -> NowWeatherView.WeatherType.SUNNY
+        WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherType.CLOUDY
+        WeatherType.WEATHER_CLOUD -> NowWeatherView.WeatherType.CLOUDY
+        WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherType.RAIN
+        WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherType.RAIN
+        WeatherType.WEATHER_SLEET -> NowWeatherView.WeatherType.RAIN
+        WeatherType.WEATHER_FOG -> NowWeatherView.WeatherType.CLOUDY
+        WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherType.CLOUDY
+        WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherType.CLOUDY
+        WeatherType.WEATHER_THUNDER -> NowWeatherView.WeatherType.RAIN
+        WeatherType.WEATHER_THUNDERSTORM -> NowWeatherView.WeatherType.RAIN
     }
 }

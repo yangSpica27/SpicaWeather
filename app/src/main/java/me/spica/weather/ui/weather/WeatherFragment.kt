@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.Preference
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
+import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.FragmentListBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -25,6 +27,7 @@ import me.spica.weather.tools.dp
 import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.toHomeCardType
+import me.spica.weather.view.weather_bg.NowWeatherView
 import timber.log.Timber
 
 /**
@@ -44,10 +47,12 @@ class WeatherFragment(
 
     private var currentColor = Color.parseColor("#1F787474")
 
+    private var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
+
     private var currentCity: CityBean? = null
 
     // 更改颜色
-    var onColorChange: (Int) -> Unit = {}
+    var onColorChange: (Int,NowWeatherView.WeatherType) -> Unit  = {i, weatherType ->  }
 
 
     private val sp by lazy {
@@ -64,7 +69,7 @@ class WeatherFragment(
         super.onResume()
         viewBinding.scrollView.smoothScrollTo(0, 0)
 //        mainCardAdapter.onScroll()
-        onColorChange(currentColor)
+        onColorChange(currentColor,currentWeatherType)
     }
 
 
@@ -123,15 +128,18 @@ class WeatherFragment(
             }
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             viewModel.weatherCacheFlow.filterNotNull().collectLatest {
                 doOnMainThreadIdle({
                     mainCardAdapter.notifyData(it)
-                    currentColor = WeatherCodeUtils.getWeatherCode(
-                        it.todayWeather.iconId.toString()
-                    ).getThemeColor()
-                    onColorChange(currentColor)
                 })
+                currentColor = WeatherCodeUtils.getWeatherCode(
+                    it.todayWeather.iconId.toString()
+                ).getThemeColor()
+                currentWeatherType =WeatherCodeUtils.getWeatherCode(
+                    it.todayWeather.iconId.toString()
+                ).getWeatherAnimType()
+                onColorChange(currentColor,currentWeatherType)
             }
         }
     }

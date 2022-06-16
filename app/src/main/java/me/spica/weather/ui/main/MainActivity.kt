@@ -14,6 +14,8 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -36,6 +38,7 @@ import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.SpicaColorEvaluator
+import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.tools.keyboard.FluidContentResizer
@@ -273,7 +276,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     private val bgColorAnim by lazy {
         ObjectAnimator.ofInt(ContextCompat.getColor(this, R.color.window_background))
             .apply {
-                duration = 450
+                duration = 350
                 setEvaluator(SpicaColorEvaluator())
                 addUpdateListener {
                     viewBinding.contentView.setBackgroundColor(it.animatedValue as Int)
@@ -293,10 +296,19 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
         // 根据当前天气切换背景颜色
-        mainPagerAdapter.onColorChange = {
-            if (bgColorAnim.isRunning) bgColorAnim.cancel()
-            bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, it)
-            bgColorAnim.start()
+        mainPagerAdapter.onColorChange = { color, type ->
+            doOnMainThreadIdle({
+
+                if (bgColorAnim.isRunning) bgColorAnim.cancel()
+                bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, color)
+                bgColorAnim.doOnStart {
+                    viewBinding.weatherView.alpha = 0f
+                }
+                bgColorAnim.doOnEnd {
+                    viewBinding.weatherView.currentWeatherType = type
+                }
+                bgColorAnim.start()
+            })
         }
 
         lifecycleScope.launch {

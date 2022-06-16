@@ -60,27 +60,30 @@ class NowWeatherView : View {
 
     var currentWeatherType = WeatherType.CLOUDY
         set(value) {
+            if (field == value) return
             field = value
-            when (value) {
-                WeatherType.SUNNY -> {
-                    stopAllAnim()
-                    sunnyAnim.start()
-                }
-                WeatherType.CLOUDY -> {
-                    stopAllAnim()
-                    cloudAnim.start()
-                }
-                WeatherType.RAIN -> {
-                    stopAllAnim()
-                    rainAnim.start()
-                }
-                WeatherType.SNOW -> {
-                    stopAllAnim()
-                    rainAnim.start()
-                }
-                WeatherType.UNKNOWN -> {
-                    stopAllAnim()
-
+            post {
+                animate().alpha(0f).alpha(1f).setDuration(500L).start()
+                when (value) {
+                    WeatherType.SUNNY -> {
+                        stopAllAnim()
+                        sunnyAnim.start()
+                    }
+                    WeatherType.CLOUDY -> {
+                        stopAllAnim()
+                        cloudAnim.start()
+                    }
+                    WeatherType.RAIN -> {
+                        stopAllAnim()
+                        rainAnim.start()
+                    }
+                    WeatherType.SNOW -> {
+                        stopAllAnim()
+                        rainAnim.start()
+                    }
+                    WeatherType.UNKNOWN -> {
+                        stopAllAnim()
+                    }
                 }
             }
         }
