@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -304,10 +305,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                 bgColorAnim.doOnStart {
                     viewBinding.weatherView.alpha = 0f
                 }
-                bgColorAnim.doOnEnd {
-                    viewBinding.weatherView.currentWeatherType = type
-                }
                 bgColorAnim.start()
+                viewBinding.weatherView.currentWeatherType = type
             })
         }
 

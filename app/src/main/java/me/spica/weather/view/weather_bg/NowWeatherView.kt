@@ -63,7 +63,12 @@ class NowWeatherView : View {
             if (field == value) return
             field = value
             post {
-                animate().alpha(0f).alpha(1f).setDuration(500L).start()
+                animate()
+                    .alpha(0f)
+                    .alpha(1f)
+                    .setInterpolator(LinearInterpolator())
+                    .setDuration(500L)
+                    .start()
                 when (value) {
                     WeatherType.SUNNY -> {
                         stopAllAnim()
