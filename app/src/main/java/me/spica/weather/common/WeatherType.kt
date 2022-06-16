@@ -64,11 +64,9 @@ fun WeatherType.getThemeColor(): Int {
         -> Color.parseColor("#03A9F4")
         WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")
         WeatherType.WEATHER_THUNDER -> Color.parseColor("#3F51B5")
-        WeatherType.WEATHER_FOG
-        -> Color.parseColor("#5A5A5A")
+        WeatherType.WEATHER_FOG -> Color.parseColor("#5A5A5A")
         WeatherType.WEATHER_HAZE -> Color.parseColor("#FF5722")
-        else -> {
-            Color.parseColor("#00BCD4")
-        }
+        else -> Color.parseColor("#00BCD4")
+
     }
 }

@@ -26,7 +26,6 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
 
     private val cityViewModel: CityViewModel by viewModels()
 
-
     // 滑动删除工具类
     private val itemTouchHelper = ItemTouchHelper(
         object : ItemTouchHelper.Callback() {
