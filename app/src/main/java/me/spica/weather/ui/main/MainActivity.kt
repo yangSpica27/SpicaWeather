@@ -72,7 +72,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
             run {
                 mFirstCardMarginTop = if ((view as RecyclerView).childCount > 0) {
                     view.getChildAt(0).measuredHeight
-                } else { -1 }
+                } else {
+                    -1
+                }
                 mScrollY = scrollY
                 mLastAppBarTranslationY = viewBinding.appbarLayout.translationY
 
@@ -98,6 +100,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                                                 - mScrollY
                                                 - viewBinding.appbarLayout.measuredHeight
                                         )
+
                             }
                         }
                     } else {

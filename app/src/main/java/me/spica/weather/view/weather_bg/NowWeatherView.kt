@@ -1,9 +1,11 @@
 package me.spica.weather.view.weather_bg
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
@@ -11,6 +13,7 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import java.util.*
 
 
 /**
@@ -18,16 +21,67 @@ import me.spica.weather.tools.dp
  */
 class NowWeatherView : View {
 
-    var currentWeatherType = WeatherType.SUNNY
+    private val random = Random()
+
+    //路径
+    private val cloudPath = Path()
+
+    //画笔
+    private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = ContextCompat.getColor(context,R.color.cloud_color)
+        style = Paint.Style.FILL
+    }
+
+    // 贝塞尔曲线的控制点
+    private var centerY = 0
+
+
+    //屏幕高度
+    private var screenHeight = 0
+
+    //屏幕宽度
+    private var screenWidth = 0
+
+    //波长
+    private val waveLength = 800
+
+    private val cloudAnim: ValueAnimator = ValueAnimator.ofInt(0, waveLength).apply {
+        duration = 1350
+        repeatCount = ValueAnimator.INFINITE
+        interpolator = LinearInterpolator()
+        addUpdateListener {
+            mOffset = it.animatedValue as Int
+            postInvalidateOnAnimation()
+        }
+    }
+
+    // 偏移量
+    private var mOffset = 0
+
+    var currentWeatherType = WeatherType.CLOUDY
         set(value) {
             field = value
             when (value) {
                 WeatherType.SUNNY -> {
+                    stopAllAnim()
                     sunnyAnim.start()
                 }
-                WeatherType.CLOUDY -> {}
-                WeatherType.RAIN -> {}
-                WeatherType.SNOW -> {}
+                WeatherType.CLOUDY -> {
+                    stopAllAnim()
+                    cloudAnim.start()
+                }
+                WeatherType.RAIN -> {
+                    stopAllAnim()
+                    rainAnim.start()
+                }
+                WeatherType.SNOW -> {
+                    stopAllAnim()
+                    rainAnim.start()
+                }
+                WeatherType.UNKNOWN -> {
+                    stopAllAnim()
+
+                }
             }
         }
 
@@ -37,12 +91,23 @@ class NowWeatherView : View {
 
     private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeCap = Paint.Cap.ROUND
+        strokeWidth = 4.dp
     }
 
     private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-        duration = 10 * 1000L
+        duration = 20 * 1000L
         repeatCount = Animation.INFINITE
-//        repeatMode = Animation.REVERSE
+        repeatMode = Animation.RESTART
+        interpolator = LinearInterpolator()
+        addUpdateListener {
+            postInvalidateOnAnimation()
+        }
+    }
+
+    private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
+        duration = 20 * 1000L
+        repeatCount = Animation.INFINITE
+        repeatMode = Animation.RESTART
         interpolator = LinearInterpolator()
         addUpdateListener {
             postInvalidateOnAnimation()
@@ -57,21 +122,50 @@ class NowWeatherView : View {
         defStyleAttr
     )
 
-    init {
-        sunnyAnim.start()
-    }
 
     // 雨水的合集
     private val mDropList: ArrayList<RainDrop> = arrayListOf()
 
+
+    init {
+        post {
+            cloudAnim.start()
+        }
+        for (i in 1..30) {
+            val drop = RainDrop(random, rainPaint)
+            mDropList.add(drop);
+        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        for (drop in mDropList) {
+            drop.init(measuredWidth, measuredHeight)
+            drop.initPos()
+        }
+    }
+
+    private var waveCount = 0;
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        screenHeight = h // 获取屏幕高度
+
+        screenWidth = w //获取屏幕宽度
+
+
+        centerY = 40.dp.toInt() //设置中心点
+
+        waveCount = Math.round(screenWidth / waveLength + 1.5).toInt() //波长的数量
+
     }
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawSunny(canvas)
+        drawRain(canvas)
+        drawCloudy(canvas)
     }
 
 
@@ -82,18 +176,22 @@ class NowWeatherView : View {
 
     // 雨的实现
     private fun drawRain(canvas: Canvas) {
-
+        if (currentWeatherType != WeatherType.RAIN) return
+        mDropList.forEach {
+            it.rain(canvas)
+        }
     }
 
     // 停止所有的动画
-    private fun stopAllValue() {
-
+    private fun stopAllAnim() {
+        sunnyAnim.cancel()
+        rainAnim.cancel()
     }
 
-    var startDegrees = 0f
 
     // 晴天的实现
     private fun drawSunny(canvas: Canvas) {
+        if (currentWeatherType != WeatherType.SUNNY) return
         sunnyPaint.alpha = 20
         sunnyPaint.color = ContextCompat.getColor(context, R.color.sun_light_color)
         val centerX = width - 50.dp
@@ -104,7 +202,7 @@ class NowWeatherView : View {
         for (index in 1..4) {
             canvas.translate(centerX, centerY)
             // 将画布旋转三次 每次30度（正方形旋转90度看上去一致）+动画进度x90度（用于旋转）
-            canvas.rotate(index * (30) + 40 * (sunnyAnim.animatedValue as Float))
+            canvas.rotate(index * (30) + 90 * (sunnyAnim.animatedValue as Float))
             // 绘制内外三层矩形
             val smallSize = 100.dp
             val midSize = 180.dp
@@ -125,11 +223,13 @@ class NowWeatherView : View {
 
     }
 
+
     public enum class WeatherType() {
         SUNNY,// 晴朗
         CLOUDY,// 多云
         RAIN,// 下雨
         SNOW,// 下雪
+        UNKNOWN,// 无效果
     }
 
 }
