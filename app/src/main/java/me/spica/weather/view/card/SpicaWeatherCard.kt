@@ -3,11 +3,14 @@ package me.spica.weather.view.card
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
+import me.spica.weather.view.anim.Rotate3dAnimation
 
 interface SpicaWeatherCard {
 
@@ -18,17 +21,23 @@ interface SpicaWeatherCard {
 
     var index: Int
 
+
     fun startEnterAnim() {
         enterAnim.doOnEnd {
             enterAnim = AnimatorSet()
         }
         enterAnim.startDelay = 150
-        enterAnim.start()
+        animatorView.post {
+            enterAnim.start()
+        }
+
     }
 
     fun resetAnim() {
         hasInScreen = false
         animatorView.alpha = 0f
+
+
         enterAnim.playTogether(
             ObjectAnimator.ofFloat(
                 animatorView,
@@ -48,9 +57,10 @@ interface SpicaWeatherCard {
                 animatorView, "scaleX", 1.025f, 1f
             ).apply {
                 interpolator = DecelerateInterpolator(1f)
-            }
+            },
         )
         enterAnim.duration = 450
+
 //        enterAnim.doOnEnd {
 //            animatorView.requestLayout()
 //        }
