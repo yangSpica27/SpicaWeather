@@ -6,6 +6,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.hide
@@ -46,17 +48,20 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard{
 
     @SuppressLint("NotifyDataSetChanged")
     override fun bindData(weather: Weather) {
-            val items = weather.hourlyWeather
-            hourWeatherAdapter.items.clear()
-            hourWeatherAdapter.items.addAll(items)
-            hourWeatherAdapter.sortList()
-            binding.rvHourWeather.post {
-                hourWeatherAdapter.notifyDataSetChanged()
-            }
-            binding.rvHourWeather.postDelayed(
-                {
-                    binding.layoutLoading.hide()
-                    binding.rvHourWeather.show()
+        val items = weather.hourlyWeather
+
+        binding.cardName.setTextColor(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor())
+
+        hourWeatherAdapter.items.clear()
+        hourWeatherAdapter.items.addAll(items)
+        hourWeatherAdapter.sortList()
+        binding.rvHourWeather.post {
+            hourWeatherAdapter.notifyDataSetChanged()
+        }
+        binding.rvHourWeather.postDelayed(
+            {
+                binding.layoutLoading.hide()
+                binding.rvHourWeather.show()
                 }, 100
             )
     }

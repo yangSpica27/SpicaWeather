@@ -15,6 +15,7 @@
         android:layout_marginStart="14dp"
         android:layout_marginTop="12dp"
         android:textStyle="bold"
+        android:id="@+id/card_name"
         android:textColor="@color/textColorPrimary"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:text="小时级气象信息" />

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
+        android:id="@+id/card_name"
         android:textColor="@color/textColorPrimary"
         android:textStyle="bold"
         android:layout_marginTop="12dp"

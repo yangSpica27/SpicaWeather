@@ -95,10 +95,17 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                             mScrollY > mFirstCardMarginTop - viewBinding.appbarLayout.y -> {
                                 viewBinding.appbarLayout.translationY =
                                     -viewBinding.appbarLayout.measuredHeight.toFloat()
+                                viewBinding.weatherView.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
 //                                viewBinding.viewPager.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
                             }
                             else -> {
                                 viewBinding.appbarLayout.translationY = (
+                                        mFirstCardMarginTop
+                                                - MainCardAdapter.firsItemMargin*2
+                                                - mScrollY
+                                                - viewBinding.appbarLayout.measuredHeight
+                                        )
+                                viewBinding.weatherView.translationY = (
                                         mFirstCardMarginTop
                                                 - MainCardAdapter.firsItemMargin*2
                                                 - mScrollY
@@ -207,16 +214,19 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         }
 
         viewBinding.toolbar.iconMenu.setOnClickListener {
+            Timber.e("点击菜单%s","")
             startActivity(Intent(this, WeatherCityActivity::class.java))
         }
 
         viewBinding.toolbar.iconAbout.setOnClickListener {
+            Timber.e("点击菜单%s","")
             startActivity(Intent(this, SettingActivity::class.java))
         }
 
         viewBinding.btnPlus.setOnClickListener {
             startActivity(Intent(this, CitySelectActivity::class.java))
         }
+
     }
 
     override fun initializer() {
@@ -306,6 +316,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
                     viewBinding.weatherView.alpha = 0f
                 }
                 bgColorAnim.start()
+
                 viewBinding.weatherView.currentWeatherType = type
             })
         }

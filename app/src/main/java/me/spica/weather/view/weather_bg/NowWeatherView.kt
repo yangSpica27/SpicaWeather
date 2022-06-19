@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
@@ -13,6 +12,7 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import timber.log.Timber
 import java.util.*
 
 
@@ -23,17 +23,36 @@ class NowWeatherView : View {
 
     private val random = Random()
 
-    //路径
-    private val cloudPath = Path()
-
     //画笔
     private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context,R.color.cloud_color)
+        color = ContextCompat.getColor(context, R.color.cloud_color)
         style = Paint.Style.FILL
     }
 
     // 贝塞尔曲线的控制点
     private var centerY = 0
+
+    private val cloudAnim = ValueAnimator.ofFloat(
+        0f, 1f
+    ).apply {
+        repeatCount = Animation.INFINITE
+        repeatMode = Animation.REVERSE
+        duration = 3000L
+        addUpdateListener {
+            postInvalidateOnAnimation()
+        }
+    }
+
+
+    private val cloudAnim2 = ValueAnimator.ofFloat(
+        0f, 1f
+    ).apply {
+        repeatCount = Animation.INFINITE
+        repeatMode = Animation.REVERSE
+        duration = 4000L
+        interpolator = LinearInterpolator()
+
+    }
 
 
     //屏幕高度
@@ -42,25 +61,11 @@ class NowWeatherView : View {
     //屏幕宽度
     private var screenWidth = 0
 
-    //波长
-    private val waveLength = 800
 
-    private val cloudAnim: ValueAnimator = ValueAnimator.ofInt(0, waveLength).apply {
-        duration = 1350
-        repeatCount = ValueAnimator.INFINITE
-        interpolator = LinearInterpolator()
-        addUpdateListener {
-            mOffset = it.animatedValue as Int
-            postInvalidateOnAnimation()
-        }
-    }
-
-    // 偏移量
-    private var mOffset = 0
-
-    var currentWeatherType = WeatherType.CLOUDY
+    var currentWeatherType = WeatherType.UNKNOWN
         set(value) {
-            if (field == value) return
+            if (currentWeatherType == value) return
+            Timber.tag("设置类型").e(value.name)
             field = value
             post {
                 animate()
@@ -77,6 +82,7 @@ class NowWeatherView : View {
                     WeatherType.CLOUDY -> {
                         stopAllAnim()
                         cloudAnim.start()
+                        cloudAnim2.start()
                     }
                     WeatherType.RAIN -> {
                         stopAllAnim()
@@ -136,12 +142,13 @@ class NowWeatherView : View {
 
 
     init {
-        post {
-            cloudAnim.start()
-        }
         for (i in 1..30) {
             val drop = RainDrop(random, rainPaint)
-            mDropList.add(drop);
+            mDropList.add(drop)
+        }
+        post {
+            cloudAnim.start()
+            cloudAnim2.start()
         }
     }
 
@@ -153,7 +160,7 @@ class NowWeatherView : View {
         }
     }
 
-    private var waveCount = 0;
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -164,7 +171,6 @@ class NowWeatherView : View {
 
         centerY = 40.dp.toInt() //设置中心点
 
-        waveCount = Math.round(screenWidth / waveLength + 1.5).toInt() //波长的数量
 
     }
 
@@ -194,6 +200,8 @@ class NowWeatherView : View {
     private fun stopAllAnim() {
         sunnyAnim.cancel()
         rainAnim.cancel()
+        cloudAnim.cancel()
+        cloudAnim2.cancel()
     }
 
 
@@ -228,11 +236,63 @@ class NowWeatherView : View {
 
     //多云的实现
     private fun drawCloudy(canvas: Canvas) {
-
+        if (currentWeatherType != WeatherType.CLOUDY) return
+        canvas.save()
+        val centerX = width / 8f * 7f
+        val centerY = 0f
+        canvas.translate(centerX, centerY)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 5f + (cloudAnim2.animatedValue as Float) * 16.dp,
+            cloudPaint
+        )
+        canvas.translate(40.dp, 0f)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 3f + (cloudAnim.animatedValue as Float) * 8.dp,
+            cloudPaint
+        )
+        canvas.restore()
+        canvas.save()
+        //=========
+        canvas.translate(screenWidth / 2f, 8.dp)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 5f + (cloudAnim.animatedValue as Float) * 5.dp,
+            cloudPaint
+        )
+        canvas.translate(40f, -18f)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 3f + (cloudAnim2.animatedValue as Float) * 8.dp,
+            cloudPaint
+        )
+        canvas.restore()
+        // = =====
+        canvas.save()
+        canvas.translate(screenWidth / 5f - 20.dp, 12.dp)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 5f + (cloudAnim2.animatedValue as Float) * 5.dp,
+            cloudPaint
+        )
+        canvas.translate((-40).dp, 8f)
+        cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
+        canvas.drawCircle(
+            0f, 0f,
+            screenWidth / 3f + (cloudAnim.animatedValue as Float) * 20.dp,
+            cloudPaint
+        )
+        canvas.restore()
     }
 
 
-    public enum class WeatherType() {
+    enum class WeatherType() {
         SUNNY,// 晴朗
         CLOUDY,// 多云
         RAIN,// 下雨
