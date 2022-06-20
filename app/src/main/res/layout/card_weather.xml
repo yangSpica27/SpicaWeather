@@ -75,79 +75,51 @@
         app:layout_constraintBaseline_toBaselineOf="@id/tv_now"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/container_wind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
         android:background="@drawable/bg_card"
+        android:backgroundTint="#1A000000"
         android:padding="14dp"
         app:layout_constraintTop_toBottomOf="@id/tv_now">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_wind_speed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="风速"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textColor="@color/textColorPrimaryHint"
-            app:layout_constraintEnd_toStartOf="@id/tv_wind_pa"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_wind_speed_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintStart_toStartOf="@id/tv_wind_speed"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_wind_pa"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="气压"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textColor="@color/textColorPrimaryHint"
-            app:layout_constraintEnd_toStartOf="@id/tv_water"
-            app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="start"
+            android:textColor="@color/white"
+            android:drawablePadding="2dp"
+            android:drawableTint="@color/white"
+            android:drawableStart="@drawable/ic_wind2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_wind_pa_value"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:drawablePadding="2dp"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white"
+            android:drawableStart="@drawable/ic_pressure"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toEndOf="@id/tv_wind_pa"
-            app:layout_constraintStart_toStartOf="@id/tv_wind_pa"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_pa" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_water"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="湿度"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textColor="@color/textColorPrimaryHint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_wind_pa"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_water_value"
             android:layout_width="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@color/white"
+            android:drawableTint="@color/white"
+            android:drawablePadding="2dp"
+            android:drawableStart="@drawable/ic_water"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_wind_speed" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

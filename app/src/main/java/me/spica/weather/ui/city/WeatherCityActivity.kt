@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -15,6 +16,7 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityCityBinding
 import me.spica.weather.model.city.CityBean
+import me.spica.weather.tools.dp
 
 /**
  * 城市选择
@@ -93,6 +95,12 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
             R.anim.layout_animation_fall_down
         )
         itemTouchHelper.attachToRecyclerView(viewBinding.rvCity)
+
+        dividerBuilder()
+            .colorRes(R.color.line_divider)
+            .size(1.dp.toInt())
+            .build().addTo(viewBinding.rvCity)
+
         viewBinding.rvCity.layoutAnimation = animation
         viewBinding.rvCity.adapter = cityWeatherAdapter
 

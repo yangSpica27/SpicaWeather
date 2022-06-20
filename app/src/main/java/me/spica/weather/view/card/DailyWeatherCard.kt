@@ -6,6 +6,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -51,7 +53,8 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     @SuppressLint("NotifyDataSetChanged")
     override fun bindData(weather: Weather) {
             val items = weather.dailyWeather
-            dailyWeatherAdapter.items.clear()
+        binding.cardName.setTextColor(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor())
+        dailyWeatherAdapter.items.clear()
             dailyWeatherAdapter.items.addAll(items)
             dailyWeatherAdapter.syncTempMaxAndMin()
             doOnMainThreadIdle({

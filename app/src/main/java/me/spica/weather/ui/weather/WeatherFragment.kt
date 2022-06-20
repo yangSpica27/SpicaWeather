@@ -35,7 +35,7 @@ import timber.log.Timber
  */
 @AndroidEntryPoint
 class WeatherFragment(
-    val scrollListener: View.OnScrollChangeListener
+    private val scrollListener: View.OnScrollChangeListener
 ) : BindingFragment<FragmentListBinding>(
 
 ),
@@ -47,12 +47,12 @@ class WeatherFragment(
 
     private var currentColor = Color.parseColor("#1F787474")
 
-    private var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
+    private var currentWeatherType = NowWeatherView.WeatherType.CLOUDY
 
     private var currentCity: CityBean? = null
 
     // 更改颜色
-    var onColorChange: (Int,NowWeatherView.WeatherType) -> Unit  = {i, weatherType ->  }
+    var onColorChange: (Int,NowWeatherView.WeatherType) -> Unit  = { _, _ ->  }
 
 
     private val sp by lazy {
