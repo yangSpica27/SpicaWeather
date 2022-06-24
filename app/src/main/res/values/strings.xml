@@ -10,6 +10,7 @@
     <string name="sunrise_sunset_time">日出%1$s\n日落%2$s</string>
     <string name="hint_city_name">城市名称</string>
     <string name="cancel">取消</string>
+    <string name="key_word">关键字</string>
 
     <string-array name="cards">
         <item>当前天气</item>

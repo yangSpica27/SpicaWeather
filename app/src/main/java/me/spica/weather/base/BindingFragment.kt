@@ -18,7 +18,7 @@ abstract class BindingFragment<ViewBindingType : ViewBinding> :
     Fragment(),
     LifecycleEventObserver {
 
-    private var isFirstLoad = true
+    protected var isFirstLoad = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
