@@ -15,6 +15,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import me.spica.weather.tools.MathTool;
 
 public class SensorLayout extends FrameLayout implements SensorEventListener {
   private final SensorManager mSensorManager;
@@ -55,19 +56,17 @@ public class SensorLayout extends FrameLayout implements SensorEventListener {
     }
   }
 
-
   @Override
   public void onSensorChanged(SensorEvent event) {
     if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-      mAccelerateValues = event.values;
+      mAccelerateValues = MathTool.lowPass(event.values.clone(), mAccelerateValues);
     }
     if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-      mMagneticValues = event.values;
+      mMagneticValues = MathTool.lowPass(event.values.clone(), mMagneticValues);
     }
     float[] values = new float[3];
     float[] R = new float[9];
-    if (mMagneticValues != null && mAccelerateValues != null)
-      SensorManager.getRotationMatrix(R, null, mAccelerateValues, mMagneticValues);
+    if (mMagneticValues != null && mAccelerateValues != null) {SensorManager.getRotationMatrix(R, null, mAccelerateValues, mMagneticValues);}
     SensorManager.getOrientation(R, values);
     // x轴的偏转角度
     values[1] = (float) Math.toDegrees(values[1]);
@@ -91,7 +90,6 @@ public class SensorLayout extends FrameLayout implements SensorEventListener {
     }
     smoothScroll(hasChangeX ? scrollX : mScroller.getFinalX(), hasChangeY ? scrollY : mScroller.getFinalY());
   }
-
 
   @Override
   public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -136,7 +134,7 @@ public class SensorLayout extends FrameLayout implements SensorEventListener {
     mDirection = direction;
   }
 
-  @IntDef({DIRECTION_LEFT, DIRECTION_RIGHT})
+  @IntDef({ DIRECTION_LEFT, DIRECTION_RIGHT })
   @Retention(RetentionPolicy.SOURCE)
   @Target(ElementType.PARAMETER)
   public @interface ADirection {

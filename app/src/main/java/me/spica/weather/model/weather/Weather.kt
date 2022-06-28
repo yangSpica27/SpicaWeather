@@ -14,5 +14,6 @@ data class Weather(
     val lifeIndexes: List<LifeIndexBean>,
     val air: AirBean,
     @PrimaryKey(autoGenerate = false)
-    val cityName: String = ""
+    val cityName: String = "",
+    var description:String = ""
 )

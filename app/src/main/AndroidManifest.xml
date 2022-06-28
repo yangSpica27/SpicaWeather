@@ -67,7 +67,7 @@
 
         <activity
             android:name=".ui.city.CitySelectActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".ui.about.AboutActivity"

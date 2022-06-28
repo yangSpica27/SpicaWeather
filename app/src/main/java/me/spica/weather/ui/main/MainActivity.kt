@@ -11,11 +11,9 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,12 +36,8 @@ import me.spica.weather.base.BindingActivity
 import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.tools.SpicaColorEvaluator
-import me.spica.weather.tools.doOnMainThreadIdle
-import me.spica.weather.tools.dp
-import me.spica.weather.tools.getStatusBarHeight
+import me.spica.weather.tools.*
 import me.spica.weather.tools.keyboard.FluidContentResizer
-import me.spica.weather.tools.toast
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
 import me.spica.weather.ui.setting.SettingActivity
@@ -386,7 +380,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     if (permissionDialog.isShowing) {
       permissionDialog.cancel()
     }
-
   }
 
   override fun onRationaleAccepted(requestCode: Int) {

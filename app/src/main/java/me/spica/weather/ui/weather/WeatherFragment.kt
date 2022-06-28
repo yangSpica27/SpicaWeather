@@ -72,9 +72,6 @@ class WeatherFragment(
       // 首次加载
       lifecycleScope.launch {
         viewModel.weatherFlow.collectLatest {
-          if (it == null) {
-            errorTip.show()
-          }
           viewBinding.swipeRefreshLayout.isRefreshing = false
         }
       }

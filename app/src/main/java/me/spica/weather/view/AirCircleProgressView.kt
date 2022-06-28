@@ -22,6 +22,7 @@ private val VIEW_MARGIN = 14.dp
 
 class AirCircleProgressView : View {
 
+
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
@@ -55,6 +56,7 @@ class AirCircleProgressView : View {
         strokeWidth = 6.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.line_default)
+        strokeCap =  Paint.Cap.ROUND
     }
 
     private val startAngle = 135f

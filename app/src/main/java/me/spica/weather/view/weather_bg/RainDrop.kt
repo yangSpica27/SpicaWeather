@@ -7,7 +7,7 @@ import me.spica.weather.tools.dp
 import java.util.*
 
 
-class RainDrop(val mRandom: Random,val mPaint: Paint) {
+class RainDrop(private val mRandom: Random, private val mPaint: Paint) {
 
     private var mStartX = 30
     private var mStartY = 0
