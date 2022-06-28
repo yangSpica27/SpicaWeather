@@ -77,16 +77,21 @@ class WeatherFragment(
       }
 
       lifecycleScope.launch(Dispatchers.Default) {
+        // 监听数据库中的对应的天气对象
         viewModel.weatherCacheFlow.filterNotNull().collectLatest {
           doOnMainThreadIdle({
+            // 主线程空闲时候更新页面
             mainCardAdapter.notifyData(it)
           })
+          // 更新页面的主题颜色
           currentColor = WeatherCodeUtils.getWeatherCode(
             it.todayWeather.iconId.toString()
           ).getThemeColor()
+          // 更新页面的动画模式
           currentWeatherType = WeatherCodeUtils.getWeatherCode(
             it.todayWeather.iconId.toString()
           ).getWeatherAnimType()
+          // 回传
           onColorChange(currentColor, currentWeatherType)
         }
       }

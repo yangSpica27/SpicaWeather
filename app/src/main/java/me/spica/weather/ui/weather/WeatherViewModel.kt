@@ -124,6 +124,7 @@ class WeatherViewModel @Inject constructor(
     weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)
   }
 
+  // 和风系 接口
   val weatherFlow = combine(
     nowWeatherFlow,// 请求获取当前天气
     dailyWeatherFlow,// 请求获取日级别天气
