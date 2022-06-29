@@ -163,7 +163,7 @@ class WeatherViewModel @Inject constructor(
       // 合并和风系接口和彩云系列接口的数据
       combine(weatherFlow, alert) { weather, alertBean ->
         kotlin.run {
-          // 和风天气的天气数据+彩云的天气预警贴士
+          // 和风天气的天气数据+彩云的天气预警贴士(彩云接口请求失败不影响显示)
           weather?.description = alertBean?.description ?: ""
           weather
         }
