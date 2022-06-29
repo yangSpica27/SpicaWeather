@@ -90,9 +90,9 @@ class MainCardAdapter(
 
     override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
         if (position == 0) {
-            holder.itemView.updatePadding(
-                top = firsItemMargin.toInt()*2
-            )
+//            holder.itemView.updatePadding(
+//                top = firsItemMargin.toInt()*2
+//            )
         }
         holder.reset()
         weather?.let {

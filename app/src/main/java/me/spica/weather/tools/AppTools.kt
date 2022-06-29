@@ -237,7 +237,7 @@ fun AppCompatActivity.showOldFragment(
 }
 
 
-fun AppCompatActivity.getStatusBarHeight(): Int {
+fun Context.getStatusBarHeight(): Int {
     var height = 0
     val resourceId =
         applicationContext.resources.getIdentifier("status_bar_height", "dimen", "android")

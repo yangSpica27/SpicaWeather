@@ -4,16 +4,24 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
+import me.spica.weather.R
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getAnimRes
+import me.spica.weather.common.getThemeColor
+import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.CardWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.dp
+import me.spica.weather.tools.getStatusBarHeight
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +47,9 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
     init {
         resetAnim()
+        binding.weatherBg.updateLayoutParams<MarginLayoutParams> {
+            topMargin = context.getStatusBarHeight()+56.dp.toInt()
+        }
     }
 
     private val numAnim = ValueAnimator.ofInt(0, 0)
@@ -56,7 +67,17 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
         val nowWeatherBean = weather.todayWeather
+        val themeColor = WeatherCodeUtils.getWeatherCode(
+            weather.todayWeather.iconId.toString()
+        ).getThemeColor()
 
+
+        val bgDrawable = context.getDrawable(R.drawable.bg_card)
+        bgDrawable?.colorFilter = PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
+        binding.weatherBg.background = bgDrawable
+        binding.weatherBg.currentWeatherType = WeatherCodeUtils.getWeatherCode(
+            weather.todayWeather.iconId.toString()
+        ).getWeatherAnimType()
 
         doOnMainThreadIdle({
             if (numAnim.isRunning) numAnim.cancel()

@@ -3,10 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:elevation="1dp"
-    android:paddingTop="20dp">
+    android:layout_height="56dp"
+    android:elevation="1dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon_menu"
@@ -14,7 +12,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:scaleType="center"
-        android:tint="@color/white"
+        app:layout_constraintBaseline_toBottomOf="parent"
         android:src="@drawable/ic_menu"
         app:layout_constraintTop_toTopOf="@id/ts_location"
         app:layout_constraintBottom_toBottomOf="@id/ts_location"
@@ -31,14 +29,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingEnd="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon_about"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:tint="@color/white"
         android:clickable="true"
+        app:layout_constraintBaseline_toBottomOf="parent"
         android:layout_marginEnd="24dp"
         android:src="@drawable/ic_tip"
         app:layout_constraintTop_toTopOf="@id/ts_location"

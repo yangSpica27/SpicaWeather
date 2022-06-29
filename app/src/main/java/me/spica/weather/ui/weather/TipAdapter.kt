@@ -25,7 +25,7 @@ class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items[position].let { item ->
             holder.itemTipsBinding.tvName.text = item.name
-            holder.itemTipsBinding.tvDesc.text = item.text
+            holder.itemTipsBinding.tvDesc.text = item.category
             holder.itemTipsBinding.ivIcon.load(item.iconRes)
         }
     }

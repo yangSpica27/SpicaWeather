@@ -5,14 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <me.spica.weather.view.weather_bg.NowWeatherView
+        android:id="@+id/weather_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+    </me.spica.weather.view.weather_bg.NowWeatherView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="2dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="200dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +88,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="12dp"
         android:gravity="center_vertical"
         android:background="@drawable/bg_card"
         android:backgroundTint="#1A000000"
@@ -119,5 +129,10 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        app:layout_constraintTop_toBottomOf="@id/container_wind" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

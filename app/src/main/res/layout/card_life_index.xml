@@ -7,13 +7,26 @@
     android:background="@drawable/bg_card"
     android:layout_height="wrap_content">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/card_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        android:textStyle="bold"
+        android:textColor="@color/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:text="生活预报" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/card_name"
         android:orientation="vertical"
         tools:listitem="@layout/item_tips"
         android:nestedScrollingEnabled="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:spanCount="2"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
 </RelativeLayout>

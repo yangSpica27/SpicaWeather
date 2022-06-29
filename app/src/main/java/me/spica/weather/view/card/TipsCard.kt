@@ -7,10 +7,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import kotlinx.coroutines.Job
-import me.spica.weather.R
-import me.spica.weather.databinding.CardLifeIndexBinding
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.weather.TipAdapter
@@ -28,7 +27,7 @@ class TipsCard : RelativeLayout, SpicaWeatherCard{
 
 
 
-    private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding = me.spica.weather.databinding.CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -42,17 +41,16 @@ class TipsCard : RelativeLayout, SpicaWeatherCard{
 
     init {
         resetAnim()
-        context
-            .dividerBuilder()
-            .colorRes(R.color.line_divider)
-            .build()
-            .addTo(binding.rvTip)
         binding.rvTip.adapter = tipAdapter
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun bindData(weather: Weather) {
-            val items = weather.lifeIndexes
+        val themeColor = WeatherCodeUtils.getWeatherCode(
+            weather.todayWeather.iconId.toString()
+        ).getThemeColor()
+        binding.cardName.setTextColor(themeColor)
+        val items = weather.lifeIndexes
             tipAdapter.items.clear()
             tipAdapter.items.addAll(items)
             doOnMainThreadIdle({

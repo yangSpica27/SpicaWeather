@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -46,6 +47,8 @@ open class NowWeatherView : View, SensorEventListener {
     }
   }
 
+
+  private val clipPath = Path()
 
   private val cloudAnim2 = ValueAnimator.ofFloat(
     0f, 1f
@@ -170,12 +173,23 @@ open class NowWeatherView : View, SensorEventListener {
 
     centerY = 40.dp.toInt() //设置中心点
 
+    clipPath.reset()
+    clipPath.moveTo(12.dp, 0f);
+    clipPath.lineTo(width - 12.dp, 0f);
+    clipPath.quadTo(width*1f, 0f, width*1f, 12.dp);
+    clipPath.lineTo(width*1f, height - 12.dp);
+    clipPath.quadTo(width*1f, height*1f, width - 12.dp, height.dp);
+    clipPath.lineTo(12.dp, height.dp);
+    clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp);
+    clipPath.lineTo(0f, 12f);
+    clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp);
 
   }
 
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
+    roundClip(canvas)
     drawSunny(canvas)
     drawRain(canvas)
     drawCloudy(canvas)
@@ -290,6 +304,10 @@ open class NowWeatherView : View, SensorEventListener {
     canvas.restore()
   }
 
+
+  private fun roundClip(canvas: Canvas){
+    canvas.clipPath(clipPath);
+  }
 
   enum class WeatherType() {
     SUNNY,// 晴朗

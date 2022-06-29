@@ -76,42 +76,43 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         mScrollY = scrollY
         mLastAppBarTranslationY = viewBinding.appbarLayout.translationY
 
-        if (mFirstCardMarginTop > 0) {
-          if (mFirstCardMarginTop >= viewBinding.appbarLayout.measuredHeight
-            + MainCardAdapter.firsItemMargin
-          ) {
-            when {
-              mScrollY < (mFirstCardMarginTop
-                  - MainCardAdapter.firsItemMargin * 2
-                  - viewBinding.appbarLayout.measuredHeight) -> {
-                viewBinding.appbarLayout.translationY = 0f
-              }
-              mScrollY > mFirstCardMarginTop - viewBinding.appbarLayout.y -> {
-                viewBinding.appbarLayout.translationY =
-                  -viewBinding.appbarLayout.measuredHeight.toFloat()
-                viewBinding.weatherView.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
-//                                viewBinding.viewPager.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
-              }
-              else -> {
-                viewBinding.appbarLayout.translationY = (
-                    mFirstCardMarginTop
-                        - MainCardAdapter.firsItemMargin * 2
-                        - mScrollY
-                        - viewBinding.appbarLayout.measuredHeight
-                    )
-                viewBinding.weatherView.translationY = (
-                    mFirstCardMarginTop
-                        - MainCardAdapter.firsItemMargin * 2
-                        - mScrollY
-                        - viewBinding.appbarLayout.measuredHeight
-                    )
-
-              }
-            }
-          } else {
-            viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
-          }
-        }
+        viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
+//        if (mFirstCardMarginTop > 0) {
+//          if (mFirstCardMarginTop >= viewBinding.appbarLayout.measuredHeight
+//            + MainCardAdapter.firsItemMargin
+//          ) {
+//            when {
+//              mScrollY < (mFirstCardMarginTop
+//                  - MainCardAdapter.firsItemMargin * 2
+//                  - viewBinding.appbarLayout.measuredHeight) -> {
+//                viewBinding.appbarLayout.translationY = 0f
+//              }
+//              mScrollY > mFirstCardMarginTop - viewBinding.appbarLayout.y -> {
+//                viewBinding.appbarLayout.translationY =
+//                  -viewBinding.appbarLayout.measuredHeight.toFloat()
+//                viewBinding.weatherView.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
+////                                viewBinding.viewPager.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
+//              }
+//              else -> {
+//                viewBinding.appbarLayout.translationY = (
+//                    mFirstCardMarginTop
+//                        - MainCardAdapter.firsItemMargin * 2
+//                        - mScrollY
+//                        - viewBinding.appbarLayout.measuredHeight
+//                    )
+//                viewBinding.weatherView.translationY = (
+//                    mFirstCardMarginTop
+//                        - MainCardAdapter.firsItemMargin * 2
+//                        - mScrollY
+//                        - viewBinding.appbarLayout.measuredHeight
+//                    )
+//
+//              }
+//            }
+//          } else {
+//            viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
+//          }
+//        }
 
       }
     }
@@ -198,7 +199,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
   private fun initTitle() {
     viewBinding.toolbar.tsLocation.setFactory {
       val textView = TextView(this)
-      textView.setTextColor(ContextCompat.getColor(this, R.color.white))
+      textView.setTextColor(ContextCompat.getColor(this, R.color.textColorPrimary))
       textView.textSize = 6.dp
       textView.isSingleLine = true
       textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
@@ -304,14 +305,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     mainPagerAdapter.onColorChange = { color, type ->
       doOnMainThreadIdle({
 
-        if (bgColorAnim.isRunning) bgColorAnim.cancel()
-        bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, color)
-        bgColorAnim.doOnStart {
-          viewBinding.weatherView.alpha = 0f
-        }
-        bgColorAnim.start()
-
-        viewBinding.weatherView.currentWeatherType = type
+//        if (bgColorAnim.isRunning) bgColorAnim.cancel()
+//        bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, color)
+//        bgColorAnim.doOnStart {
+//          viewBinding.weatherView.alpha = 0f
+//        }
+//        bgColorAnim.start()
+//
+//        viewBinding.weatherView.currentWeatherType = type
       })
     }
 
