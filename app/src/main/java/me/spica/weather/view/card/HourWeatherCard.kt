@@ -51,8 +51,8 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     binding.cardName.setTextColor(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor())
 
     doOnMainThreadIdle({
-      binding.tipDesc.text = weather.description
-      if (weather.description.isEmpty()) {
+      binding.tipDesc.text = weather.descriptionForToday
+      if (weather.descriptionForToday.isEmpty()) {
         binding.tipDesc.hide()
       } else {
         binding.tipDesc.show()

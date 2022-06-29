@@ -5,7 +5,7 @@ import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
-import me.spica.weather.network.hefeng.minute.Minute
+import me.spica.weather.network.hefeng.minute.CaiyunBean
 import me.spica.weather.network.hefeng.now.NowWeather
 import javax.inject.Inject
 
@@ -56,5 +56,5 @@ class HeClient @Inject constructor(private val heService: HeService) {
   suspend fun getMinute(
     lon: String,
     lat: String
-  ): ApiResponse<Minute> = heService.getMinutely(location = "$lon,$lat")
+  ): ApiResponse<CaiyunBean> = heService.getMinutely(location = "$lon,$lat")
 }

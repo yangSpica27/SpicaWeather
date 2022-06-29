@@ -1,7 +1,6 @@
 package me.spica.weather.repository
 
 import me.spica.weather.model.weather.*
-import me.spica.weather.network.hefeng.minute.Minute
 
 interface Repository {
 

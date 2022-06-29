@@ -6,7 +6,7 @@ import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
-import me.spica.weather.network.hefeng.minute.Minute
+import me.spica.weather.network.hefeng.minute.CaiyunBean
 import me.spica.weather.network.hefeng.now.NowWeather
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -73,10 +73,10 @@ interface HeService {
   ): ApiResponse<Air>
 
 
-  @GET("https://api.caiyunapp.com/v2.6/${BuildConfig.CAIYUN}/{location}/minutely?alert=true")
+  @GET("https://api.caiyunapp.com/v2.6/${BuildConfig.CAIYUN}/{location}/weather?alert=true&dailysteps=1&hourlysteps=24")
   suspend fun getMinutely(
     @Path("location") location: String,
     @Query("alert") alert: Boolean = true
-  ): ApiResponse<Minute>
+  ): ApiResponse<CaiyunBean>
 
 }

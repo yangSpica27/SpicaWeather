@@ -8,12 +8,13 @@ import androidx.room.TypeConverters
 @Entity
 @TypeConverters(WeatherBeanConverter::class)
 data class Weather(
-    val todayWeather: NowWeatherBean,
-    val dailyWeather: List<DailyWeatherBean>,
-    val hourlyWeather: List<HourlyWeatherBean>,
-    val lifeIndexes: List<LifeIndexBean>,
-    val air: AirBean,
-    @PrimaryKey(autoGenerate = false)
-    val cityName: String = "",
-    var description:String = ""
+  val todayWeather: NowWeatherBean,
+  val dailyWeather: List<DailyWeatherBean>,
+  val hourlyWeather: List<HourlyWeatherBean>,
+  val lifeIndexes: List<LifeIndexBean>,
+  val air: AirBean,
+  @PrimaryKey(autoGenerate = false)
+  val cityName: String = "",
+  var descriptionForToday: String = "", // 今天的气象描述
+  var descriptionForToWeek: String = "", // 一周的气象描述
 )

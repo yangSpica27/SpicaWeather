@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Minute(
+data class CaiyunBean(
     @Json(name = "api_status")
     val apiStatus: String,
     @Json(name = "api_version")

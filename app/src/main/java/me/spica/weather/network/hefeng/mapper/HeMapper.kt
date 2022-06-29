@@ -8,7 +8,7 @@ import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
-import me.spica.weather.network.hefeng.minute.Minute
+import me.spica.weather.network.hefeng.minute.CaiyunBean
 import me.spica.weather.network.hefeng.now.NowWeather
 
 object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<DailyWeatherBean>> {
@@ -86,10 +86,10 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
 
 }
 
-object SuccessMinutelyMapper : ApiSuccessModelMapper<Minute, AlertBean> {
+object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, AlertBean> {
 
   @Throws(RuntimeException::class)
-  override fun map(apiErrorResponse: ApiResponse.Success<Minute>): AlertBean {
+  override fun map(apiErrorResponse: ApiResponse.Success<CaiyunBean>): AlertBean {
     if (apiErrorResponse.data.status == "ok") {
       return AlertBean(
         description = apiErrorResponse.data.result.forecastKeypoint,
