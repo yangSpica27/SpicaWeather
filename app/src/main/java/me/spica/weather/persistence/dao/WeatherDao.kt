@@ -17,6 +17,10 @@ interface WeatherDao {
     @Query("SELECT * FROM weather WHERE cityName == (:cityName)")
     fun getWeather(cityName: String): Flow<Weather?>
 
+
+    @Query("SELECT * FROM weather WHERE cityName == (:cityName)")
+    fun getWeatherEntity(cityName: String): Weather?
+
     @ExperimentalCoroutinesApi
     fun getWeatherFlowDistinctUntilChanged(cityName: String) =
         getWeather(cityName).distinctUntilChanged()
