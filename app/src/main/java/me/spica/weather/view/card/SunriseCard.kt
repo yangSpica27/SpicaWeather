@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import me.spica.weather.R
-import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
