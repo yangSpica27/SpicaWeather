@@ -92,8 +92,8 @@ class WeatherFragment(
       }
     }
     super.onResume()
-    viewBinding.scrollView.smoothScrollTo(0, 0)
-//        mainCardAdapter.onScroll()
+
+    mainCardAdapter.onScroll()
 
 
   }
@@ -110,6 +110,7 @@ class WeatherFragment(
       viewModel.changeCity(it)
     }
     mainCardAdapter = MainCardAdapter(
+      requireActivity(),
       viewBinding.rvList, lifecycleScope,
       viewBinding.scrollView
     )

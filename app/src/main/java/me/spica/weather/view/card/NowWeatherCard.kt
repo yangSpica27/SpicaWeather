@@ -82,6 +82,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
             binding.tvAlertTitle.hide()
           } else {
             binding.tvAlertTitle.text = weather.alerts[0].title
+            binding.tvAlertTitle.setTextColor(weather.alerts[0].getAlertColor())
             binding.tvAlertTitle.show()
           }
         }

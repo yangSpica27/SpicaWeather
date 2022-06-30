@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/card_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_marginTop="12dp"
@@ -18,10 +18,24 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:text="生活预报" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:textColor="@color/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:text="查看更多" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        tools:itemCount="4"
         android:layout_below="@id/card_name"
         android:orientation="vertical"
         tools:listitem="@layout/item_tips"

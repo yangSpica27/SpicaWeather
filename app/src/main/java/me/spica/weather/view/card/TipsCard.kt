@@ -7,9 +7,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import kotlinx.coroutines.Job
-import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
+import me.spica.weather.databinding.CardLifeIndexBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.ui.weather.TipAdapter
@@ -18,47 +17,38 @@ import me.spica.weather.ui.weather.TipAdapter
 /**
  * 生活指数卡
  */
-class TipsCard : RelativeLayout, SpicaWeatherCard{
+class TipsCard : RelativeLayout, SpicaWeatherCard {
 
-    private val tipAdapter = TipAdapter()
+  private val tipAdapter = TipAdapter()
 
+  private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val job = Job()
+  constructor(context: Context) : super(context)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+  override var animatorView: View = this
 
+  override var enterAnim: AnimatorSet = AnimatorSet()
+  override var index: Int = 4
+  override var hasInScreen: Boolean = false
 
-    private val binding = me.spica.weather.databinding.CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
+  init {
+    resetAnim()
+    binding.rvTip.adapter = tipAdapter
+  }
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    override var animatorView: View = this
-
-    override var enterAnim: AnimatorSet = AnimatorSet()
-    override var index: Int = 4
-    override var hasInScreen: Boolean = false
-
-    init {
-        resetAnim()
-        binding.rvTip.adapter = tipAdapter
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun bindData(weather: Weather) {
-        val themeColor = weather.getWeatherType().getThemeColor()
-        binding.cardName.setTextColor(themeColor)
-        val items = weather.lifeIndexes
-            tipAdapter.items.clear()
-            tipAdapter.items.addAll(items)
-            doOnMainThreadIdle({
-                tipAdapter.notifyDataSetChanged()
-            })
-    }
+  @SuppressLint("NotifyDataSetChanged")
+  override fun bindData(weather: Weather) {
+    val themeColor = weather.getWeatherType().getThemeColor()
+    binding.cardName.setTextColor(themeColor)
+    val items = weather.lifeIndexes
+    tipAdapter.items.clear()
+    tipAdapter.items.addAll(items)
+    doOnMainThreadIdle({
+      tipAdapter.notifyDataSetChanged()
+    })
+  }
 
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        job.cancel()
-    }
 }

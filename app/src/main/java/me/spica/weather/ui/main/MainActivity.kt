@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -27,6 +28,7 @@ import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -77,42 +79,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         mLastAppBarTranslationY = viewBinding.appbarLayout.translationY
 
         viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
-//        if (mFirstCardMarginTop > 0) {
-//          if (mFirstCardMarginTop >= viewBinding.appbarLayout.measuredHeight
-//            + MainCardAdapter.firsItemMargin
-//          ) {
-//            when {
-//              mScrollY < (mFirstCardMarginTop
-//                  - MainCardAdapter.firsItemMargin * 2
-//                  - viewBinding.appbarLayout.measuredHeight) -> {
-//                viewBinding.appbarLayout.translationY = 0f
-//              }
-//              mScrollY > mFirstCardMarginTop - viewBinding.appbarLayout.y -> {
-//                viewBinding.appbarLayout.translationY =
-//                  -viewBinding.appbarLayout.measuredHeight.toFloat()
-//                viewBinding.weatherView.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
-////                                viewBinding.viewPager.translationY = -viewBinding.appbarLayout.measuredHeight.toFloat()
-//              }
-//              else -> {
-//                viewBinding.appbarLayout.translationY = (
-//                    mFirstCardMarginTop
-//                        - MainCardAdapter.firsItemMargin * 2
-//                        - mScrollY
-//                        - viewBinding.appbarLayout.measuredHeight
-//                    )
-//                viewBinding.weatherView.translationY = (
-//                    mFirstCardMarginTop
-//                        - MainCardAdapter.firsItemMargin * 2
-//                        - mScrollY
-//                        - viewBinding.appbarLayout.measuredHeight
-//                    )
-//
-//              }
-//            }
-//          } else {
-//            viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
-//          }
-//        }
 
       }
     }
@@ -160,6 +126,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
   lateinit var locationClint: LocationClient
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+    setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+    window.sharedElementsUseOverlay = false
     super.onCreate(savedInstanceState)
     // 绑定定位监听
     locationClint.registerLocationListener(locationListener)
