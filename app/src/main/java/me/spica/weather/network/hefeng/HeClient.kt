@@ -1,11 +1,11 @@
 package me.spica.weather.network.hefeng
 
 import com.skydoves.sandwich.ApiResponse
+import me.spica.weather.network.caiyun.CaiyunBean
 import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
-import me.spica.weather.network.hefeng.minute.CaiyunBean
 import me.spica.weather.network.hefeng.now.NowWeather
 import javax.inject.Inject
 

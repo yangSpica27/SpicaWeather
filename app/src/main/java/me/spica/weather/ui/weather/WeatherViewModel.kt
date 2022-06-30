@@ -107,11 +107,11 @@ class WeatherViewModel @Inject constructor(
         )
       }
 
-  private val alert: Flow<AlertBean?> = cityFlow
+  private val alert: Flow<CaiyunExtendBean?> = cityFlow
     .filterNotNull()
     .flatMapLatest {
       Timber.e("触发获取Alert")
-      return@flatMapLatest repository.fetchMinute(
+      return@flatMapLatest repository.fetchCaiyunExtend(
         lon = it.lon,
         lat = it.lat,
         onError = { message ->
@@ -164,7 +164,9 @@ class WeatherViewModel @Inject constructor(
       combine(weatherFlow, alert) { weather, alertBean ->
         kotlin.run {
           // 和风天气的天气数据+彩云的天气预警贴士(彩云接口请求失败不影响显示)
-          weather?.descriptionForToday = alertBean?.description ?: ""
+          weather?.descriptionForToday = alertBean?.forecastKeypoint ?: ""
+          weather?.descriptionForToWeek = alertBean?.description?: ""
+          weather?.alerts = alertBean?.alerts ?: listOf()
           weather
         }
       }.collectLatest {

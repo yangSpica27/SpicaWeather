@@ -3,12 +3,12 @@ package me.spica.weather.network.hefeng.mapper
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.ApiSuccessModelMapper
 import me.spica.weather.model.weather.*
+import me.spica.weather.network.caiyun.CaiyunBean
 import me.spica.weather.network.hefeng.HeCode
 import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
 import me.spica.weather.network.hefeng.hourly.HourlyWeather
 import me.spica.weather.network.hefeng.index.LifeIndex
-import me.spica.weather.network.hefeng.minute.CaiyunBean
 import me.spica.weather.network.hefeng.now.NowWeather
 
 object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<DailyWeatherBean>> {
@@ -86,14 +86,18 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
 
 }
 
-object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, AlertBean> {
+object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBean> {
 
   @Throws(RuntimeException::class)
-  override fun map(apiErrorResponse: ApiResponse.Success<CaiyunBean>): AlertBean {
+  override fun map(apiErrorResponse: ApiResponse.Success<CaiyunBean>): CaiyunExtendBean {
     if (apiErrorResponse.data.status == "ok") {
-      return AlertBean(
-        description = apiErrorResponse.data.result.forecastKeypoint,
-        warning = ""
+
+      return CaiyunExtendBean(
+        alerts = apiErrorResponse.data.result.alert.content.map {
+          AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
+        }.toList(),
+        description = apiErrorResponse.data.result.hourly.description,
+        forecastKeypoint = apiErrorResponse.data.result.forecastKeypoint
       )
     } else {
       throw java.lang.RuntimeException(apiErrorResponse.response.message())

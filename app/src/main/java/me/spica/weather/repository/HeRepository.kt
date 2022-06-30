@@ -113,7 +113,7 @@ class HeRepository(private val heClient: HeClient) : Repository {
       }
     }.flowOn(Dispatchers.IO)
 
-  override fun fetchMinute(lon: String, lat: String, onError: (String?) -> Unit) =
+  override fun fetchCaiyunExtend(lon: String, lat: String, onError: (String?) -> Unit) =
     flow {
       val response = heClient.getMinute(lon, lat)
       response.suspendOnSuccess(SuccessMinutelyMapper) {

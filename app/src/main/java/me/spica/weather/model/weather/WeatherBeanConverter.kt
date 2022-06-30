@@ -17,7 +17,11 @@ class WeatherBeanConverter {
 
   private val airAdapter = moshi.adapter(AirBean::class.java)
 
-  private val alertAdapter = moshi.adapter(AlertBean::class.java)
+  private val listOfAlertBeanType = Types.newParameterizedType(
+    List::class.java, AlertBean::class.java
+  )
+
+  private val alertAdapter = moshi.adapter<List<AlertBean>>(listOfAlertBeanType)
 
   private val listOfHourlyType = Types.newParameterizedType(
     List::class.java, HourlyWeatherBean::class.java
@@ -95,14 +99,14 @@ class WeatherBeanConverter {
     return airAdapter.fromJson(value)
   }
 
-
-  fun stringToAlertBean(value: String): AlertBean? {
-    return alertAdapter.fromJson(value)
+  @TypeConverter
+  fun stringToAlertBean(value: String): List<AlertBean> {
+    return alertAdapter.fromJson(value) ?: listOf()
   }
 
-
-  fun alertBeanToString(alertBean: AlertBean): String {
-    return alertAdapter.toJson(alertBean)
+  @TypeConverter
+  fun alertBeanToString(alertBeans: List<AlertBean>): String {
+    return alertAdapter.toJson(alertBeans)
   }
 
 }
