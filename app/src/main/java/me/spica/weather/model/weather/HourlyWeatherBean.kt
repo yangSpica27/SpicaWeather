@@ -1,6 +1,8 @@
 package me.spica.weather.model.weather
 
 import com.squareup.moshi.JsonClass
+import me.spica.weather.common.WeatherCodeUtils
+import me.spica.weather.common.WeatherType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,7 +21,12 @@ data class HourlyWeatherBean(
     val windPa: Int, // 气压
     val weatherName: String,
     val pop: Int, // 降雨概率
-)
+){
+
+    fun getWeatherType(): WeatherType {
+        return WeatherCodeUtils.getWeatherCode(iconId)
+    }
+}
 
 fun me.spica.weather.network.hefeng.hourly.Hourly.toHourlyWeatherBean(): HourlyWeatherBean {
     return HourlyWeatherBean(

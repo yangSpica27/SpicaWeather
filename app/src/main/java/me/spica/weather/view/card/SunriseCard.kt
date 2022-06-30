@@ -53,7 +53,7 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
         val subTitle = weather.dailyWeather[0].moonParse
         binding.sunriseView.bindTime(startTime, endTime)
         binding.sunriseView.themeColor =
-            WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor()
+            weather.getWeatherType().getThemeColor()
         doOnMainThreadIdle({
             binding.tvTitle.text = String.format(
                 context.getString(R.string.sunrise_sunset_time),

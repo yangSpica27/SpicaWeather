@@ -46,9 +46,7 @@ class TipsCard : RelativeLayout, SpicaWeatherCard{
 
     @SuppressLint("NotifyDataSetChanged")
     override fun bindData(weather: Weather) {
-        val themeColor = WeatherCodeUtils.getWeatherCode(
-            weather.todayWeather.iconId.toString()
-        ).getThemeColor()
+        val themeColor = weather.getWeatherType().getThemeColor()
         binding.cardName.setTextColor(themeColor)
         val items = weather.lifeIndexes
             tipAdapter.items.clear()

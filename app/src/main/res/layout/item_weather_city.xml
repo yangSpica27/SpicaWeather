@@ -3,15 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@drawable/bg_card"
+    android:backgroundTint="@color/colorAccent"
     android:layout_height="wrap_content"
-    android:transitionName="shared_element_container"
-    android:background="@color/white"
-    android:padding="12dp">
+    android:transitionName="shared_element_container">
+
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="12dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -21,8 +26,11 @@
         android:id="@+id/tv_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:paddingBottom="12dp"
         android:text="东经113° 北纬43°"
         app:layout_constraintTop_toBottomOf="@+id/tv_city_name" />
 
@@ -30,6 +38,8 @@
         android:id="@+id/tv_is_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginEnd="12dp"
         android:text="当前选择"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_city_name"

@@ -15,124 +15,124 @@ import java.util.*
 
 class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>() {
 
-    val items = mutableListOf<DailyWeatherBean>()
+  val items = mutableListOf<DailyWeatherBean>()
 
-    // 格式化
-    private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
+  // 格式化
+  private val sdf2 = SimpleDateFormat("M月dd日", Locale.CHINA)
 
-    // 格式化为"周几"
-    private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
+  // 格式化为"周几"
+  private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
 
-    // 用于排序的列表
-    private val sortList = mutableListOf<DailyWeatherBean>()
+  // 用于排序的列表
+  private val sortList = mutableListOf<DailyWeatherBean>()
 
-    //点击监听
-    var itemClickListener: (DailyWeatherBean) -> Unit = {}
+  //点击监听
+  var itemClickListener: (DailyWeatherBean) -> Unit = {}
 
-    // 最近几日最低气温中最低的
-    private var minTempTop = 0
+  // 最近几日最低气温中最低的
+  private var minTempTop = 0
 
-    // 最近几日最低气温中最高的
-    private var maxTempTop = 0
+  // 最近几日最低气温中最高的
+  private var maxTempTop = 0
 
-    // 最近几日最高气温中最低的
-    private var minTempBottom = 0
+  // 最近几日最高气温中最低的
+  private var minTempBottom = 0
 
-    // 最近几日最高气温中最高的
-    private var maxTempBottom = 0
+  // 最近几日最高气温中最高的
+  private var maxTempBottom = 0
 
-    class ViewHolder(val itemDayWeatherBinding: ItemDayWeatherBinding) :
-        RecyclerView.ViewHolder(itemDayWeatherBinding.root)
+  class ViewHolder(val itemDayWeatherBinding: ItemDayWeatherBinding) :
+    RecyclerView.ViewHolder(itemDayWeatherBinding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemDayWeatherBinding: ItemDayWeatherBinding = ItemDayWeatherBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(itemDayWeatherBinding)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    val itemDayWeatherBinding: ItemDayWeatherBinding = ItemDayWeatherBinding
+      .inflate(LayoutInflater.from(parent.context), parent, false)
+    return ViewHolder(itemDayWeatherBinding)
+  }
+
+  // 获取最高低期望用于计算折线图对应坐标
+  fun syncTempMaxAndMin() {
+    sortList.clear()
+    sortList.addAll(items)
+    sortList.sortBy {
+      it.maxTemp
     }
-
-    // 获取最高低期望用于计算折线图对应坐标
-    fun syncTempMaxAndMin() {
-        sortList.clear()
-        sortList.addAll(items)
-        sortList.sortBy {
-            it.maxTemp
-        }
-        maxTempTop = sortList.last().maxTemp
-        minTempTop = sortList.first().maxTemp
-        sortList.sortBy {
-            it.minTemp
-        }
-        maxTempBottom = sortList.last().minTemp
-        minTempBottom = sortList.first().minTemp
+    maxTempTop = sortList.last().maxTemp
+    minTempTop = sortList.first().maxTemp
+    sortList.sortBy {
+      it.minTemp
     }
+    maxTempBottom = sortList.last().minTemp
+    minTempBottom = sortList.first().minTemp
+  }
 
-    @Suppress("DEPRECATION")
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val themeColor = WeatherCodeUtils.getWeatherCode(items[0].iconId.toString()).getThemeColor()
-        items[position].let {
+  @Suppress("DEPRECATION")
+  @SuppressLint("SetTextI18n")
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val themeColor = items[0].getWeatherType().getThemeColor()
+    items[position].let {
 
-            holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime)
-            holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime)
+      holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime)
+      holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime)
 
-            holder.itemDayWeatherBinding.itemLineMax.themeColor = themeColor
-            holder.itemDayWeatherBinding.itemLineMin.themeColor = themeColor
+      holder.itemDayWeatherBinding.itemLineMax.themeColor = themeColor
+      holder.itemDayWeatherBinding.itemLineMin.themeColor = themeColor
 
-            holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
-            holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
-            holder.itemDayWeatherBinding.itemLineMin.maxValue = maxTempBottom
-            holder.itemDayWeatherBinding.itemLineMin.minValue = minTempBottom
+      holder.itemDayWeatherBinding.itemLineMax.maxValue = maxTempTop
+      holder.itemDayWeatherBinding.itemLineMax.minValue = minTempTop
+      holder.itemDayWeatherBinding.itemLineMin.maxValue = maxTempBottom
+      holder.itemDayWeatherBinding.itemLineMin.minValue = minTempBottom
 
-            holder.itemDayWeatherBinding.root.setOnClickListener {
-                itemClickListener(items[position])
-            }
+      holder.itemDayWeatherBinding.root.setOnClickListener {
+        itemClickListener(items[position])
+      }
 
-            if (position == 0) {
-                // 首个item不绘制左半部分
-                holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = false
-                holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = false
-            } else {
-                holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = true
-                holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = true
-                holder.itemDayWeatherBinding.itemLineMax.lastValue =
-                    items[position - 1].maxTemp
-                holder.itemDayWeatherBinding.itemLineMin.lastValue =
-                    items[position - 1].minTemp
-            }
+      if (position == 0) {
+        // 首个item不绘制左半部分
+        holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = false
+        holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = false
+      } else {
+        holder.itemDayWeatherBinding.itemLineMax.drawLeftLine = true
+        holder.itemDayWeatherBinding.itemLineMin.drawLeftLine = true
+        holder.itemDayWeatherBinding.itemLineMax.lastValue =
+          items[position - 1].maxTemp
+        holder.itemDayWeatherBinding.itemLineMin.lastValue =
+          items[position - 1].minTemp
+      }
 
-            holder.itemDayWeatherBinding.itemLineMax.currentValue =
-                items[position].maxTemp
+      holder.itemDayWeatherBinding.itemLineMax.currentValue =
+        items[position].maxTemp
 
-            holder.itemDayWeatherBinding.itemLineMin.currentValue =
-                items[position].minTemp
-            Timber.e("precip==" + items[position].precip)
-            holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
+      holder.itemDayWeatherBinding.itemLineMin.currentValue =
+        items[position].minTemp
+      Timber.e("precip==" + items[position].precip)
+      holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
 //            holder.itemDayWeatherBinding.icon.rainfallProbability = 60
-            holder.itemDayWeatherBinding.icon.setAnimation(
-                WeatherCodeUtils.getWeatherCode(items[position].iconId.toString()).getAnimRes()
-            )
+      holder.itemDayWeatherBinding.icon.setAnimation(
+          items[position].getWeatherType().getAnimRes()
+      )
 
-            holder.itemDayWeatherBinding.icon.progress = .5f
-            holder.itemDayWeatherBinding.icon.setMaxProgress(.5f)
-            holder.itemDayWeatherBinding.icon.setOnClickListener {
-                holder.itemDayWeatherBinding.icon.playAnimation()
-            }
+      holder.itemDayWeatherBinding.icon.progress = .5f
+      holder.itemDayWeatherBinding.icon.setMaxProgress(.5f)
+      holder.itemDayWeatherBinding.icon.setOnClickListener {
+        holder.itemDayWeatherBinding.icon.playAnimation()
+      }
 
 
-            if (position == items.size - 1) {
-                // 末尾item不绘制左半部分
-                holder.itemDayWeatherBinding.itemLineMax.drawRightLine = false
-                holder.itemDayWeatherBinding.itemLineMin.drawRightLine = false
-            } else {
-                holder.itemDayWeatherBinding.itemLineMax.drawRightLine = true
-                holder.itemDayWeatherBinding.itemLineMin.drawRightLine = true
-                holder.itemDayWeatherBinding.itemLineMax.nextValue =
-                    items[position + 1].maxTemp
-                holder.itemDayWeatherBinding.itemLineMin.nextValue =
-                    items[position + 1].minTemp
-            }
-        }
+      if (position == items.size - 1) {
+        // 末尾item不绘制左半部分
+        holder.itemDayWeatherBinding.itemLineMax.drawRightLine = false
+        holder.itemDayWeatherBinding.itemLineMin.drawRightLine = false
+      } else {
+        holder.itemDayWeatherBinding.itemLineMax.drawRightLine = true
+        holder.itemDayWeatherBinding.itemLineMin.drawRightLine = true
+        holder.itemDayWeatherBinding.itemLineMax.nextValue =
+          items[position + 1].maxTemp
+        holder.itemDayWeatherBinding.itemLineMin.nextValue =
+          items[position + 1].minTemp
+      }
     }
+  }
 
-    override fun getItemCount(): Int = items.size
+  override fun getItemCount(): Int = items.size
 }

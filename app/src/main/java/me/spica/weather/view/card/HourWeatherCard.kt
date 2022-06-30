@@ -48,7 +48,7 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
   override fun bindData(weather: Weather) {
     val items = weather.hourlyWeather
 
-    binding.cardName.setTextColor(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId.toString()).getThemeColor())
+    binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
 
     doOnMainThreadIdle({
       binding.tipDesc.text = weather.descriptionForToday

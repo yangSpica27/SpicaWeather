@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
 
     <me.spica.weather.view.weather_bg.NowWeatherView
         android:id="@+id/weather_bg"
@@ -15,6 +16,23 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
     </me.spica.weather.view.weather_bg.NowWeatherView>
+
+    <TextView
+        android:id="@+id/tv_alert_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="4dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:backgroundTint="#80FFFFFF"
+        android:layout_marginStart="14dp"
+        android:background="@drawable/bg_round"
+        android:paddingHorizontal="14dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textColor="@color/l6"
+        android:text="海淀区气象台发布大风蓝色预警[IV/一般]"
+        app:layout_constraintTop_toTopOf="@id/weather_bg"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_now"
@@ -74,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="14dp"
-        android:drawableLeft="@drawable/ic_time"
+        android:drawableStart="@drawable/ic_time"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:drawableTint="@color/white"

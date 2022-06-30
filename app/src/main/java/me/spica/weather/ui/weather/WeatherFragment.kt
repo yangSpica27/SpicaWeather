@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.Preference
-import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.FragmentListBinding
@@ -84,13 +83,9 @@ class WeatherFragment(
             mainCardAdapter.notifyData(it)
           })
           // 更新页面的主题颜色
-          currentColor = WeatherCodeUtils.getWeatherCode(
-            it.todayWeather.iconId.toString()
-          ).getThemeColor()
+          currentColor = it.getWeatherType().getThemeColor()
           // 更新页面的动画模式
-          currentWeatherType = WeatherCodeUtils.getWeatherCode(
-            it.todayWeather.iconId.toString()
-          ).getWeatherAnimType()
+          currentWeatherType = it.getWeatherType().getWeatherAnimType()
           // 回传
           onColorChange(currentColor, currentWeatherType)
         }
