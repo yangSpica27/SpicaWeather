@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.webkit.WebView
+import androidx.core.view.updatePaddingRelative
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_CROSS
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_THROUGH
@@ -18,7 +19,7 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityWebviewBinding
 import me.spica.weather.tools.doOnMainThreadIdle
-import me.spica.weather.ui.life.LifeActivity
+import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.view.WebViewPool
 
 
@@ -47,7 +48,11 @@ class WebViewActivity : BindingActivity<ActivityWebviewBinding>() {
 
 
   override fun initializer() {
-    val url = intent.getIntExtra(url_tag_name, 0).toString()
+    val url = intent.getStringExtra(url_tag_name).toString()
+    val decorView = window.decorView //获取屏幕的decorView
+
+    decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN //设置全屏
+
     doOnMainThreadIdle(
       {
         webView = WebViewPool.instance.getWebView(this)

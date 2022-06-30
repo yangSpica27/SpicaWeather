@@ -16,22 +16,19 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/textField"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_cityName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="14dp"
-            app:endIconMode="clear_text"
+            android:paddingVertical="12dp"
+            android:hint="城市名称"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingHorizontal="12dp"
             android:layout_marginVertical="12dp"
-            android:hint="@string/key_word">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_cityName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:backgroundTint="@color/white"
+            android:background="@drawable/bg_round"
+            android:layout_marginHorizontal="14dp" />
 
     </LinearLayout>
 

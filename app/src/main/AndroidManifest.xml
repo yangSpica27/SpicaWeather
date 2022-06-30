@@ -32,6 +32,7 @@
         android:icon="@drawable/ic_app"
         android:label="@string/app_name"
         android:name=".App"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true">
 
         <!-- 已适配存储分区特性 -->

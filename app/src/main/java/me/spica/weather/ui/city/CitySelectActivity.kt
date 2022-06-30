@@ -70,9 +70,10 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
         this
             .dividerBuilder()
-            .size(1.dp.toInt())
-            .colorRes(R.color.line_divider)
+            .size(12.dp.toInt())
+            .colorRes(android.R.color.transparent)
             .showFirstDivider()
+            .showLastDivider()
             .build()
             .addTo(viewBinding.rvList)
 
