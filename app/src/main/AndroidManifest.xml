@@ -84,6 +84,11 @@
             android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".ui.webview.WebViewActivity"
+            android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            />
 
         <meta-data
             android:name="android.max_aspect"

@@ -33,7 +33,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-  private val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
+  val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
   override var animatorView: View = this
 

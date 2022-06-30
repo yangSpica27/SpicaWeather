@@ -19,6 +19,7 @@ data class NowWeatherBean(
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherName: String,
+    var fxLink:String =""
 ) : Parcelable
 
 fun me.spica.weather.network.hefeng.now.Now.toNowWeatherBean(): NowWeatherBean {

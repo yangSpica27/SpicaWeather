@@ -33,7 +33,9 @@ object SuccessNowWeatherMapper : ApiSuccessModelMapper<NowWeather, NowWeatherBea
       NowWeatherBean {
 
     if (apiErrorResponse.data.code == HeCode.Ok.code) {
-      return apiErrorResponse.data.now.toNowWeatherBean()
+      val now = apiErrorResponse.data.now.toNowWeatherBean()
+      now.fxLink = apiErrorResponse.data.fxLink
+      return now
     } else {
       throw RuntimeException(apiErrorResponse.data.code)
     }
@@ -78,7 +80,9 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
   @Throws(RuntimeException::class)
   override fun map(apiErrorResponse: ApiResponse.Success<Air>): AirBean {
     if (apiErrorResponse.data.code == HeCode.Ok.code) {
-      return apiErrorResponse.data.now.toAir()
+      val air = apiErrorResponse.data.now.toAir()
+      air.fxLink = apiErrorResponse.data.fxLink
+      return air
     } else {
       throw java.lang.RuntimeException(apiErrorResponse.data.code)
     }

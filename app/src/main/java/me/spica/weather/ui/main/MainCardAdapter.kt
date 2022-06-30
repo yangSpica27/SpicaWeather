@@ -9,10 +9,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
-import me.spica.weather.tools.dp
 import me.spica.weather.ui.life.LifeActivity
+import me.spica.weather.ui.webview.WebViewActivity
 import me.spica.weather.view.card.*
-import timber.log.Timber
 
 class MainCardAdapter(
   private val activity: Activity,
@@ -21,9 +20,6 @@ class MainCardAdapter(
   private val scrollview: NestedScrollView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
-  companion object {
-    val firsItemMargin = 100.dp
-  }
 
   private val items = arrayListOf<HomeCardType>()
 
@@ -69,6 +65,11 @@ class MainCardAdapter(
       HomeCardType.NOW_WEATHER.code -> {
         val itemView = NowWeatherCard(parent.context)
         itemView.layoutParams = lp
+        itemView.setOnClickListener {
+          if (weather?.todayWeather?.fxLink?.isEmpty() == false) {
+            WebViewActivity.startActivity(activity, itemView.binding.weatherBg, weather?.todayWeather?.fxLink.toString())
+          }
+        }
         return AbstractMainViewHolder(itemView, itemView)
       }
       HomeCardType.SUNRISE.code -> {
@@ -79,6 +80,11 @@ class MainCardAdapter(
       HomeCardType.AIR.code -> {
         val itemView = AirCard(parent.context)
         itemView.layoutParams = lp
+        itemView.setOnClickListener {
+          if (weather?.air?.fxLink?.isEmpty() == false) {
+            WebViewActivity.startActivity(activity, it, weather?.air?.fxLink.toString())
+          }
+        }
         return AbstractMainViewHolder(itemView, itemView)
       }
       else -> {
@@ -95,18 +101,12 @@ class MainCardAdapter(
   }
 
   override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
-    if (position == 0) {
-//            holder.itemView.updatePadding(
-//                top = firsItemMargin.toInt()*2
-//            )
-    }
     holder.reset()
     weather?.let {
       scope.launch(Dispatchers.Default) {
         holder.bindView(it)
       }
     }
-    Timber.e("绑定视图${position}")
     recyclerView.post {
       holder.checkEnterScreen(scrollview)
     }
