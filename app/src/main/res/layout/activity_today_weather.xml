@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.today.TodayWeatherActivity"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_left"
-        app:title="天气详情" />
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        app:elevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/status_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                app:navigationIcon="@drawable/ic_left"
+                app:title="天气详情" />
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:scrollbars="none"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
-        android:background="@drawable/bg_an"
-        android:backgroundTint="#1F787474"
-        android:layout_weight="1">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:backgroundTint="@color/window_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,7 +134,6 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,7 +195,6 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -228,7 +247,6 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -255,7 +273,6 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -264,8 +281,8 @@
                     android:layout_marginEnd="12dp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
                     android:id="@+id/tv_night_wind_speed"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1-2级"
                     android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
@@ -460,4 +477,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

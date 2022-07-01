@@ -64,9 +64,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
   private val viewModel: MainViewModel by viewModels()
 
   private var mFirstCardMarginTop = 0
+
   private var mScrollY = 0
+
   private var mLastAppBarTranslationY = 0f
+
   private val listScrollerListener =
+
     View.OnScrollChangeListener { view, _, scrollY, _, _ ->
 
       run {
@@ -75,7 +79,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         } else {
           -1
         }
+
         mScrollY = scrollY
+
         mLastAppBarTranslationY = viewBinding.appbarLayout.translationY
 
         viewBinding.appbarLayout.translationY = -mScrollY.toFloat()
