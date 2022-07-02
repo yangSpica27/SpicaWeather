@@ -133,7 +133,7 @@ class MinTempLineItem : View {
 
         linePaint.maskFilter = BlurMaskFilter(1.dp, BlurMaskFilter.Blur.SOLID)
 
-        Timber.i("======================")
+
 
         if (drawLeftLine) {
             val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
@@ -163,10 +163,8 @@ class MinTempLineItem : View {
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
-            Timber.i("lastP$lastPointY")
         }
 
-        Timber.i("currentP$pointY")
 
         if (drawRightLine) {
 

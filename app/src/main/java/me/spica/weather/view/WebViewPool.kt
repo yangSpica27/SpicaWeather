@@ -92,11 +92,10 @@ class WebViewPool {
   }
 
   companion object {
-    private const val APP_CACAHE_DIRNAME = "webCache"
     private val available: MutableList<WebView> = ArrayList()
     private val inUse: MutableList<WebView> = ArrayList()
     private val lock = byteArrayOf()
-    private var maxSize = 2
+    private var maxSize = 1
     private const val startTimes: Long = 0
 
     @Volatile
@@ -144,7 +143,7 @@ class WebViewPool {
       webSettings.displayZoomControls = true // 隐藏原生的缩放控件
 
       // 其他细节操作
-      webSettings.cacheMode = WebSettings.LOAD_DEFAULT// 关闭webview中缓存
+      webSettings.cacheMode = WebSettings.LOAD_NO_CACHE// 关闭webview中缓存
       webSettings.allowFileAccess = true // 设置可以访问文件
       webSettings.javaScriptCanOpenWindowsAutomatically = true // 支持通过JS打开新窗口
       webSettings.loadsImagesAutomatically = true // 支持自动加载图片
