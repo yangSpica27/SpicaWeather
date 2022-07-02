@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.ui.life.LifeActivity
-import me.spica.weather.ui.webview.WebViewActivity
 import me.spica.weather.view.card.*
 
 class MainCardAdapter(
@@ -67,7 +66,8 @@ class MainCardAdapter(
         itemView.layoutParams = lp
         itemView.setOnClickListener {
           if (weather?.todayWeather?.fxLink?.isEmpty() == false) {
-            WebViewActivity.startActivity(activity, itemView.binding.weatherBg, weather?.todayWeather?.fxLink.toString())
+            // LifeActivity.startActivity(activity, itemView)
+//            WebViewActivity.startActivity(activity, itemView.binding.weatherBg, weather?.todayWeather?.fxLink.toString())
           }
         }
         return AbstractMainViewHolder(itemView, itemView)
@@ -82,7 +82,8 @@ class MainCardAdapter(
         itemView.layoutParams = lp
         itemView.setOnClickListener {
           if (weather?.air?.fxLink?.isEmpty() == false) {
-            WebViewActivity.startActivity(activity, it, weather?.air?.fxLink.toString())
+            LifeActivity.startActivity(activity, itemView)
+//            WebViewActivity.startActivity(activity, it, weather?.air?.fxLink.toString())
           }
         }
         return AbstractMainViewHolder(itemView, itemView)

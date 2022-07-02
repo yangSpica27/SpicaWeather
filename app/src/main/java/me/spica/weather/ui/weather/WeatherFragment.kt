@@ -35,9 +35,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class WeatherFragment(
   private val scrollListener: View.OnScrollChangeListener
-) : BindingFragment<FragmentListBinding>(
-
-),
+) : BindingFragment<FragmentListBinding>(),
   SharedPreferences.OnSharedPreferenceChangeListener {
 
   private val viewModel by viewModels<WeatherViewModel>()

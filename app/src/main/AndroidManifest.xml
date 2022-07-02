@@ -79,6 +79,7 @@
         <activity
             android:name=".ui.today.TodayWeatherActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.life.LifeActivity"

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.spica.weather.R
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
+import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.ItemWeatherCityBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -51,12 +52,17 @@ class WeatherCityAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val bgDrawable = holder.itemView.context.getDrawable(R.drawable.bg_card)
     bgDrawable?.colorFilter =
-      PorterDuffColorFilter(WeatherCodeUtils.getWeatherCode(
-        diffUtil.currentList[position].iconId
+      PorterDuffColorFilter(
+        WeatherCodeUtils.getWeatherCode(
+          diffUtil.currentList[position].iconId
+        )
+          .getThemeColor(), PorterDuff.Mode.SRC_IN
       )
-        .getThemeColor(), PorterDuff.Mode.SRC_IN)
     holder.itemBinding.root.background = bgDrawable
     holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
+    holder.itemBinding.nowWeatherBg.currentWeatherType = WeatherCodeUtils.getWeatherCode(
+      diffUtil.currentList[position].iconId
+    ).getWeatherAnimType()
     holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon} 北纬${diffUtil.currentList[position].lat}"
     if (diffUtil.currentList[position].isSelected) {
       holder.itemBinding.tvIsDefault.show()
