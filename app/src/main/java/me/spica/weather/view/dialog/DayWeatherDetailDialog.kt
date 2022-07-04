@@ -11,7 +11,8 @@ import androidx.fragment.app.FragmentManager
 import me.spica.weather.databinding.DialogDayDetailBinding
 import me.spica.weather.tools.dp
 
-class DayWeatherDetailDialog(private val screenActivity: Activity) : BaseDialogFragment<DialogDayDetailBinding>() {
+class DayWeatherDetailDialog(private val screenActivity: Activity) :
+  BaseDialogFragment<DialogDayDetailBinding>() {
 
 
   // 进入动画
@@ -37,14 +38,16 @@ class DayWeatherDetailDialog(private val screenActivity: Activity) : BaseDialogF
   // 创建进入动画
   private fun createEnterAnim() {
     if (enterOrExitAnim?.isRunning == true) enterOrExitAnim?.cancel()
-    enterOrExitAnim = ValueAnimator.ofFloat(viewBinding.layoutBg.height, 20.dp)
+    enterOrExitAnim = ValueAnimator.ofFloat(viewBinding.containerMain.height * 1f, 70.dp)
     enterOrExitAnim?.apply {
       duration = 550L
       addUpdateListener {
-        viewBinding.layoutBg.translationY = it.animatedValue as Float
-        val zoomScale: Float = 1 - (viewBinding.layoutBg.getHeight() - viewBinding.layoutBg.translationY) * 0.00002f
+        viewBinding.containerMain.alpha = it.animatedFraction
+        viewBinding.containerMain.translationY = it.animatedValue as Float
+        val zoomScale: Float = 1 - (viewBinding.layoutBg.getHeight() - viewBinding.containerMain.translationY) * 0.00004f
         viewBinding.layoutBg.scaleX = zoomScale
         viewBinding.layoutBg.scaleY = zoomScale
+        viewBinding.layoutBg.setRadius(18.dp * it.animatedFraction)
       }
     }
   }
@@ -56,29 +59,32 @@ class DayWeatherDetailDialog(private val screenActivity: Activity) : BaseDialogF
       createExitAnim()
       enterOrExitAnim?.start()
     }
-    viewBinding.layoutBg.postDelayed({
+    viewBinding.layoutBg.post {
       createEnterAnim()
       enterOrExitAnim?.start()
-    }, 500)
+    }
   }
 
   // 创建退出动画
   private fun createExitAnim() {
     if (enterOrExitAnim?.isRunning == true) enterOrExitAnim?.cancel()
-    enterOrExitAnim = ValueAnimator.ofFloat(viewBinding.layoutBg.translationY, viewBinding.layoutBg.height)
+    enterOrExitAnim = ValueAnimator.ofFloat(viewBinding.containerMain.translationY, viewBinding.containerMain.height * 1f)
     enterOrExitAnim?.apply {
       duration = 550L
       addUpdateListener {
-        viewBinding.layoutBg.translationY = it.animatedValue as Float
-        val zoomScale: Float = 1 - (viewBinding.layoutBg.getHeight() - viewBinding.layoutBg.translationY) * 0.00002f
+        viewBinding.containerMain.alpha = 1 - it.animatedFraction
+        viewBinding.containerMain.translationY = it.animatedValue as Float
+        val zoomScale: Float = 1 - (viewBinding.layoutBg.getHeight() - viewBinding.containerMain.translationY) * 0.00004f
         viewBinding.layoutBg.scaleX = zoomScale
         viewBinding.layoutBg.scaleY = zoomScale
+        viewBinding.layoutBg.setRadius(18.dp - 18.dp * it.animatedFraction)
         doOnEnd {
           dismiss()
         }
       }
     }
   }
+
 
   override fun setupViewBinding(inflater: LayoutInflater, container: ViewGroup?): DialogDayDetailBinding =
     DialogDayDetailBinding.inflate(inflater, container, false)

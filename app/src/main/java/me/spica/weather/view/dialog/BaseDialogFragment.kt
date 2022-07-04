@@ -3,7 +3,6 @@ package me.spica.weather.view.dialog
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import me.spica.weather.R
+
+
 
 abstract class BaseDialogFragment<ViewBindingType : ViewBinding> : DialogFragment(), LifecycleEventObserver {
 
@@ -39,15 +40,16 @@ abstract class BaseDialogFragment<ViewBindingType : ViewBinding> : DialogFragmen
     lp.height = WindowManager.LayoutParams.MATCH_PARENT
     lp.dimAmount = 0f
     lp.format = PixelFormat.TRANSPARENT
+    lp.dimAmount = 0.0f
+
 
     dialogWindow.attributes = lp
-    dialogWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     dialogWindow.decorView.setPadding(0, 0, 0, 0)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-      lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-    }
     dialogWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+    dialogWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    val options = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    dialogWindow.decorView.systemUiVisibility = options
 
   }
 

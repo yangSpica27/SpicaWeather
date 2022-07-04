@@ -199,7 +199,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     viewBinding.toolbar.tsLocation.setOnClickListener {
       val dayWeatherDetailDialog = DayWeatherDetailDialog(this)
-      dayWeatherDetailDialog.show(supportFragmentManager, "")
+      dayWeatherDetailDialog.show(supportFragmentManager, "one_detail")
     }
 
   }
@@ -258,17 +258,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
   }
 
-  // 背景颜色切换动画
-  private val bgColorAnim by lazy {
-    ObjectAnimator.ofInt(ContextCompat.getColor(this, R.color.window_background))
-      .apply {
-        duration = 350
-        setEvaluator(SpicaColorEvaluator())
-        addUpdateListener {
-          viewBinding.contentView.setBackgroundColor(it.animatedValue as Int)
-        }
-      }
-  }
+
 
 
   @SuppressLint("NotifyDataSetChanged")
@@ -281,20 +271,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     viewBinding.viewPager.adapter = mainPagerAdapter
 
 
-    // 根据当前天气切换背景颜色
-    mainPagerAdapter.onColorChange = { color, type ->
-      doOnMainThreadIdle({
 
-//        if (bgColorAnim.isRunning) bgColorAnim.cancel()
-//        bgColorAnim.setIntValues(bgColorAnim.animatedValue as Int, color)
-//        bgColorAnim.doOnStart {
-//          viewBinding.weatherView.alpha = 0f
-//        }
-//        bgColorAnim.start()
-//
-//        viewBinding.weatherView.currentWeatherType = type
-      })
-    }
 
     lifecycleScope.launch {
       viewModel.allCityFlow.collectLatest {

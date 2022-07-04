@@ -22,28 +22,26 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     
     public ActivityScreenShotImageView(Context context) {
         super(context);
-        init(null);
+        init();
     }
     
     public ActivityScreenShotImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init();
     }
     
     public ActivityScreenShotImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init();
     }
     
-    private void init(AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-        }
+    private void init() {
+        setLayerType(LAYER_TYPE_HARDWARE, null);
     }
     
     public void setRadius(float mRadius) {
         this.mRadius = mRadius;
-        invalidate();
+        postInvalidate();
     }
     
     @Override
@@ -52,6 +50,8 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         width = getWidth();
         height = getHeight();
     }
+
+    private final Path path = new Path();
     
     @Override
     protected void onDraw(Canvas canvas) {
@@ -59,7 +59,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
             if (isScreenshotSuccess) {
                 canvas.drawColor(Color.BLACK);
             }
-            Path path = new Path();
+            path.reset();
             path.moveTo(mRadius, 0);
             path.lineTo(width - mRadius, 0);
             path.quadTo(width, 0, width, mRadius);
@@ -76,6 +76,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
             canvas.drawColor(Color.WHITE);
             super.onDraw(canvas);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -103,13 +104,10 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         }
         //先执行一次绘制，防止出现闪屏问题
         if (!inited) drawViewImage(contentView);
-        contentView.post(new Runnable() {
-            @Override
-            public void run() {
-                //当view渲染完成后再次通知刷新一下界面（当旋转屏幕执行时，很可能出现渲染延迟的问题）
-                drawViewImage(contentView);
-                inited = true;
-            }
+        contentView.post(() -> {
+            //当view渲染完成后再次通知刷新一下界面（当旋转屏幕执行时，很可能出现渲染延迟的问题）
+            drawViewImage(contentView);
+            inited = true;
         });
     }
 
