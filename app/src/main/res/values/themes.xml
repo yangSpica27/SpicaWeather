@@ -28,4 +28,17 @@
         <item name="android:clickable">true</item>
         <item name="android:stateListAnimator" tools:ignore="NewApi">@animator/touch_raise</item>
     </style>
+
+    <style name="BaseDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item><!-- 解决全屏时状态栏变黑 -->
+        <item name="android:backgroundDimEnabled">true</item>   <!-- 是否允许背景模糊 -->
+        <item name="android:windowIsTranslucent">true</item>    <!-- 是否半透明 -->
+        <item name="android:windowIsFloating">true</item>       <!-- 是否浮现在activity之上 -->
+        <item name="android:windowContentOverlay">@null</item>  <!-- 是否有遮盖 -->
+        <item name="android:backgroundDimAmount">0.8</item>     <!-- 设置背景模糊的透明度-->
+    </style>
 </resources>
