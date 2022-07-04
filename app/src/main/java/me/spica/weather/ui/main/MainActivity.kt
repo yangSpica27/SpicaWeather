@@ -15,7 +15,6 @@ import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.animation.doOnStart
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -43,6 +42,7 @@ import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.ui.city.CitySelectActivity
 import me.spica.weather.ui.city.WeatherCityActivity
 import me.spica.weather.ui.setting.SettingActivity
+import me.spica.weather.view.dialog.DayWeatherDetailDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import javax.inject.Inject
@@ -195,6 +195,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     viewBinding.btnPlus.setOnClickListener {
       startActivity(Intent(this, CitySelectActivity::class.java))
+    }
+
+    viewBinding.toolbar.tsLocation.setOnClickListener {
+      val dayWeatherDetailDialog = DayWeatherDetailDialog(this)
+      dayWeatherDetailDialog.show(supportFragmentManager, "")
     }
 
   }
