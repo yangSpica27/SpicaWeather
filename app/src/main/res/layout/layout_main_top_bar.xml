@@ -23,12 +23,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingStart="100dp"
+        android:layout_marginHorizontal="100dp"
         android:inAnimation="@anim/message_in_anim"
         android:outAnimation="@anim/message_out_anim"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingEnd="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center" />
 
