@@ -2,9 +2,11 @@ package me.spica.weather.view.dialog
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.MotionEvent
+import android.widget.RelativeLayout
+import android.widget.ScrollView
 
-class ContainerConstraintLayout : ConstraintLayout {
+class ContainerConstraintLayout : RelativeLayout {
 
   constructor(context: Context) : super(context)
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -20,5 +22,13 @@ class ContainerConstraintLayout : ConstraintLayout {
     yChangedListener(translationY)
   }
 
+
+  override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+    val scrollView: ScrollView? = getChildAt(0) as ScrollView?
+    scrollView?.let {
+      return true
+    }
+    return super.onInterceptTouchEvent(ev)
+  }
 
 }
