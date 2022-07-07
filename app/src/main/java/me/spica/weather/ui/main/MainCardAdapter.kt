@@ -2,12 +2,16 @@ package me.spica.weather.ui.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
+import com.kongzue.dialogx.dialogs.FullScreenDialog
+import com.kongzue.dialogx.interfaces.OnBindView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.spica.weather.R
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.ui.life.LifeActivity
 import me.spica.weather.view.card.*
@@ -23,6 +27,17 @@ class MainCardAdapter(
   private val items = arrayListOf<HomeCardType>()
 
   private var weather: Weather? = null
+
+
+  private val todayWeatherDetailDialog by lazy {
+    FullScreenDialog
+      .build()
+      .setCustomView(object : OnBindView<FullScreenDialog>(R.layout.activity_today_weather) {
+        override fun onBind(dialog: FullScreenDialog?, v: View?) {
+
+        }
+      })
+  }
 
 
   init {
@@ -65,10 +80,7 @@ class MainCardAdapter(
         val itemView = NowWeatherCard(parent.context)
         itemView.layoutParams = lp
         itemView.setOnClickListener {
-          if (weather?.todayWeather?.fxLink?.isEmpty() == false) {
-            // LifeActivity.startActivity(activity, itemView)
-//            WebViewActivity.startActivity(activity, itemView.binding.weatherBg, weather?.todayWeather?.fxLink.toString())
-          }
+          todayWeatherDetailDialog.show(activity)
         }
         return AbstractMainViewHolder(itemView, itemView)
       }

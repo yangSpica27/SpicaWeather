@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.kongzue.dialogx.DialogX
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
@@ -18,6 +19,7 @@ class App : Application() {
     super.onCreate()
     // 初始化AppCenter
     createAppCenter()
+    DialogX.init(this)
 //    WebViewPool.init(this)
     handlerDelegate()
   }
