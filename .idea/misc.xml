@@ -50,8 +50,13 @@
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_current_city.xml" value="0.16682113067655235" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_hot_view.xml" value="0.1417979610750695" />
         <entry key="..\:/AndroidStudioProjects/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.26927083333333335" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_edit_round.xml" value="0.229" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_right_round.xml" value="0.229" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_round.xml" value="0.229" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/ic_plus.xml" value="0.2075" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/rect_dialogtap.xml" value="0.229" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_about_me.xml" value="0.27239583333333334" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_city.xml" value="0.33" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_city_select.xml" value="0.27239583333333334" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_life.xml" value="0.27239583333333334" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_main.xml" value="0.33177083333333335" />

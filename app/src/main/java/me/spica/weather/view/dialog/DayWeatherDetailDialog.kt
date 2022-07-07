@@ -26,9 +26,6 @@ class DayWeatherDetailDialog(private val screenActivity: Activity) :
 
   private var originScrollY = 0
 
-  //
-  private var hasScrollerY = 0f
-
   @SuppressLint("ClickableViewAccessibility")
   override fun init() {
     viewBinding.layoutBg.setScreenshotActivity(screenActivity)
@@ -54,14 +51,18 @@ class DayWeatherDetailDialog(private val screenActivity: Activity) :
             if (isTouch) {
               touchDownY = motionEvent.y
               val changeY = touchDownY - oldY
-              if (viewBinding.scrollview.canScrollVertically(1) && viewBinding.containerMain.translationY == 70.dp) {
+
+              if (viewBinding.scrollview.canScrollVertically(-1) &&
+                viewBinding.containerMain.translationY.toInt() == 70.dp.toInt()
+              ) {
                 Timber.e("滑动内部")
                 viewBinding.scrollview.scrollY = -changeY.toInt() + originScrollY
               }
-              if (!viewBinding.scrollview.canScrollVertically(-1) || viewBinding.containerMain.translationY != 70.dp) {
-                Timber.e("滑动外部")
-                if (viewBinding.containerMain.translationY + changeY >= 60.dp)
-                  viewBinding.containerMain.translationY = 70.dp + changeY - (originScrollY)
+              if (!viewBinding.scrollview.canScrollVertically(-1) || viewBinding.containerMain.translationY > 70.dp) {
+                Timber.e("滑动外部${motionEvent.y}-${oldY}px")
+                if (viewBinding.containerMain.translationY + changeY >= 60.dp) {
+                  viewBinding.containerMain.translationY += changeY - (originScrollY)
+                }
               }
             }
           }

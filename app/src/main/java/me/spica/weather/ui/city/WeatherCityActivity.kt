@@ -1,5 +1,7 @@
 package me.spica.weather.ui.city
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
@@ -115,6 +117,17 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
 
     viewBinding.toolbar.setNavigationOnClickListener {
       finish()
+    }
+
+    viewBinding.btnSearch.setOnClickListener {
+      // 点击搜索
+      val intent = Intent(this, CitySelectActivity::class.java)
+      startActivity(
+        intent, ActivityOptions.makeSceneTransitionAnimation(
+          this,
+          viewBinding.btnSearch, "share_edit"
+        ).toBundle()
+      )
     }
 
     lifecycleScope.launch {

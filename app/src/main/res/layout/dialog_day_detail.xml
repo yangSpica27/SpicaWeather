@@ -15,7 +15,7 @@
         android:id="@+id/container_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
+        android:alpha="1"
         android:backgroundTint="@color/white"
         android:background="@drawable/bg_round">
 
@@ -29,7 +29,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/activity_today_weather"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:src="@drawable/ic_sunny"
+                    android:scaleType="fitXY"
+                    android:layout_height="1500dp"/>
+
 
             </LinearLayout>
 

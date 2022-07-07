@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -18,10 +19,10 @@ import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityCitySelectBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
 import me.spica.weather.ui.main.MainActivity
-import me.spica.weather.view.decorator.CityItemDecoration
 import javax.inject.Inject
 
 /**
@@ -48,6 +49,12 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     override fun afterTextChanged(edit: Editable) {
       rvItems.clear()
+
+      if (edit.toString().isEmpty()) {
+        cityAdapter.diffUtil.submitList(rvItems.toList())
+        return
+      }
+
       cityList.forEach {
         if (it.cityName.contains(edit.trim()) ||
           it.sortName.contains(edit.trim())
@@ -67,24 +74,32 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     FluidContentResizer.listen(this)
     viewBinding.etCityName.addTextChangedListener(textWatch)
 
-//        this
-//            .dividerBuilder()
-//            .size(12.dp.toInt())
-//            .colorRes(android.R.color.transparent)
-//            .showFirstDivider()
-//            .showLastDivider()
-//            .build()
-//            .addTo(viewBinding.rvList)
 
     val animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_slide_right)
     viewBinding.rvList.layoutAnimation = animation
-    viewBinding.rvList.addItemDecoration(CityItemDecoration(cityAdapter))
+
+    dividerBuilder()
+      .colorRes(android.R.color.transparent)
+      .size(12.dp.toInt())
+      .showFirstDivider()
+      .showLastDivider()
+      .build().addTo(viewBinding.rvList)
+
+
     viewBinding.rvList.adapter = cityAdapter
 
     // 设置点击item
     cityAdapter.itemClickListener = { cityBean ->
       cityViewModel.selectCity(cityBean)
-      finish()
+      supportFinishAfterTransition()
+    }
+
+    viewBinding.btnBack.setOnClickListener {
+      supportFinishAfterTransition()
+    }
+
+    viewBinding.btnCancel.setOnClickListener {
+      viewBinding.etCityName.setText("")
     }
 
     // 提示结果
@@ -101,12 +116,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     // 添加数据
     lifecycleScope.launch {
       rvItems.clear()
-      rvItems.addAll(
-        cityList.filter {
-          it.cityName.isNotEmpty()
-        }
-      )
-
       doOnMainThreadIdle({
         cityAdapter.diffUtil.submitList(rvItems.toList())
         viewBinding.rvList.scheduleLayoutAnimation()
@@ -115,10 +124,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     }
   }
 
-  override fun onBackPressed() {
-    super.onBackPressed()
-    startActivity(Intent(this, MainActivity::class.java))
-  }
+
 
   override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding =
     ActivityCitySelectBinding.inflate(inflater)

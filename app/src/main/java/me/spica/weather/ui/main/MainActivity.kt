@@ -1,7 +1,6 @@
 package me.spica.weather.ui.main
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
@@ -37,9 +36,10 @@ import me.spica.weather.base.BindingActivity
 import me.spica.weather.common.Preference
 import me.spica.weather.databinding.ActivityMainBinding
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.tools.*
+import me.spica.weather.tools.dp
+import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.tools.keyboard.FluidContentResizer
-import me.spica.weather.ui.city.CitySelectActivity
+import me.spica.weather.tools.toast
 import me.spica.weather.ui.city.WeatherCityActivity
 import me.spica.weather.ui.setting.SettingActivity
 import me.spica.weather.view.dialog.DayWeatherDetailDialog
@@ -194,7 +194,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     }
 
     viewBinding.btnPlus.setOnClickListener {
-      startActivity(Intent(this, CitySelectActivity::class.java))
+      startActivity(Intent(this, WeatherCityActivity::class.java))
     }
 
     viewBinding.toolbar.tsLocation.setOnClickListener {
@@ -257,8 +257,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     )
 
   }
-
-
 
 
   @SuppressLint("NotifyDataSetChanged")
