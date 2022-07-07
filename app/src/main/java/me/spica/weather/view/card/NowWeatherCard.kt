@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
@@ -82,7 +83,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
             binding.tvAlertTitle.hide()
           } else {
             binding.tvAlertTitle.text = weather.alerts[0].title
-            binding.tvAlertTitle.setTextColor(weather.alerts[0].getAlertColor())
+            binding.tvAlertTitle.setTextColor(Color.WHITE)
             binding.tvAlertTitle.show()
           }
         }

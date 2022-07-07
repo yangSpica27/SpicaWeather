@@ -96,6 +96,10 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
     }
   )
 
+  override fun onBackPressed() {
+    finish()
+  }
+
   override fun initializer() {
     val animation = AnimationUtils.loadLayoutAnimation(
       this,

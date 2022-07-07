@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.baidu.location.e.k.y
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +91,9 @@ class WeatherFragment(
       }
     }
     super.onResume()
-
+    Timber.e("滑动回复")
+    viewBinding.scrollView.smoothScrollTo(0,0)
+    scrollListener.onScrollChange(viewBinding.rvList, 0, 0, 0, 0)
     mainCardAdapter.onScroll()
 
 

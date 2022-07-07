@@ -1,6 +1,5 @@
 package me.spica.weather.ui.city
 
-import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -22,7 +21,6 @@ import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
-import me.spica.weather.ui.main.MainActivity
 import javax.inject.Inject
 
 /**
@@ -69,6 +67,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
   override fun initializer() {
     init()
   }
+
 
   private fun init() {
     FluidContentResizer.listen(this)
@@ -123,7 +122,6 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
       })
     }
   }
-
 
 
   override fun setupViewBinding(inflater: LayoutInflater): ActivityCitySelectBinding =
