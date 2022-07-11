@@ -183,20 +183,22 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
       textView
     }
 
+    // 点击左边菜单
     viewBinding.toolbar.iconMenu.setOnClickListener {
-      Timber.e("点击菜单%s", "")
       startActivity(Intent(this, WeatherCityActivity::class.java))
     }
 
+    // 点击右边关于
     viewBinding.toolbar.iconAbout.setOnClickListener {
-      Timber.e("点击菜单%s", "")
       startActivity(Intent(this, SettingActivity::class.java))
     }
 
+    // 点击添加城市
     viewBinding.btnPlus.setOnClickListener {
       startActivity(Intent(this, WeatherCityActivity::class.java))
     }
 
+    // 测试用
     viewBinding.toolbar.tsLocation.setOnClickListener {
       val dayWeatherDetailDialog = DayWeatherDetailDialog(this)
       dayWeatherDetailDialog.show(supportFragmentManager, "one_detail")
@@ -262,13 +264,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
   @SuppressLint("NotifyDataSetChanged")
   private fun initView() {
 
+    // 状态栏占位
     viewBinding.statusLl.updateLayoutParams<LinearLayout.LayoutParams> {
       height = getStatusBarHeight()
     }
 
+    // 设置中心的viewpager适配器
     viewBinding.viewPager.adapter = mainPagerAdapter
-
-
 
 
     lifecycleScope.launch {
@@ -285,7 +287,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         viewBinding.viewPager.currentItem = index
       }
     }
-
 
 
     viewBinding.viewPager.registerOnPageChangeCallback(object :
@@ -308,8 +309,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
   private fun syncNewCity(cityName: String) {
     lifecycleScope.launch(Dispatchers.Default) {
+      // 根据百度返回的位置信息 更新当前城市
       cityList.forEach {
         if (cityName.contains(it.cityName)) {
+          // 地点存在
           if (viewModel.getAllCity().contains(it) || viewModel.getAllCity().isEmpty()) {
             Snackbar.make(
               viewBinding.root,

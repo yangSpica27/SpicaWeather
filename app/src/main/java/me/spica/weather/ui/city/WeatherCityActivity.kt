@@ -23,7 +23,7 @@ import me.spica.weather.tools.dp
 import javax.inject.Inject
 
 /**
- * 城市选择
+ * 城市选择【已经选择了的】
  */
 @AndroidEntryPoint
 class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {

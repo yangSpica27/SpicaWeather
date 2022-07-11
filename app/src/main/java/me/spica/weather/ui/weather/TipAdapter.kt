@@ -7,6 +7,7 @@ import coil.load
 import me.spica.weather.databinding.ItemTipsBinding
 import me.spica.weather.model.weather.LifeIndexBean
 
+// 生活指数适配器
 class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
 
     // 数据

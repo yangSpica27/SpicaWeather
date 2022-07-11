@@ -50,6 +50,7 @@ class WeatherCityAdapter(
 
   @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    // 设置背景为天气的主题色彩
     val bgDrawable = holder.itemView.context.getDrawable(R.drawable.bg_card)
     bgDrawable?.colorFilter =
       PorterDuffColorFilter(
@@ -59,6 +60,7 @@ class WeatherCityAdapter(
           .getThemeColor(), PorterDuff.Mode.SRC_IN
       )
     holder.itemBinding.root.background = bgDrawable
+    // 代入文本
     holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
     holder.itemBinding.nowWeatherBg.currentWeatherType = WeatherCodeUtils.getWeatherCode(
       diffUtil.currentList[position].iconId
@@ -75,12 +77,11 @@ class WeatherCityAdapter(
       holder.itemBinding.tvIsDefault.hide()
     }
     holder.itemView.rootView.setOnClickListener {
-
       itemClickListener(diffUtil.currentList[position])
-
       holder.itemBinding.root.postDelayed(
         {
           doOnMainThreadIdle({
+            // 进入主页
             val intent = Intent(activity, MainActivity::class.java)
             val options = ActivityOptions.makeSceneTransitionAnimation(
               activity,

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.baidu.location.e.k.y
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,8 +48,6 @@ class WeatherFragment(
 
   private var currentCity: CityBean? = null
 
-  // 更改颜色
-  var onColorChange: (Int, NowWeatherView.WeatherType) -> Unit = { _, _ -> }
 
 
   private val sp by lazy {
@@ -65,7 +62,7 @@ class WeatherFragment(
 
   override fun onResume() {
     if (!isFirstLoad) {
-      onColorChange(currentColor, currentWeatherType)
+//      onColorChange(currentColor, currentWeatherType)
     } else {
       // 首次加载
       lifecycleScope.launch {
@@ -86,18 +83,16 @@ class WeatherFragment(
           // 更新页面的动画模式
           currentWeatherType = it.getWeatherType().getWeatherAnimType()
           // 回传
-          onColorChange(currentColor, currentWeatherType)
+//          onColorChange(currentColor, currentWeatherType)
         }
       }
     }
     super.onResume()
-    Timber.e("滑动回复")
-    viewBinding.scrollView.smoothScrollTo(0,0)
-    scrollListener.onScrollChange(viewBinding.rvList, 0, 0, 0, 0)
+    scrollListener.onScrollChange(viewBinding.rvList, 0, viewBinding.scrollView.scrollY, 0, 0)
     mainCardAdapter.onScroll()
 
-
   }
+
 
 
   override fun onDestroyView() {

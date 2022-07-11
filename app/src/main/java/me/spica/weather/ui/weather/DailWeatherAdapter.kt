@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getAnimRes
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.ItemDayWeatherBinding
 import me.spica.weather.model.weather.DailyWeatherBean
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -105,7 +103,6 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
 
       holder.itemDayWeatherBinding.itemLineMin.currentValue =
         items[position].minTemp
-      Timber.e("precip==" + items[position].precip)
       holder.itemDayWeatherBinding.icon.rainfallProbability = items[position].precip
 //            holder.itemDayWeatherBinding.icon.rainfallProbability = 60
       holder.itemDayWeatherBinding.icon.setAnimation(

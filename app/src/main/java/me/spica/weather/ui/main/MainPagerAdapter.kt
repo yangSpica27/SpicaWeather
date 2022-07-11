@@ -19,9 +19,6 @@ class MainPagerAdapter(
 ) :
     FragmentStateAdapter(fragmentActivity) {
 
-    var onColorChange: (Int, NowWeatherView.WeatherType) -> Unit = { _, _ -> }
-
-
     private var backgroundColor = Color.parseColor("#1F787474")
 
 
@@ -42,14 +39,6 @@ class MainPagerAdapter(
         val fragment = WeatherFragment(scrollListener)
         fragment.arguments = Bundle().apply {
             putParcelable("city", diffUtil.currentList[position])
-        }
-        fragment.onColorChange = { color, type ->
-            run {
-                if (color != backgroundColor) {
-                    backgroundColor = color
-                    onColorChange(color, type)
-                }
-            }
         }
         return fragment
     }

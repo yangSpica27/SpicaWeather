@@ -24,7 +24,7 @@ import me.spica.weather.tools.toast
 import javax.inject.Inject
 
 /**
- * 城市选择
+ * 城市选择【全部城市】
  */
 @AndroidEntryPoint
 class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
