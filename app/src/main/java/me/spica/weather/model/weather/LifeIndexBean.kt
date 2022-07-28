@@ -1,10 +1,10 @@
 package me.spica.weather.model.weather
 
+import android.graphics.Color
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.squareup.moshi.JsonClass
 import me.spica.weather.R
-import me.spica.weather.tools.IndicesUtils
 
 
 @JsonClass(generateAdapter = true)
@@ -39,7 +39,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 "运动指数",
                 category,
                 text ?: "无更多描述",
-                IndicesUtils.getColorRes(this.type, level.toInt()),
+                Color.BLACK,
                 R.drawable.ic_spt
             )
         }
@@ -49,7 +49,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 "穿衣指数",
                 category,
                 text ?: "无更多描述",
-                IndicesUtils.getColorRes(type, level.toInt()),
+                Color.BLACK,
                 R.drawable.ic_clothes
             )
         }
@@ -59,7 +59,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 "空气污染指数",
                 category,
                 text ?: "无更多描述",
-                IndicesUtils.getColorRes(type, level.toInt()),
+                Color.BLACK,
                 R.drawable.ic_air_index
             )
         }
@@ -69,7 +69,7 @@ fun me.spica.weather.network.hefeng.index.Daily.toLifeIndexBean(): LifeIndexBean
                 "洗车指数",
                 category,
                 text ?: "无更多描述",
-                IndicesUtils.getColorRes(type, level.toInt()),
+                Color.BLACK,
                 R.drawable.ic_clean_car
             )
         }
