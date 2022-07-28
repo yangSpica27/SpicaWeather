@@ -42,7 +42,6 @@ open class NowWeatherView : View, SensorEventListener {
     repeatMode = Animation.REVERSE
     duration = 3000L
     addUpdateListener {
-
       postInvalidateOnAnimation()
     }
   }
@@ -174,15 +173,15 @@ open class NowWeatherView : View, SensorEventListener {
     centerY = 40.dp.toInt() //设置中心点
 
     clipPath.reset()
-    clipPath.moveTo(12.dp, 0f);
-    clipPath.lineTo(width - 12.dp, 0f);
-    clipPath.quadTo(width*1f, 0f, width*1f, 12.dp);
-    clipPath.lineTo(width*1f, height - 12.dp);
-    clipPath.quadTo(width*1f, height*1f, width - 12.dp, height.dp);
-    clipPath.lineTo(12.dp, height.dp);
-    clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp);
-    clipPath.lineTo(0f, 12f);
-    clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp);
+    clipPath.moveTo(12.dp, 0f)
+    clipPath.lineTo(width - 12.dp, 0f)
+    clipPath.quadTo(width * 1f, 0f, width * 1f, 12.dp)
+    clipPath.lineTo(width * 1f, height - 12.dp)
+    clipPath.quadTo(width * 1f, height * 1f, width - 12.dp, height.dp)
+    clipPath.lineTo(12.dp, height.dp)
+    clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp)
+    clipPath.lineTo(0f, 12f)
+    clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
 
   }
 
@@ -195,11 +194,6 @@ open class NowWeatherView : View, SensorEventListener {
     drawCloudy(canvas)
   }
 
-
-  // 雪的实现
-  private fun drawSnow(canvas: Canvas) {
-
-  }
 
   // 雨的实现
   private fun drawRain(canvas: Canvas) {
@@ -305,8 +299,8 @@ open class NowWeatherView : View, SensorEventListener {
   }
 
 
-  private fun roundClip(canvas: Canvas){
-    canvas.clipPath(clipPath);
+  private fun roundClip(canvas: Canvas) {
+    canvas.clipPath(clipPath)
   }
 
   enum class WeatherType() {

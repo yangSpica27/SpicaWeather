@@ -21,6 +21,7 @@ import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.CardWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
+import me.spica.weather.ui.warn.WarningDetailActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,8 +64,6 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   override fun bindData(weather: Weather) {
     val nowWeatherBean = weather.todayWeather
     val themeColor = weather.getWeatherType().getThemeColor()
-
-
     val bgDrawable = context.getDrawable(R.drawable.bg_card)
     bgDrawable?.colorFilter = PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
     binding.weatherBg.background = bgDrawable
@@ -98,6 +97,12 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
       binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"
       binding.lottieView.setAnimation(weather.getWeatherType().getAnimRes())
       binding.lottieView.playAnimation()
+
+
+      binding.tvAlertTitle.setOnClickListener {
+        WarningDetailActivity.startActivity(context, weather.alerts[0])
+      }
+
     })
 
 

@@ -1,9 +1,11 @@
 package me.spica.weather.model.weather
 
 import android.graphics.Color
+import android.os.Parcelable
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class AlertBean(
   val title: String,
@@ -11,7 +13,7 @@ data class AlertBean(
   val status: String,
   val code: String,
   val source: String
-) {
+) : Parcelable {
 
   fun getAlertColor(): Int {
     return if (code.endsWith("00")) {
