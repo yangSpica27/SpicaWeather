@@ -136,23 +136,10 @@ class MiniNowWeatherView : View {
   )
 
 
-  // 雨水的合集
-  private val mDropList: ArrayList<RainDrop> = arrayListOf()
 
-
-  init {
-    for (i in 1..30) {
-      val drop = RainDrop(random, rainPaint)
-      mDropList.add(drop)
-    }
-  }
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    for (drop in mDropList) {
-      drop.init(measuredWidth, measuredHeight)
-      drop.initPos()
-    }
   }
 
 
@@ -196,9 +183,7 @@ class MiniNowWeatherView : View {
   // 雨的实现
   private fun drawRain(canvas: Canvas) {
     if (currentWeatherType != NowWeatherView.WeatherType.RAIN) return
-    mDropList.forEach {
-      it.rain(canvas)
-    }
+
   }
 
   // 停止所有的动画

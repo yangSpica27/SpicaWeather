@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.hardware.Sensor
@@ -16,7 +17,6 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
-import java.util.*
 
 
 /**
@@ -24,7 +24,6 @@ import java.util.*
  */
 open class NowWeatherView : View, SensorEventListener {
 
-  private val random = Random()
 
   //画笔
   private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -93,7 +92,7 @@ open class NowWeatherView : View, SensorEventListener {
           }
           WeatherType.SNOW -> {
             stopAllAnim()
-            rainAnim.start()
+            snowAnim.start()
           }
           WeatherType.UNKNOWN -> {
             stopAllAnim()
@@ -111,6 +110,16 @@ open class NowWeatherView : View, SensorEventListener {
   private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeCap = Paint.Cap.ROUND
     strokeWidth = 4.dp
+    color = Color.WHITE
+    style = Paint.Style.FILL
+  }
+
+  // 绘制雨水的paint
+  private val snowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 4.dp
+    color = Color.WHITE
+    style = Paint.Style.FILL
   }
 
 
@@ -125,9 +134,16 @@ open class NowWeatherView : View, SensorEventListener {
   }
 
   private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    duration = 20 * 1000L
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.RESTART
+    interpolator = LinearInterpolator()
+    addUpdateListener {
+      postInvalidateOnAnimation()
+    }
+  }
+
+
+  private val snowAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
+    repeatCount = Animation.INFINITE
     interpolator = LinearInterpolator()
     addUpdateListener {
       postInvalidateOnAnimation()
@@ -144,21 +160,18 @@ open class NowWeatherView : View, SensorEventListener {
 
 
   // 雨水的合集
-  private val mDropList: ArrayList<RainDrop> = arrayListOf()
+  private var rains: ArrayList<RainFlake> = arrayListOf()
+
+  // 雪的集合
+  private var snows: ArrayList<SnowFlake> = arrayListOf()
 
 
-  init {
-    for (i in 1..30) {
-      val drop = RainDrop(random, rainPaint)
-      mDropList.add(drop)
-    }
-  }
-
-  override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    for (drop in mDropList) {
-      drop.init(measuredWidth, measuredHeight)
-      drop.initPos()
+  private fun initSnow(width: Int, height: Int) {
+    rains.clear()
+    //mSnowFlakes所有的雨滴都生成放到这里面
+    for (i in 0 until 30) {
+      rains.add(RainFlake.create(width, height, rainPaint))
+      snows.add(SnowFlake.create(width, height, snowPaint))
     }
   }
 
@@ -182,7 +195,7 @@ open class NowWeatherView : View, SensorEventListener {
     clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp)
     clipPath.lineTo(0f, 12f)
     clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
-
+    initSnow(width, height)
   }
 
 
@@ -192,14 +205,24 @@ open class NowWeatherView : View, SensorEventListener {
     drawSunny(canvas)
     drawRain(canvas)
     drawCloudy(canvas)
+    drawSnow(canvas)
   }
 
 
   // 雨的实现
   private fun drawRain(canvas: Canvas) {
     if (currentWeatherType != WeatherType.RAIN) return
-    mDropList.forEach {
-      it.rain(canvas)
+    rains.forEach {
+      it.draw(canvas)
+    }
+  }
+
+
+  // 雪的实现
+  private fun drawSnow(canvas: Canvas) {
+    if (currentWeatherType != WeatherType.SNOW) return
+    snows.forEach {
+      it.draw(canvas)
     }
   }
 
@@ -207,6 +230,7 @@ open class NowWeatherView : View, SensorEventListener {
   private fun stopAllAnim() {
     sunnyAnim.cancel()
     rainAnim.cancel()
+    snowAnim.cancel()
     cloudAnim.cancel()
     cloudAnim2.cancel()
   }
@@ -313,33 +337,7 @@ open class NowWeatherView : View, SensorEventListener {
 
 
   override fun onSensorChanged(event: SensorEvent) {
-//    if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-//      mAccelerateValues = lowPass(event.values.clone(), mAccelerateValues)
-//    }
-//    if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-//      mMagneticValues = lowPass(event.values.clone(), mMagneticValues)
-//    }
-//    if (mMagneticValues != null && mAccelerateValues != null)
-//    SensorManager.getRotationMatrix(mR, null, mAccelerateValues, mMagneticValues);
-//    SensorManager.getOrientation(mR, values);
-//    // x轴的偏转角度
-//    val degreeX = Math.toDegrees(values[1].toDouble())
-//    // y轴的偏转角度
-//    val degreeY = Math.toDegrees(values[2].toDouble())
-//    var scrollX = 0
-//    var scrollY = 0
-//    if (degreeY <= 0 && degreeY > mDegreeYMin) {
-//      scrollX = ((degreeY / Math.abs(mDegreeYMin) * MOVE_DISTANCE_X * mDirection).toInt())
-//    } else if (degreeY > 0 && degreeY < mDegreeYMax) {
-//      scrollX = ((degreeY / Math.abs(mDegreeYMax) * MOVE_DISTANCE_X * mDirection).toInt())
-//    }
-//    if (degreeX <= 0 && degreeX > mDegreeXMin) {
-//      scrollY = ((degreeX / Math.abs(mDegreeXMin) * MOVE_DISTANCE_Y * mDirection).toInt())
-//    } else if (degreeX > 0 && degreeX < mDegreeXMax) {
-//      scrollY = ((degreeX / Math.abs(mDegreeXMax) * MOVE_DISTANCE_Y * mDirection).toInt())
-//    }
-//    sX = scrollX
-//    sY = scrollY
+
   }
 
 
