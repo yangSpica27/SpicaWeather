@@ -183,7 +183,6 @@ open class NowWeatherView : View, SensorEventListener {
 
     screenWidth = w //获取屏幕宽度
 
-
     centerY = 40.dp.toInt() //设置中心点
 
     clipPath.reset()
@@ -197,6 +196,7 @@ open class NowWeatherView : View, SensorEventListener {
     clipPath.lineTo(0f, 12f)
     clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
     initSnowAndRain(width, height)
+
   }
 
 

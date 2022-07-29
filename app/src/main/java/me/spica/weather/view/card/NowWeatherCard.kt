@@ -4,13 +4,12 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
@@ -22,9 +21,9 @@ import me.spica.weather.databinding.CardWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
-import me.spica.weather.view.weather_bg.NowWeatherView
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  *  用于展示现在的天气
@@ -36,7 +35,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-  val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
+  private val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
   override var animatorView: View = this
 
@@ -63,12 +62,14 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
   @SuppressLint("SetTextI18n")
   override fun bindData(weather: Weather) {
+
     val nowWeatherBean = weather.todayWeather
     val themeColor = weather.getWeatherType().getThemeColor()
     val bgDrawable = context.getDrawable(R.drawable.bg_card)
     bgDrawable?.colorFilter = PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
     binding.weatherBg.background = bgDrawable
     binding.weatherBg.currentWeatherType = weather.getWeatherType().getWeatherAnimType()
+
     doOnMainThreadIdle({
       with(numAnim) {
         if (isRunning) cancel()
@@ -76,6 +77,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         removeAllListeners()
         addUpdateListener {
           binding.tvTemp.text = "${it.animatedValue as Int}℃"
+          setTextViewStyles(binding.tvTemp)
         }
         doOnEnd {
           if (weather.alerts.isEmpty()) {
@@ -108,8 +110,17 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
   }
 
-
-  override fun onDetachedFromWindow() {
-    super.onDetachedFromWindow()
+  private fun setTextViewStyles(textView: TextView) {
+    val mLinearGradient = LinearGradient(
+      0f,
+      0f, 0f, textView.height * 1f,
+      Color.WHITE,
+      Color.parseColor("#80FFFFFF"),
+      Shader.TileMode.CLAMP
+    )
+    textView.paint.shader = mLinearGradient
+    textView.postInvalidateOnAnimation()
   }
+
+
 }

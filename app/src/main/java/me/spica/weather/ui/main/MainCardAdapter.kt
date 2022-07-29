@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.weather.R
+import me.spica.weather.databinding.ActivityTodayWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.ui.life.LifeActivity
 import me.spica.weather.view.card.*
@@ -29,12 +30,31 @@ class MainCardAdapter(
   private var weather: Weather? = null
 
 
+  // 今天天气的弹窗
   private val todayWeatherDetailDialog by lazy {
     FullScreenDialog
       .build()
       .setCustomView(object : OnBindView<FullScreenDialog>(R.layout.activity_today_weather) {
-        override fun onBind(dialog: FullScreenDialog?, v: View?) {
-
+        override fun onBind(dialog: FullScreenDialog, v: View) {
+          val binding = ActivityTodayWeatherBinding.bind(v)
+          val info = weather?.dailyWeather?.get(0)
+          with(binding) {
+            binding.toolbar.setNavigationOnClickListener {
+              dialog.dismiss()
+            }
+            tvDayWeather.text = info?.weatherNameDay
+            tvNightWeather.text = info?.weatherNameNight
+            tvMaxTemp.text = "${info?.maxTemp}℃"
+            tvMinTemp.text = "${info?.minTemp}℃"
+            tvDayWindDir.text = info?.dayWindDir
+            tvNightWindDir.text = info?.nightWindDir
+            tvDayWindSpeed.text = info?.dayWindSpeed + "km/h"
+            tvNightWindSpeed.text = info?.nightWindSpeed + "km/h"
+            tvPressureTitle.text = "${info?.pressure}pa"
+            tvUvTitle.text = "${info?.uv}级"
+            tvVisTitle.text = "${info?.vis}km"
+            tvCloudTitle.text = "${info?.cloud}%"
+          }
         }
       })
   }

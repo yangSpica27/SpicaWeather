@@ -6,7 +6,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import com.kongzue.dialogx.dialogs.FullScreenDialog
+import com.kongzue.dialogx.interfaces.OnBindView
+import me.spica.weather.R
 import me.spica.weather.common.getThemeColor
+import me.spica.weather.databinding.ActivityTodayWeatherBinding
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -39,6 +43,7 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
   override var index: Int = 2
   override var hasInScreen: Boolean = false
 
+
   init {
     resetAnim()
     binding.rvWeather.adapter = dailyWeatherAdapter
@@ -70,6 +75,7 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
       )
     })
   }
+
 
 
 }

@@ -1,7 +1,6 @@
 package me.spica.weather.network;
 
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.util.IOUtils;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -26,6 +25,7 @@ import timber.log.Timber;
  * @Author Spica2 7
  * @Date 2021/8/30 16:43
  */
+@SuppressWarnings("unused")
 public class HttpLoggingInterceptor implements Interceptor {
 
   private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -152,7 +152,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 
             log("\tbody:" + decode(body));
 
-            responseBody = ResponseBody.create(bytes,responseBody.contentType());
+            responseBody = ResponseBody.create(bytes, responseBody.contentType());
 
             return response.newBuilder().body(responseBody).build();
           } else {
@@ -182,15 +182,14 @@ public class HttpLoggingInterceptor implements Interceptor {
     int maxLoop = unicodeStr.length();
     for (int i = 0; i < maxLoop; i++) {
       if (unicodeStr.charAt(i) == '\\') {
-        if ((i < maxLoop - 5) && ((unicodeStr.charAt(i + 1) == 'u') || (unicodeStr.charAt(i + 1) == 'U')))
+        if ((i < maxLoop - 5) && ((unicodeStr.charAt(i + 1) == 'u') || (unicodeStr.charAt(i + 1) == 'U'))) {
           try {
             retBuf.append((char) Integer.parseInt(unicodeStr.substring(i + 2, i + 6), 16));
             i += 5;
           } catch (NumberFormatException localNumberFormatException) {
             retBuf.append(unicodeStr.charAt(i));
           }
-        else
-          retBuf.append(unicodeStr.charAt(i));
+        } else {retBuf.append(unicodeStr.charAt(i));}
       } else {
         retBuf.append(unicodeStr.charAt(i));
       }
