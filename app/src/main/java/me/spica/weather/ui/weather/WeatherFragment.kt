@@ -1,7 +1,6 @@
 package me.spica.weather.ui.weather
 
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +16,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import me.spica.weather.base.BindingFragment
 import me.spica.weather.common.Preference
-import me.spica.weather.common.getThemeColor
-import me.spica.weather.common.getWeatherAnimType
 import me.spica.weather.databinding.FragmentListBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -26,7 +23,6 @@ import me.spica.weather.tools.dp
 import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.toHomeCardType
-import me.spica.weather.view.weather_bg.NowWeatherView
 import timber.log.Timber
 
 /**
@@ -42,12 +38,8 @@ class WeatherFragment(
 
   private lateinit var mainCardAdapter: MainCardAdapter
 
-  private var currentColor = Color.parseColor("#1F787474")
-
-  private var currentWeatherType = NowWeatherView.WeatherType.CLOUDY
 
   private var currentCity: CityBean? = null
-
 
 
   private val sp by lazy {
@@ -62,7 +54,7 @@ class WeatherFragment(
 
   override fun onResume() {
     if (!isFirstLoad) {
-//      onColorChange(currentColor, currentWeatherType)
+      // TODO
     } else {
       // 首次加载
       lifecycleScope.launch {
@@ -78,21 +70,26 @@ class WeatherFragment(
             // 主线程空闲时候更新页面
             mainCardAdapter.notifyData(it)
           })
-          // 更新页面的主题颜色
-          currentColor = it.getWeatherType().getThemeColor()
-          // 更新页面的动画模式
-          currentWeatherType = it.getWeatherType().getWeatherAnimType()
-          // 回传
-//          onColorChange(currentColor, currentWeatherType)
         }
       }
+
+      lifecycleScope.launch {
+        viewModel.errorMessage.collectLatest {
+          doOnMainThreadIdle({
+            if (!errorTip.isShown) {
+              errorTip.show()
+            }
+          })
+        }
+      }
+
+
     }
     super.onResume()
     scrollListener.onScrollChange(viewBinding.rvList, 0, viewBinding.scrollView.scrollY, 0, 0)
     mainCardAdapter.onScroll()
 
   }
-
 
 
   override fun onDestroyView() {
@@ -112,7 +109,7 @@ class WeatherFragment(
     )
 
     // 滑动检测
-    viewBinding.scrollView.setOnScrollChangeListener { view, x, y, ox, oy ->
+    viewBinding.scrollView.setOnScrollChangeListener { _, x, y, ox, oy ->
       mainCardAdapter.onScroll()
       scrollListener.onScrollChange(viewBinding.rvList, x, y, ox, oy)
     }

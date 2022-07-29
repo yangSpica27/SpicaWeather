@@ -166,10 +166,11 @@ open class NowWeatherView : View, SensorEventListener {
   private var snows: ArrayList<SnowFlake> = arrayListOf()
 
 
-  private fun initSnow(width: Int, height: Int) {
+  private fun initSnowAndRain(width: Int, height: Int) {
     rains.clear()
+    snows.clear()
     //mSnowFlakes所有的雨滴都生成放到这里面
-    for (i in 0 until 30) {
+    for (i in 0 until 10) {
       rains.add(RainFlake.create(width, height, rainPaint))
       snows.add(SnowFlake.create(width, height, snowPaint))
     }
@@ -195,7 +196,7 @@ open class NowWeatherView : View, SensorEventListener {
     clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp)
     clipPath.lineTo(0f, 12f)
     clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
-    initSnow(width, height)
+    initSnowAndRain(width, height)
   }
 
 

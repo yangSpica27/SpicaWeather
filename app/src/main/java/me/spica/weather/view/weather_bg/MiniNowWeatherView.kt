@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -58,6 +59,31 @@ class MiniNowWeatherView : View {
 
   //屏幕宽度
   private var screenWidth = 0
+
+
+  // 雨水的合集
+  private var rains: ArrayList<RainFlake> = arrayListOf()
+
+  // 雪的集合
+  private var snows: ArrayList<SnowFlake> = arrayListOf()
+
+  // 绘制雨水的paint
+  private val snowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 4.dp
+    color = Color.WHITE
+    style = Paint.Style.FILL
+  }
+
+  private fun initSnowAndRain(width: Int, height: Int) {
+    rains.clear()
+    snows.clear()
+    //mSnowFlakes所有的雨滴都生成放到这里面
+    for (i in 0 until 10) {
+      rains.add(RainFlake.create(width, height, rainPaint))
+      snows.add(SnowFlake.create(width, height, snowPaint))
+    }
+  }
 
 
   var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
@@ -136,13 +162,6 @@ class MiniNowWeatherView : View {
   )
 
 
-
-
-  override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-  }
-
-
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     super.onSizeChanged(w, h, oldw, oldh)
     screenHeight = h // 获取屏幕高度
@@ -162,7 +181,7 @@ class MiniNowWeatherView : View {
     clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp)
     clipPath.lineTo(0f, 12f)
     clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
-
+    initSnowAndRain(w, h)
   }
 
 
@@ -172,18 +191,24 @@ class MiniNowWeatherView : View {
     drawSunny(canvas)
     drawRain(canvas)
     drawCloudy(canvas)
+    drawSnow(canvas)
   }
 
 
   // 雪的实现
   private fun drawSnow(canvas: Canvas) {
-
+    if (currentWeatherType != NowWeatherView.WeatherType.SNOW) return
+    snows.forEach {
+      it.draw(canvas)
+    }
   }
 
   // 雨的实现
   private fun drawRain(canvas: Canvas) {
     if (currentWeatherType != NowWeatherView.WeatherType.RAIN) return
-
+    rains.forEach {
+      it.draw(canvas)
+    }
   }
 
   // 停止所有的动画
@@ -229,7 +254,7 @@ class MiniNowWeatherView : View {
     if (currentWeatherType != NowWeatherView.WeatherType.CLOUDY) return
     // ====
     canvas.save()
-    canvas.translate(width*1f-6.dp, 0f)
+    canvas.translate(width * 1f - 6.dp, 0f)
     cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
     canvas.drawCircle(
       0f, 0f,
@@ -239,7 +264,7 @@ class MiniNowWeatherView : View {
     //====
     canvas.restore()
     canvas.save()
-    canvas.translate(width*1f-6.dp, 12f)
+    canvas.translate(width * 1f - 6.dp, 12f)
     cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
     canvas.drawCircle(
       0f, 0f,
@@ -259,7 +284,7 @@ class MiniNowWeatherView : View {
     //====
     canvas.restore()
     canvas.save()
-    canvas.translate(width / 20f * 14f+20f, 8.dp)
+    canvas.translate(width / 20f * 14f + 20f, 8.dp)
     cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
     canvas.drawCircle(
       0f, 0f,
@@ -269,7 +294,7 @@ class MiniNowWeatherView : View {
     //====
     canvas.restore()
     canvas.save()
-    canvas.translate(width/ 20f*17f - 4.dp, 6.dp)
+    canvas.translate(width / 20f * 17f - 4.dp, 6.dp)
     cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
     canvas.drawCircle(
       0f, 0f,
@@ -279,7 +304,7 @@ class MiniNowWeatherView : View {
     //====
     canvas.restore()
     canvas.save()
-    canvas.translate(width/ 20f*17f , 4f)
+    canvas.translate(width / 20f * 17f, 4f)
     cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
     canvas.drawCircle(
       0f, 0f,

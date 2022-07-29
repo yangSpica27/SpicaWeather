@@ -117,7 +117,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     override fun onReceiveLocation(result: BDLocation) {
       Timber.e("定位${result.city}")
       if (result.hasAddr()) {
-        syncNewCity(result.city)
+        syncNewCity(result.city, result)
       } else {
         toast("获取地理位置失败")
         viewModel.changeCity(
@@ -307,7 +307,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     ActivityMainBinding.inflate(inflater)
 
 
-  private fun syncNewCity(cityName: String) {
+  private fun syncNewCity(cityName: String, bdLocation: BDLocation) {
     lifecycleScope.launch(Dispatchers.Default) {
       // 根据百度返回的位置信息 更新当前城市
       cityList.forEach {
@@ -319,6 +319,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
               "检测您所在城市在${it.cityName},正在切换",
               Snackbar.LENGTH_SHORT
             ).show()
+            // 使用定位获取的地理位置以提高精度
+            it.lat = bdLocation.latitude.toString()
+            it.lon = bdLocation.longitude.toString()
             viewModel.changeCity(it)
             return@launch
           }

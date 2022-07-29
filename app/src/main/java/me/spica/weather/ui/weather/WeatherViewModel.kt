@@ -40,6 +40,9 @@ class WeatherViewModel @Inject constructor(
 
   private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
 
+
+  val errorMessage: Flow<String> = _errorMessage.filterNotNull()
+
   private val _isLoading = MutableStateFlow(false)
 
   // 即时天气
@@ -157,7 +160,6 @@ class WeatherViewModel @Inject constructor(
       _isLoading.value = false
     }
 
-
   init {
     viewModelScope.launch(Dispatchers.IO) {
       // 合并和风系接口和彩云系列接口的数据
@@ -165,7 +167,7 @@ class WeatherViewModel @Inject constructor(
         kotlin.run {
           // 和风天气的天气数据+彩云的天气预警贴士(彩云接口请求失败不影响显示)
           weather?.descriptionForToday = alertBean?.forecastKeypoint ?: ""
-          weather?.descriptionForToWeek = alertBean?.description?: ""
+          weather?.descriptionForToWeek = alertBean?.description ?: ""
           weather?.alerts = alertBean?.alerts ?: listOf()
           weather
         }
