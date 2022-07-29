@@ -130,6 +130,7 @@ class MiniNowWeatherView : View {
   private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeCap = Paint.Cap.ROUND
     strokeWidth = 4.dp
+    color = Color.WHITE
   }
 
 
