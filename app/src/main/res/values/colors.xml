@@ -26,10 +26,7 @@
 
     <color name="test">#80FFFFFF</color>
 
-
-
     <color name="sun_light_color">#34FF9800</color>
-
 
     <color name="l8">#f5222d</color>
     <color name="l7">#ff7875</color>
@@ -39,5 +36,9 @@
     <color name="l3">#FFD54F</color>
     <color name="l2">#389e0d</color>
     <color name="l1">#135200</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 
 </resources>

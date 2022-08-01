@@ -40,5 +40,8 @@
     <string name="car_index_desc">洗车指数是根据过去12小时和未来48小时有无雨雪天气，路面是否有积雪和泥水，是否容易使汽车溅上泥水，是否有沙尘等天气条件，给驾驶员朋友提供是否适宜洗车的气象指数。洗车指数共分为4级，级数越高，就越不适宜洗车。</string>
     <string name="add_more_city">添加更多城市</string>
     <string name="warning_detail">预警详情</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">当前的天气信息</string>
 
 </resources>

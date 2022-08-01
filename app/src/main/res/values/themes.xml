@@ -7,16 +7,15 @@
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Status bar color. -->
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:statusBarColor" tools:targetApi="l">@color/window_background</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
-<!---->
+    <!---->
     <style name="Theme.SpicaWeather.TranslateStatusBar" parent="Theme.SpicaWeather">
-      <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
-
 
     <style name="SplashTheme" parent="Theme.SpicaWeather">
         <item name="android:windowBackground">@drawable/splash</item>
@@ -40,5 +39,20 @@
         <item name="android:windowIsFloating">true</item>       <!-- 是否浮现在activity之上 -->
         <item name="android:windowContentOverlay">@null</item>  <!-- 是否有遮盖 -->
         <item name="android:backgroundDimAmount">0.8</item>     <!-- 设置背景模糊的透明度-->
+    </style>
+
+    <style name="Theme.SpicaWeather.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.SpicaWeather.AppWidgetContainer" parent="Theme.SpicaWeather.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
     </style>
 </resources>

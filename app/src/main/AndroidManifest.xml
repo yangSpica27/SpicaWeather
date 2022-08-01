@@ -3,44 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.spica.weather">
 
-    <!-- 网络权限-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 手机状态-->
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 手机状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 网络状态-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <permission-group android:name="${applicationId}.andpermission" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <!-- 允许读设备等信息，用于问题排查，必选 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- 允许app联网，必选 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 允许获取网络状态，必选 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 允许读设备等信息，用于问题排查，必选 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 允许app联网，必选 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许获取网络状态，必选 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:theme="@style/Theme.SpicaWeather"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/ic_app"
         android:label="@string/app_name"
-        android:name=".App"
-        android:usesCleartextTraffic="true"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
+        <receiver
+            android:name=".widget.NowWeatherWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/now_weather_widget_info" />
+        </receiver>
 
         <!-- 已适配存储分区特性 -->
         <meta-data
             android:name="ScopedStorage"
-            android:value="true" />
-
-        <!--百度地图-->
+            android:value="true" /> <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="9fokNjwZ20sOccj7GXblgLHEWagrebQr" />
@@ -48,67 +50,55 @@
         <activity
             android:theme="@style/SplashTheme"
             android:name=".ui.main.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity android:name=".ui.setting.SettingActivity" />
-
         <activity android:name=".ui.city.WeatherCityActivity" />
-
         <activity
             android:name=".ui.city.CitySelectActivity"
             android:windowSoftInputMode="adjustNothing" />
-
         <activity
             android:name=".ui.about.AboutActivity"
-            android:exported="true">
-
-        </activity>
-
+            android:exported="true"></activity>
         <activity
+            android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
             android:name=".ui.today.TodayWeatherActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ui.life.LifeActivity"
             android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
+            android:name=".ui.life.LifeActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".ui.webview.WebViewActivity"
+        <activity
             android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
+            android:name=".ui.webview.WebViewActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
-        <activity android:name=".ui.warn.WarningDetailActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:theme="@style/Theme.SpicaWeather.TranslateStatusBar"
+            android:name=".ui.warn.WarningDetailActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.4" />
-        <!-- 适配华为（huawei）刘海屏 -->
+            android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
         <meta-data
             android:name="android.notch_support"
-            android:value="true" />
-        <!-- 适配小米（xiaomi）刘海屏 -->
+            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
         <meta-data
             android:name="notch.config"
-            android:value="portrait|landscape" />
-        <!-- 用于初始化 -->
+            android:value="portrait|landscape" /> <!-- 用于初始化 -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -120,28 +110,12 @@
             <meta-data
                 android:name="me.spica.weather.initializer.CoilInitializer"
                 android:value="androidx.startup" />
-
-        </provider>
-        <!-- 结束 -->
+        </provider> <!-- 结束 -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:foregroundServiceType="location"
             android:process=":remote" />
-
-        <receiver
-            android:name=".widget.NowWeatherProvider"
-            android:label="now_weather"
-            android:exported="true">
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_now_weather" />
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.ACTION_APPWIDGET_DISABLED" />
-            </intent-filter>
-
-        </receiver>
     </application>
 
 </manifest>
