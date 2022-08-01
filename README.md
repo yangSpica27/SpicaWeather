@@ -28,5 +28,4 @@
     - [SunriseView] - 自定义的日出日落view
     - [templeLineView] - 自定义的折线图
   
-## 已知bug：
-## 首次进入不能正常添加城市
+
