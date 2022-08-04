@@ -9,7 +9,6 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.HiltAndroidApp
-import me.spica.weather.view.WebViewPool
 import timber.log.Timber
 
 @HiltAndroidApp
