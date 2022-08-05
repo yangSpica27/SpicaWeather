@@ -17,10 +17,11 @@ import me.spica.weather.R
 import me.spica.weather.common.getAnimRes
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.common.getWeatherAnimType
-import me.spica.weather.databinding.CardWeatherBinding
+import me.spica.weather.databinding.CardNowWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
+import me.spica.weather.view.weather_bg.NowWeatherView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +36,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-  private val binding: CardWeatherBinding = CardWeatherBinding.inflate(LayoutInflater.from(context), this, true)
+  private val binding: CardNowWeatherBinding = CardNowWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
   override var animatorView: View = this
 
@@ -66,8 +67,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     val nowWeatherBean = weather.todayWeather
     val themeColor = weather.getWeatherType().getThemeColor()
     val bgDrawable = context.getDrawable(R.drawable.bg_card)
-    bgDrawable?.colorFilter = PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
-    binding.weatherBg.background = bgDrawable
+    binding.weatherBg.bgColor = themeColor
     binding.weatherBg.currentWeatherType = weather.getWeatherType().getWeatherAnimType()
 
     doOnMainThreadIdle({

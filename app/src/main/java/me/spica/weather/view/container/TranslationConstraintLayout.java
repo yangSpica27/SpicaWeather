@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,10 +25,10 @@ public class TranslationConstraintLayout extends ConstraintLayout {
   private int mCenterY;
   private float mCanvasRotateX = 0;
   private float mCanvasRotateY = 0;
-  private float mCanvasMaxRotateDegree = 20;
-  private Matrix mMatrix = new Matrix();
-  private Camera mCamera = new Camera();
-  private Paint mPaint;
+  private final float mCanvasMaxRotateDegree = 20;
+  private final Matrix mMatrix = new Matrix();
+  private final Camera mCamera = new Camera();
+
 
   public TranslationConstraintLayout(@NonNull Context context) {
     super(context);

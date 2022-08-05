@@ -3,70 +3,35 @@ package me.spica.weather.view.weather_bg
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
+import android.graphics.*
 import android.util.AttributeSet
-import android.view.View
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import timber.log.Timber
+
+class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
+
+  private lateinit var syncThread: Thread
 
 
-/**
- * 目前的天气
- */
-open class NowWeatherView : View, SensorEventListener {
+  private var surfaceHolder: SurfaceHolder = holder
 
-
-  //画笔
-  private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = ContextCompat.getColor(context, R.color.cloud_color)
-    style = Paint.Style.FILL
-  }
-
-  // 贝塞尔曲线的控制点
-  private var centerY = 0
-
-  private val cloudAnim = ValueAnimator.ofFloat(
-    0f, 1f
-  ).apply {
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
-    duration = 3000L
-    addUpdateListener {
-      postInvalidateOnAnimation()
-    }
-  }
-
+  private var isWork = false // 是否预备绘制
 
   private val clipPath = Path()
 
-  private val cloudAnim2 = ValueAnimator.ofFloat(
-    0f, 1f
-  ).apply {
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
-    duration = 4000L
-    interpolator = LinearInterpolator()
 
-  }
+  constructor(context: Context?) : super(context)
+  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-
-  //屏幕高度
-  private var screenHeight = 0
-
-  //屏幕宽度
-  private var screenWidth = 0
-
-
-  var currentWeatherType = WeatherType.UNKNOWN
+  var bgColor = ContextCompat.getColor(context, R.color.window_background)
+  var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
     set(value) {
       field = value
       post {
@@ -77,24 +42,24 @@ open class NowWeatherView : View, SensorEventListener {
           .setDuration(500L)
           .start()
         when (value) {
-          WeatherType.SUNNY -> {
+          NowWeatherView.WeatherType.SUNNY -> {
             stopAllAnim()
             sunnyAnim.start()
           }
-          WeatherType.CLOUDY -> {
+          NowWeatherView.WeatherType.CLOUDY -> {
             stopAllAnim()
             cloudAnim.start()
             cloudAnim2.start()
           }
-          WeatherType.RAIN -> {
+          NowWeatherView.WeatherType.RAIN -> {
             stopAllAnim()
             rainAnim.start()
           }
-          WeatherType.SNOW -> {
+          NowWeatherView.WeatherType.SNOW -> {
             stopAllAnim()
             snowAnim.start()
           }
-          WeatherType.UNKNOWN -> {
+          NowWeatherView.WeatherType.UNKNOWN -> {
             stopAllAnim()
           }
         }
@@ -122,43 +87,6 @@ open class NowWeatherView : View, SensorEventListener {
     style = Paint.Style.FILL
   }
 
-
-  private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    duration = 20 * 1000L
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.RESTART
-    interpolator = LinearInterpolator()
-    addUpdateListener {
-      postInvalidateOnAnimation()
-    }
-  }
-
-  private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
-    interpolator = LinearInterpolator()
-    addUpdateListener {
-      postInvalidateOnAnimation()
-    }
-  }
-
-
-  private val snowAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
-    interpolator = LinearInterpolator()
-    addUpdateListener {
-      postInvalidateOnAnimation()
-    }
-  }
-
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-    context,
-    attrs,
-    defStyleAttr
-  )
-
-
   // 雨水的合集
   private var rains: ArrayList<RainFlake> = arrayListOf()
 
@@ -170,62 +98,12 @@ open class NowWeatherView : View, SensorEventListener {
     rains.clear()
     snows.clear()
     //mSnowFlakes所有的雨滴都生成放到这里面
-    for (i in 0 until 10) {
+    for (i in 0 until 30) {
       rains.add(RainFlake.create(width, height, rainPaint))
       snows.add(SnowFlake.create(width, height, snowPaint))
     }
   }
 
-
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    super.onSizeChanged(w, h, oldw, oldh)
-    screenHeight = h // 获取屏幕高度
-
-    screenWidth = w //获取屏幕宽度
-
-
-
-    clipPath.reset()
-    clipPath.moveTo(12.dp, 0f)
-    clipPath.lineTo(width - 12.dp, 0f)
-    clipPath.quadTo(width * 1f, 0f, width * 1f, 12.dp)
-    clipPath.lineTo(width * 1f, height - 12.dp)
-    clipPath.quadTo(width * 1f, height * 1f, width - 12.dp, height.dp)
-    clipPath.lineTo(12.dp, height.dp)
-    clipPath.quadTo(0f, height.dp, 0.dp, height - 12.dp)
-    clipPath.lineTo(0f, 12f)
-    clipPath.quadTo(0f, 0.dp, 12.dp, 0.dp)
-    initSnowAndRain(width, height)
-
-  }
-
-
-  override fun onDraw(canvas: Canvas) {
-    super.onDraw(canvas)
-    roundClip(canvas)
-    drawSunny(canvas)
-    drawRain(canvas)
-    drawCloudy(canvas)
-    drawSnow(canvas)
-  }
-
-
-  // 雨的实现
-  private fun drawRain(canvas: Canvas) {
-    if (currentWeatherType != WeatherType.RAIN) return
-    rains.forEach {
-      it.draw(canvas)
-    }
-  }
-
-
-  // 雪的实现
-  private fun drawSnow(canvas: Canvas) {
-    if (currentWeatherType != WeatherType.SNOW) return
-    snows.forEach {
-      it.draw(canvas)
-    }
-  }
 
   // 停止所有的动画
   private fun stopAllAnim() {
@@ -236,10 +114,137 @@ open class NowWeatherView : View, SensorEventListener {
     cloudAnim2.cancel()
   }
 
+  private val cloudAnim = ValueAnimator.ofFloat(
+    0f, 1f
+  ).apply {
+    repeatCount = Animation.INFINITE
+    repeatMode = Animation.REVERSE
+    duration = 3000L
+  }
+
+  private val cloudAnim2 = ValueAnimator.ofFloat(
+    0f, 1f
+  ).apply {
+    repeatCount = Animation.INFINITE
+    repeatMode = Animation.REVERSE
+    duration = 4000L
+    interpolator = LinearInterpolator()
+  }
+
+
+  private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
+    duration = 20 * 1000L
+    repeatCount = Animation.INFINITE
+    repeatMode = Animation.RESTART
+    interpolator = LinearInterpolator()
+  }
+
+  private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
+    repeatCount = Animation.INFINITE
+    interpolator = LinearInterpolator()
+  }
+
+
+  private val snowAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
+    repeatCount = Animation.INFINITE
+    interpolator = LinearInterpolator()
+  }
+
+
+  init {
+    surfaceHolder.addCallback(this)
+    this.holder.setFormat(PixelFormat.TRANSLUCENT)
+  }
+
+
+  private fun doOnDraw() {
+    val canvas = surfaceHolder.lockCanvas(null) ?: return
+    // ================进行绘制==============
+    canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
+    roundClip(canvas)
+    drawSunny(canvas)
+    drawRain(canvas)
+    drawCloudy(canvas)
+    drawSnow(canvas)
+    // ================绘制结束===============
+    surfaceHolder.unlockCanvasAndPost(canvas)
+  }
+
+  private fun roundClip(canvas: Canvas) {
+    canvas.clipPath(clipPath)
+    canvas.drawColor(bgColor)
+  }
+
+  private var lastSyncTime = 0L
+  override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+    isWork = true
+    syncThread = Thread {
+      while (isWork) {
+        lastSyncTime = System.currentTimeMillis()
+        postInvalidateOnAnimation()
+        doOnDraw()
+        try {
+          Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+
+      }
+    }
+    syncThread.start()
+  }
+
+
+  // 雨的实现
+  private fun drawRain(canvas: Canvas) {
+    if (currentWeatherType != NowWeatherView.WeatherType.RAIN) return
+    rains.forEach {
+      it.draw(canvas)
+    }
+  }
+
+
+  // 雪的实现
+  private fun drawSnow(canvas: Canvas) {
+    if (currentWeatherType != NowWeatherView.WeatherType.SNOW) return
+    snows.forEach {
+      it.draw(canvas)
+    }
+  }
+
+  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    super.onSizeChanged(w, h, oldw, oldh)
+    clipPath.reset()
+    clipPath.addRoundRect(
+      0f, 0f, width * 1f, height * 1f, floatArrayOf(
+        8.dp, 8.dp, 8.dp, 8.dp,
+        8.dp, 8.dp, 8.dp, 8.dp,
+      ), Path.Direction.CCW
+    )
+
+    initSnowAndRain(width, height)
+  }
+
+
+  //屏幕高度
+  private var screenHeight = 0
+
+  //屏幕宽度
+  private var screenWidth = 0
+
+  override fun surfaceChanged(p0: SurfaceHolder, format: Int, width: Int, height: Int) {
+    screenHeight = height // 获取屏幕高度
+    screenWidth = width //获取屏幕宽度
+  }
+
+  override fun surfaceDestroyed(p0: SurfaceHolder) {
+    isWork = false
+    syncThread.interrupt()
+  }
 
   // 晴天的实现
   private fun drawSunny(canvas: Canvas) {
-    if (currentWeatherType != WeatherType.SUNNY) return
+    if (currentWeatherType != NowWeatherView.WeatherType.SUNNY) return
     sunnyPaint.alpha = 20
     sunnyPaint.color = ContextCompat.getColor(context, R.color.sun_light_color)
     val centerX = width - 50.dp
@@ -265,10 +270,20 @@ open class NowWeatherView : View, SensorEventListener {
     canvas.restore()
   }
 
+  override fun onDraw(canvas: Canvas) {
+    super.onDraw(canvas)
+  }
+
+  //画笔
+  private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = ContextCompat.getColor(context, R.color.cloud_color)
+    style = Paint.Style.FILL
+  }
 
   //多云的实现
   private fun drawCloudy(canvas: Canvas) {
-    if (currentWeatherType != WeatherType.CLOUDY) return
+    if (currentWeatherType != NowWeatherView.WeatherType.CLOUDY) return
+    Timber.e("-绘制云-")
     canvas.save()
     val centerX = width / 8f * 7f
     val centerY = 0f
@@ -321,29 +336,6 @@ open class NowWeatherView : View, SensorEventListener {
       cloudPaint
     )
     canvas.restore()
-  }
-
-
-  private fun roundClip(canvas: Canvas) {
-    canvas.clipPath(clipPath)
-  }
-
-  enum class WeatherType() {
-    SUNNY,// 晴朗
-    CLOUDY,// 多云
-    RAIN,// 下雨
-    SNOW,// 下雪
-    UNKNOWN,// 无效果
-  }
-
-
-  override fun onSensorChanged(event: SensorEvent) {
-
-  }
-
-
-  override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-
   }
 
 }
