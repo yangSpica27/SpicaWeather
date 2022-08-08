@@ -75,11 +75,7 @@ class WeatherFragment(
 
       lifecycleScope.launch {
         viewModel.errorMessage.collectLatest {
-          doOnMainThreadIdle({
-            if (!errorTip.isShown) {
-              errorTip.show()
-            }
-          })
+
         }
       }
 

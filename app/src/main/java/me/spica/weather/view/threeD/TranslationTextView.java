@@ -1,4 +1,4 @@
-package me.spica.weather.view.container;
+package me.spica.weather.view.threeD;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,20 +7,20 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * @ClassName TranslationConstraintLayout
- * @Description TODO
+ * @ClassName TranslationTextView
+ * @Description 3d效果文本
  * @Author Spica2 7
- * @Date 2022/8/5 13:21
+ * @Date 2022/8/8 14:23
  */
-public class TranslationConstraintLayout extends ConstraintLayout {
+public class TranslationTextView extends AppCompatTextView {
+
   private int mCenterX;
   private int mCenterY;
   private float mCanvasRotateX = 0;
@@ -29,24 +29,27 @@ public class TranslationConstraintLayout extends ConstraintLayout {
   private final Matrix mMatrix = new Matrix();
   private final Camera mCamera = new Camera();
 
-
-  public TranslationConstraintLayout(@NonNull Context context) {
+  public TranslationTextView(@NonNull Context context) {
     super(context);
   }
 
-  public TranslationConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+  public TranslationTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public TranslationConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+  public TranslationTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
   }
 
-  @Override protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-    mCenterX = getWidth() / 2;
-    mCenterY = getHeight() / 2;
+  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    mCenterX = w / 2;
+    mCenterY = h / 2;
+  }
+
+  @Override protected void onDraw(Canvas canvas) {
     rotateCanvas(canvas);
-    return super.drawChild(canvas, child, drawingTime);
+    super.onDraw(canvas);
   }
 
   private void rotateCanvas(Canvas canvas) {

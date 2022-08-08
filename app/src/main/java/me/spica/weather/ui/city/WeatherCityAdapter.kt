@@ -4,14 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import me.spica.weather.R
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.common.getWeatherAnimType
@@ -51,20 +48,15 @@ class WeatherCityAdapter(
   @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     // 设置背景为天气的主题色彩
-    val bgDrawable = holder.itemView.context.getDrawable(R.drawable.bg_card)
-    bgDrawable?.colorFilter =
-      PorterDuffColorFilter(
-        WeatherCodeUtils.getWeatherCode(
-          diffUtil.currentList[position].iconId
-        )
-          .getThemeColor(), PorterDuff.Mode.SRC_IN
-      )
-    holder.itemBinding.root.background = bgDrawable
+    holder.itemBinding.nowWeatherBg.bgColor = WeatherCodeUtils.getWeatherCode(
+      diffUtil.currentList[position].iconId
+    ).getThemeColor()
     // 代入文本
     holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
     holder.itemBinding.nowWeatherBg.currentWeatherType = WeatherCodeUtils.getWeatherCode(
       diffUtil.currentList[position].iconId
     ).getWeatherAnimType()
+
     holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon} 北纬${diffUtil.currentList[position].lat}"
     if (diffUtil.currentList[position].isSelected) {
       holder.itemBinding.tvIsDefault.show()

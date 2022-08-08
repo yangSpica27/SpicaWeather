@@ -8,7 +8,7 @@
     android:backgroundTint="@color/colorAccent"
     android:transitionName="shared_element_container">
 
-    <me.spica.weather.view.weather_bg.MiniNowWeatherView
+    <me.spica.weather.view.weather_bg.MiniNowWeatherSurfaceView
         android:id="@+id/now_weather_bg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
