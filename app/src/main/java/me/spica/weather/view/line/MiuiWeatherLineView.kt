@@ -36,7 +36,7 @@ class MiuiWeatherLineView : View {
 
 
   // 折线可用最高点
-  private var topY = 48.dp + 40.dp
+  private var topY = 48.dp + 20.dp
 
   // 折线可用最低点
   private var bottomY = 48.dp + 40.dp + 30.dp
