@@ -121,27 +121,7 @@ class AirCircleProgressView : View {
     )
   }
 
-  @SuppressLint("ClickableViewAccessibility")
-  override fun onTouchEvent(event: MotionEvent): Boolean {
-    when (event.action) {
-      MotionEvent.ACTION_DOWN -> {
-        cancelSteadyAnimIfNeed()
-        rotateCanvasWhenMove(event.x, event.y)
-        setParentRequestDisallowInterceptTouchEvent(true, parent)
-        postInvalidateOnAnimation()
-      }
-      MotionEvent.ACTION_MOVE -> {
-        rotateCanvasWhenMove(event.x, event.y)
-        postInvalidateOnAnimation()
-      }
-      MotionEvent.ACTION_UP -> {
-        cancelSteadyAnimIfNeed()
-        startNewSteadyAnim()
-        setParentRequestDisallowInterceptTouchEvent(false, parent)
-      }
-    }
-    return super.onTouchEvent(event)
-  }
+
 
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     super.onSizeChanged(w, h, oldw, oldh)
@@ -152,7 +132,6 @@ class AirCircleProgressView : View {
   private val textBound = Rect()
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
-    rotateCanvas(canvas)
     // 背景弧
     canvas.drawArc(
       mRectF,
@@ -191,17 +170,7 @@ class AirCircleProgressView : View {
     )
   }
 
-  private fun rotateCanvas(canvas: Canvas) {
-    mMatrix.reset()
-    mCamera.save()
-    mCamera.rotateX(mCanvasRotateX)
-    mCamera.rotateY(mCanvasRotateY)
-    mCamera.getMatrix(mMatrix)
-    mCamera.restore()
-    mMatrix.preTranslate(-mCenterX.toFloat(), -mCenterY.toFloat())
-    mMatrix.postTranslate(mCenterX.toFloat(), mCenterY.toFloat())
-    canvas.concat(mMatrix)
-  }
+
 
   private fun evaluate(fraction: Float, startValue: Int, endValue: Int): Int {
     val startInt = startValue
@@ -234,36 +203,9 @@ class AirCircleProgressView : View {
     return Math.round(a) shl 24 or (Math.round(r) shl 16) or (Math.round(g) shl 8) or Math.round(b)
   }
 
-  private fun setParentRequestDisallowInterceptTouchEvent(b: Boolean, parent: ViewParent?) {
-    if (parent != null) {
-      if (parent is RecyclerView) {
-        parent.requestDisallowInterceptTouchEvent(b)
-        parent.isNestedScrollingEnabled = !b
-        return
-      }
-      setParentRequestDisallowInterceptTouchEvent(b, parent.parent)
-    }
-  }
 
 
-  private fun rotateCanvasWhenMove(x: Float, y: Float) {
-    val dx = x - mCenterX
-    val dy = y - mCenterY
-    var percentX = dx / mCenterX
-    var percentY = dy / mCenterY
-    if (percentX > 1f) {
-      percentX = 1f
-    } else if (percentX < -1f) {
-      percentX = -1f
-    }
-    if (percentY > 1f) {
-      percentY = 1f
-    } else if (percentY < -1f) {
-      percentY = -1f
-    }
-    mCanvasRotateY = MAX_ROTATE_DEGREE * percentX
-    mCanvasRotateX = -(MAX_ROTATE_DEGREE * percentY)
-  }
+
 
   private var steadyAnim: ValueAnimator = ValueAnimator()
   private fun cancelSteadyAnimIfNeed() {
@@ -272,20 +214,6 @@ class AirCircleProgressView : View {
     }
   }
 
-  private fun startNewSteadyAnim() {
-    val propertyNameRotateX = "mCanvasRotateX"
-    val propertyNameRotateY = "mCanvasRotateY"
-    val holderRotateX = PropertyValuesHolder.ofFloat(propertyNameRotateX, mCanvasRotateX, 0f)
-    val holderRotateY = PropertyValuesHolder.ofFloat(propertyNameRotateY, mCanvasRotateY, 0f)
-    steadyAnim = ValueAnimator.ofPropertyValuesHolder(holderRotateX, holderRotateY)
-    steadyAnim.duration = 500
-    steadyAnim.addUpdateListener { animation ->
-      mCanvasRotateX = animation.getAnimatedValue(propertyNameRotateX) as Float
-      mCanvasRotateY = animation.getAnimatedValue(propertyNameRotateY) as Float
-      postInvalidateOnAnimation()
-    }
-    steadyAnim.start()
-  }
 
 
 }

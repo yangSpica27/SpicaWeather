@@ -53,7 +53,9 @@
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_edit_round.xml" value="0.229" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_right_round.xml" value="0.229" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/bg_round.xml" value="0.229" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/ic_cloudly.xml" value="0.231" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/ic_plus.xml" value="0.2075" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/ic_sunny.xml" value="0.231" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/drawable/rect_dialogtap.xml" value="0.229" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_about_me.xml" value="0.27239583333333334" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/activity_city.xml" value="0.33" />
@@ -71,6 +73,7 @@
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/card_weather.xml" value="0.22395833333333334" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/dialog_day_detail.xml" value="0.29199372056514916" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/dialog_warning.xml" value="0.33177083333333335" />
+        <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/item_hour_temp.xml" value="0.33177083333333335" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/item_weather_city.xml" value="0.33177083333333335" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/layout_main_top_bar.xml" value="0.33177083333333335" />
         <entry key="..\:/Project/SpicaWeather/app/src/main/res/layout/now_weather_widget.xml" value="0.20416666666666666" />

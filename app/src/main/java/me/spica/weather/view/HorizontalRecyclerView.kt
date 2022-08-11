@@ -78,7 +78,7 @@ class HorizontalRecyclerView : RecyclerView {
 
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        when (ev.getActionMasked()) {
+        when (ev.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 mBeingDragged = false
                 mHorizontalDragged = false
