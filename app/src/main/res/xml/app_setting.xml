@@ -27,6 +27,7 @@
 
     <Preference
         app:key="about"
+        app:summary="1.0"
         app:title="关于">
 
     </Preference>
