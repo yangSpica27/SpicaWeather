@@ -47,4 +47,11 @@ interface Repository {
     onError: (String?) -> Unit,
   ): kotlinx.coroutines.flow.Flow<CaiyunExtendBean?>
 
+
+  fun fetchWeather(
+    lon: String,
+    lat: String,
+    onError: (String?) -> Unit,
+  ): kotlinx.coroutines.flow.Flow<Weather?>
+
 }

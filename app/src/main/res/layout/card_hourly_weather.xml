@@ -61,9 +61,9 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginTop="6dp" />
 
-    <me.spica.weather.view.line.MiuiWeatherLineView
-        android:id="@+id/line_view"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+<!--    <me.spica.weather.view.line.MiuiWeatherLineView-->
+<!--        android:id="@+id/line_view"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="200dp" />-->
 
 </LinearLayout>

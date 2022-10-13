@@ -250,10 +250,10 @@ class MiuiWeatherLineView : View {
 
       textPaint.color = Color.BLACK
 
-      val timeText = if (divisionDate.time.before(hourlyWeatherBean.fxTime)) {
-        "次日" + sdfAfter.format(hourlyWeatherBean.fxTime)
+      val timeText = if (divisionDate.time.before(hourlyWeatherBean.fxTime())) {
+        "次日" + sdfAfter.format(hourlyWeatherBean.fxTime())
       } else {
-        sdfAfter.format(hourlyWeatherBean.fxTime)
+        sdfAfter.format(hourlyWeatherBean.fxTime())
       }
 
       textPaint.getTextBounds(timeText, 0, timeText.length, textBound)

@@ -14,7 +14,7 @@ data class AirBean(
   val so2: Float,// so2
   val co: Float,// co
   val o3: Float,// 臭氧
-  var fxLink: String = ""
+  var fxLink: String? = ""
 )
 
 fun Now.toAir(): AirBean = AirBean(

@@ -13,7 +13,7 @@ private val sdf = SimpleDateFormat(
 
 @JsonClass(generateAdapter = true)
 data class HourlyWeatherBean(
-  val fxTime: Date = Date(), // 更新时间
+  val fxTime: String = "", // 更新时间
   val temp: Int, // 当前的温度
   val iconId: Int, // 图标
   val windSpeed: Int, // 风速
@@ -26,18 +26,22 @@ data class HourlyWeatherBean(
   fun getWeatherType(): WeatherType {
     return WeatherCodeUtils.getWeatherCode(iconId)
   }
+
+  fun fxTime(): Date {
+    try {
+      sdf.parse(fxTime) ?: Date()
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+    return Date()
+  }
 }
 
 fun me.spica.weather.network.hefeng.hourly.Hourly.toHourlyWeatherBean(): HourlyWeatherBean {
-  var fixTime = Date()
-  try {
-    fixTime = sdf.parse(fxTime) ?: Date()
-  } catch (e: Exception) {
-    e.printStackTrace()
-  }
+
 
   return HourlyWeatherBean(
-    fxTime = fixTime,
+    fxTime = this.fxTime,
     temp = temp.toIntOrNull() ?: 0,
     iconId = icon.toIntOrNull() ?: 0,
     windSpeed = windSpeed.toIntOrNull() ?: 0,

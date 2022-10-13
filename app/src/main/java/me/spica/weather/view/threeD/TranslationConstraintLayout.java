@@ -75,18 +75,18 @@ public class TranslationConstraintLayout extends ConstraintLayout {
         rotateCanvasWhenMove(x, y);
         setParentRequestDisallowInterceptTouchEvent(true, getParent());
         postInvalidateOnAnimation();
-        return true;
+        return false;
       }
       case MotionEvent.ACTION_MOVE: {
         rotateCanvasWhenMove(x, y);
         postInvalidateOnAnimation();
-        return true;
+        return false;
       }
       case MotionEvent.ACTION_UP: {
         cancelSteadyAnimIfNeed();
         startNewSteadyAnim();
         setParentRequestDisallowInterceptTouchEvent(false, getParent());
-        return true;
+        return false;
       }
     }
 

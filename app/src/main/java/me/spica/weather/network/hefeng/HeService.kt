@@ -2,6 +2,8 @@ package me.spica.weather.network.hefeng
 
 import com.skydoves.sandwich.ApiResponse
 import me.spica.weather.BuildConfig
+import me.spica.weather.model.BaseResponse
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.network.caiyun.CaiyunBean
 import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
@@ -71,6 +73,14 @@ interface HeService {
     @Query("key")
     key: String = BuildConfig.HE_WEB_KEY
   ): ApiResponse<Air>
+
+
+  // 聚合接口
+  @GET("http://117.50.189.65:3389/api/weather/all")
+  suspend fun getAllWeather(
+    @Query("location")
+    location: String,
+  ): ApiResponse<BaseResponse<Weather>>
 
 
   @GET("https://api.caiyunapp.com/v2.6/${BuildConfig.CAIYUN}/{location}/weather?alert=true&dailysteps=1&hourlysteps=24")

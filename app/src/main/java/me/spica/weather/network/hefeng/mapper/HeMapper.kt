@@ -2,6 +2,7 @@ package me.spica.weather.network.hefeng.mapper
 
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.ApiSuccessModelMapper
+import me.spica.weather.model.BaseResponse
 import me.spica.weather.model.weather.*
 import me.spica.weather.network.caiyun.CaiyunBean
 import me.spica.weather.network.hefeng.HeCode
@@ -106,6 +107,15 @@ object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBea
     } else {
       throw java.lang.RuntimeException(apiErrorResponse.response.message())
     }
+  }
+
+}
+
+object SuccessWeatherMapper : ApiSuccessModelMapper<BaseResponse<Weather>, Weather> {
+  override fun map(apiErrorResponse: ApiResponse.Success<BaseResponse<Weather>>): Weather {
+    if (apiErrorResponse.data.data == null) throw  java.lang.RuntimeException("暂无该地区数据")
+    if (apiErrorResponse.data.code != 200) throw java.lang.RuntimeException(apiErrorResponse.data.message)
+    return apiErrorResponse.data.data!!
   }
 
 }

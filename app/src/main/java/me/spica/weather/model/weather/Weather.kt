@@ -4,12 +4,14 @@ import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.squareup.moshi.JsonClass
 import me.spica.weather.R
 import me.spica.weather.common.WeatherType
 
 
 @Entity
 @TypeConverters(WeatherBeanConverter::class)
+@JsonClass(generateAdapter = true)
 data class Weather(
   val todayWeather: NowWeatherBean,
   val dailyWeather: List<DailyWeatherBean>,
@@ -17,9 +19,9 @@ data class Weather(
   val lifeIndexes: List<LifeIndexBean>,
   val air: AirBean,
   @PrimaryKey(autoGenerate = false)
-  val cityName: String = "",
-  var descriptionForToday: String = "", // 今天的气象描述
-  var descriptionForToWeek: String = "", // 一周的气象描述
+  var cityName: String = "",
+  var descriptionForToday: String? = "", // 今天的气象描述
+  var descriptionForToWeek: String? = "", // 一周的气象描述
   var alerts: List<AlertBean> = listOf()
 ) {
 

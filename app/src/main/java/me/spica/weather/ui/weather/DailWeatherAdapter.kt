@@ -70,8 +70,8 @@ class DailWeatherAdapter : RecyclerView.Adapter<DailWeatherAdapter.ViewHolder>()
     val themeColor = items[0].getWeatherType().getThemeColor()
     items[position].let {
 
-      holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime)
-      holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime)
+      holder.itemDayWeatherBinding.tvDate.text = sdf2.format(it.fxTime())
+      holder.itemDayWeatherBinding.tvWeek.text = sdfWeek.format(it.fxTime())
 
       holder.itemDayWeatherBinding.itemLineMax.themeColor = themeColor
       holder.itemDayWeatherBinding.itemLineMin.themeColor = themeColor

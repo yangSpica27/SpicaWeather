@@ -7,10 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.model.weather.*
+import me.spica.weather.model.weather.AirBean
+import me.spica.weather.model.weather.CaiyunExtendBean
 import me.spica.weather.persistence.dao.WeatherDao
 import me.spica.weather.repository.HeRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -46,23 +46,74 @@ class WeatherViewModel @Inject constructor(
   private val _isLoading = MutableStateFlow(false)
 
   // 即时天气
-  private val nowWeatherFlow: Flow<NowWeatherBean?> =
-    cityFlow
-      .filterNotNull()
-      .flatMapLatest {
-        repository.fetchNowWeather(
-          lon = it.lon,
-          lat = it.lat,
-          onError = { message ->
-            _errorMessage.value = message
-          }
-        )
-      }
-
-
-  private val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
-    cityFlow.filterNotNull().flatMapLatest {
-      repository.fetchDailyWeather(
+//  private val nowWeatherFlow: Flow<NowWeatherBean?> =
+//    cityFlow
+//      .filterNotNull()
+//      .flatMapLatest {
+//        repository.fetchNowWeather(
+//          lon = it.lon,
+//          lat = it.lat,
+//          onError = { message ->
+//            _errorMessage.value = message
+//          }
+//        )
+//      }
+//
+//
+//  private val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
+//    cityFlow.filterNotNull().flatMapLatest {
+//      repository.fetchDailyWeather(
+//        lon = it.lon,
+//        lat = it.lat,
+//        onError = { message ->
+//          _errorMessage.value = message
+//        }
+//      )
+//    }
+//
+//  private val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
+//    cityFlow
+//      .filterNotNull()
+//      .flatMapLatest {
+//        repository.fetchHourlyWeather(
+//          lon = it.lon,
+//          lat = it.lat,
+//          onError = { message ->
+//            _errorMessage.value = message
+//          }
+//        )
+//      }
+//
+//  private val currentIndices: Flow<List<LifeIndexBean>?> =
+//    cityFlow
+//      .filterNotNull()
+//      .flatMapLatest {
+//        repository.fetchTodayLifeIndex(
+//          lon = it.lon,
+//          lat = it.lat,
+//          onError = { message ->
+//            _errorMessage.value = message
+//          }
+//        )
+//      }
+//
+//  private val nowAir: Flow<AirBean?> =
+//    cityFlow
+//      .filterNotNull()
+//      .flatMapLatest {
+//        repository.fetchNowAir(
+//          lon = it.lon,
+//          lat = it.lat,
+//          onError = { message ->
+//            _errorMessage.value = message
+//          }
+//        )
+//      }
+//
+  private val alert: Flow<CaiyunExtendBean?> = cityFlow
+    .filterNotNull()
+    .flatMapLatest {
+      return@flatMapLatest repository.fetchCaiyunExtend(
         lon = it.lon,
         lat = it.lat,
         onError = { message ->
@@ -70,32 +121,6 @@ class WeatherViewModel @Inject constructor(
         }
       )
     }
-
-  private val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
-    cityFlow
-      .filterNotNull()
-      .flatMapLatest {
-        repository.fetchHourlyWeather(
-          lon = it.lon,
-          lat = it.lat,
-          onError = { message ->
-            _errorMessage.value = message
-          }
-        )
-      }
-
-  private val currentIndices: Flow<List<LifeIndexBean>?> =
-    cityFlow
-      .filterNotNull()
-      .flatMapLatest {
-        repository.fetchTodayLifeIndex(
-          lon = it.lon,
-          lat = it.lat,
-          onError = { message ->
-            _errorMessage.value = message
-          }
-        )
-      }
 
   private val nowAir: Flow<AirBean?> =
     cityFlow
@@ -110,54 +135,21 @@ class WeatherViewModel @Inject constructor(
         )
       }
 
-  private val alert: Flow<CaiyunExtendBean?> = cityFlow
+  val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
+    weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)
+  }
+
+  // 和风系 接口
+  val weatherFlow = cityFlow
     .filterNotNull()
     .flatMapLatest {
-      Timber.e("触发获取Alert")
-      return@flatMapLatest repository.fetchCaiyunExtend(
+      repository.fetchWeather(
         lon = it.lon,
         lat = it.lat,
         onError = { message ->
           _errorMessage.value = message
         }
       )
-    }
-
-  val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
-    weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)
-  }
-
-  // 和风系 接口
-  val weatherFlow = combine(
-    nowWeatherFlow,// 请求获取当前天气
-    dailyWeatherFlow,// 请求获取日级别天气
-    hourlyWeatherFlow,// 请求获取小时级别天气
-    currentIndices,// 获取天气指数
-    nowAir,// 获取空气信息
-  ) { nowWeather, dailyWeather, hourWeather, lifeIndexes, nowAir ->
-    if (nowWeather != null
-      && dailyWeather != null
-      && hourWeather != null &&
-      lifeIndexes != null &&
-      nowAir != null
-    ) {
-      // 所有请求结束后拼接 结果合并
-      return@combine Weather(
-        nowWeather,
-        dailyWeather,
-        hourWeather,
-        lifeIndexes,
-        nowAir,
-        cityFlow.value?.cityName ?: ""
-      )
-    }
-    // 请求错误给null 给前端显示是否重试
-    return@combine null
-  }
-    .onStart {
-      _isLoading.value = true
-    }.onCompletion {
-      _isLoading.value = false
     }
 
   init {
@@ -169,6 +161,7 @@ class WeatherViewModel @Inject constructor(
           weather?.descriptionForToday = alertBean?.forecastKeypoint ?: ""
           weather?.descriptionForToWeek = alertBean?.description ?: ""
           weather?.alerts = alertBean?.alerts ?: listOf()
+          weather?.cityName = cityFlow.value?.cityName?:""
           weather
         }
       }.collectLatest {

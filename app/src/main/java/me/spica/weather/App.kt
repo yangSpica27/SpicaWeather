@@ -32,7 +32,7 @@ class App : Application() {
   }
 
   private fun handlerDelegate() {
-    // 接管主线程loop
+    // 接管主线程loophttps://api.caiyunapp.com/v2.6/
     if (!BuildConfig.DEBUG) {
       Handler(Looper.getMainLooper()).post {
         while (true) {

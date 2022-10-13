@@ -66,7 +66,6 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 
     val nowWeatherBean = weather.todayWeather
     val themeColor = weather.getWeatherType().getThemeColor()
-    val bgDrawable = context.getDrawable(R.drawable.bg_card)
     binding.weatherBg.bgColor = themeColor
     binding.weatherBg.currentWeatherType = weather.getWeatherType().getWeatherAnimType()
 
@@ -93,7 +92,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
       binding.tvNow.text = "空气质量：${weather.air.category}"
       binding.tvWeather.text = nowWeatherBean.weatherName + ","
       binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
-      binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime)
+      binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime())
       binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"
       binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"
       binding.tvWindSpeedValue.text = nowWeatherBean.windSpeed.toString() + "km/h"

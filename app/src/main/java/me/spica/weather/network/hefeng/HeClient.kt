@@ -1,6 +1,8 @@
 package me.spica.weather.network.hefeng
 
 import com.skydoves.sandwich.ApiResponse
+import me.spica.weather.model.BaseResponse
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.network.caiyun.CaiyunBean
 import me.spica.weather.network.hefeng.air.Air
 import me.spica.weather.network.hefeng.daily.DailyWeather
@@ -49,6 +51,15 @@ class HeClient @Inject constructor(private val heService: HeService) {
     lon: String,
     lat: String
   ): ApiResponse<Air> = heService.getNowAir(
+    location = "$lon,$lat"
+  )
+
+
+  // 聚合接口
+  suspend fun getAllWeather(
+    lon: String,
+    lat: String
+  ): ApiResponse<BaseResponse<Weather>> = heService.getAllWeather(
     location = "$lon,$lat"
   )
 

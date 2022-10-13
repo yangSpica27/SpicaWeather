@@ -57,7 +57,7 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     dailyWeatherAdapter.syncTempMaxAndMin()
     doOnMainThreadIdle({
       binding.tipDesc.text = weather.descriptionForToWeek
-      if (weather.descriptionForToday.isEmpty()) {
+      if (weather.descriptionForToday.isNullOrEmpty()) {
         binding.tipDesc.hide()
       } else {
         binding.tipDesc.show()

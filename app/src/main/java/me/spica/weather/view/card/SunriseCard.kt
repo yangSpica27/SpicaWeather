@@ -47,8 +47,8 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
     override fun bindData(weather: Weather) {
-        val startTime = weather.dailyWeather[0].sunriseDate
-        val endTime = weather.dailyWeather[0].sunsetDate
+        val startTime = weather.dailyWeather[0].sunriseDate()
+        val endTime = weather.dailyWeather[0].sunsetDate()
         val subTitle = weather.dailyWeather[0].moonParse
         binding.sunriseView.bindTime(startTime, endTime)
         binding.sunriseView.themeColor =
