@@ -8,6 +8,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +22,6 @@ import me.spica.weather.databinding.CardNowWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
-import me.spica.weather.view.weather_bg.NowWeatherView
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,6 +62,8 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   // 12:00
   private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
+  private val showInAnimation by lazy { AnimationUtils.loadAnimation(context, R.anim.in_bottom) }
+
   @SuppressLint("SetTextI18n")
   override fun bindData(weather: Weather) {
 
@@ -90,11 +92,14 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         }
         start()
       }
+
+      binding.tvTemp.setOnClickListener {
+        binding.tvTemp.startAnimation(showInAnimation)
+      }
+
       binding.tvNow.text = "空气质量：${weather.air.category}"
       binding.tvWeather.text = nowWeatherBean.weatherName + ","
       binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
-      Timber.tag("更新时间").e(sdfAfter.format(nowWeatherBean.obsTime()))
-      Timber.tag("原始数据").e(nowWeatherBean.toString())
       binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime())
       binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"
       binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"

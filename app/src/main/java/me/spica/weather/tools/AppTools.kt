@@ -17,6 +17,7 @@ import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.*
@@ -26,6 +27,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import me.spica.weather.BuildConfig
+import me.spica.weather.R
 import timber.log.Timber
 
 /**
@@ -196,6 +198,7 @@ val Int.dp: Float
 
 fun View.show() {
     this.visibility = View.VISIBLE
+    startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
 }
 
 fun View.hide() {
