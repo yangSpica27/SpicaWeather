@@ -22,6 +22,7 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
 import me.spica.weather.view.weather_bg.NowWeatherView
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -92,6 +93,8 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
       binding.tvNow.text = "空气质量：${weather.air.category}"
       binding.tvWeather.text = nowWeatherBean.weatherName + ","
       binding.tvFeelTemp.text = "体感温度:" + nowWeatherBean.feelTemp.toString() + "℃"
+      Timber.tag("更新时间").e(sdfAfter.format(nowWeatherBean.obsTime()))
+      Timber.tag("原始数据").e(nowWeatherBean.toString())
       binding.tvUpdateTime.text = sdfAfter.format(nowWeatherBean.obsTime())
       binding.tvWaterValue.text = nowWeatherBean.water.toString() + "%"
       binding.tvWindPaValue.text = nowWeatherBean.windPa.toString() + "hPa"

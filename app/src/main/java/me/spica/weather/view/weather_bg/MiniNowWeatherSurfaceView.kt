@@ -181,7 +181,7 @@ class MiniNowWeatherSurfaceView :SurfaceView, SurfaceHolder.Callback {
         lastSyncTime = System.currentTimeMillis()
         doOnDraw()
         try {
-          Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
+          Thread.sleep(Math.max(0, 32 - (System.currentTimeMillis() - lastSyncTime)))
         } catch (e: Exception) {
           e.printStackTrace()
         }

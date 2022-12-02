@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val sdf = SimpleDateFormat("yyyy-MM-dd'T'mm:HH+08:00", Locale.CHINA)
+private val sdf = SimpleDateFormat("yyyy-MM-dd mm:HH:ss", Locale.CHINA)
 
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -22,7 +22,12 @@ data class NowWeatherBean(
   var fxLink: String? = ""
 ) : Parcelable {
   fun obsTime(): Date {
-    return sdf.parse(obsTime) ?: Date()
+    try {
+      return sdf.parse(obsTime) ?: Date()
+    } catch (_: Exception) {
+
+    }
+    return Date()
   }
 }
 

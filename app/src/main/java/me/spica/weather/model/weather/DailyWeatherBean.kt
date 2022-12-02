@@ -54,11 +54,22 @@ data class DailyWeatherBean(
   }
 
   fun sunriseDate(): Date {
-    return sdf2.parse("06:00")
+    try {
+      return sdf2.parse(sunriseDate)
+    } catch (_: Exception) {
+
+    }
+    return sdf2.parse("6:00")
   }
 
   fun sunsetDate(): Date {
+    try {
+      return sdf2.parse(sunsetDate)
+    } catch (_: Exception) {
+
+    }
     return sdf2.parse("18:00")
+
   }
 
 }

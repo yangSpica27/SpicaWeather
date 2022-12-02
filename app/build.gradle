@@ -90,7 +90,7 @@ static String quotWrapper(key) {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -109,8 +109,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // 协程支持
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
 
     // 生命周期+协程
@@ -164,8 +164,11 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
 
 
-    def dialogx_version = "0.0.45.beta21"
+    def dialogx_version = "0.0.46"
     implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
+
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     //  testImplementation 'junit:junit:4.13.2'
     //  androidTestImplementation 'androidx.test.ext:junit:1.1.3'

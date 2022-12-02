@@ -13,7 +13,7 @@ private val sdf = SimpleDateFormat(
 
 @JsonClass(generateAdapter = true)
 data class HourlyWeatherBean(
-  val fxTime: String = "", // 更新时间
+  val fxTime: String, // 更新时间
   val temp: Int, // 当前的温度
   val iconId: Int, // 图标
   val windSpeed: Int, // 风速
@@ -29,7 +29,7 @@ data class HourlyWeatherBean(
 
   fun fxTime(): Date {
     try {
-      sdf.parse(fxTime) ?: Date()
+      return sdf.parse(fxTime) ?: Date()
     } catch (e: Exception) {
       e.printStackTrace()
     }

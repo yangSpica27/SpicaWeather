@@ -182,9 +182,9 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
         lastSyncTime = System.currentTimeMillis()
         doOnDraw()
         try {
-          Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
-        } catch (e: Exception) {
-          e.printStackTrace()
+          Thread.sleep(32)
+        } catch (_: Exception) {
+
         }
 
       }

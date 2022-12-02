@@ -59,7 +59,9 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
     items[position].let {
 
       holder.itemHourTempBinding.itemLine.themeColor = it.getWeatherType().getThemeColor()
+
       holder.itemHourTempBinding.tvTime.text = sdfAfter.format(it.fxTime())
+
       if (divisionDate.time.before(it.fxTime())) {
         holder.itemHourTempBinding.tvTime.text = "次日" + sdfAfter.format(it.fxTime())
       }
