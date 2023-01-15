@@ -155,16 +155,19 @@ class TempLineItem : View {
     linePaint.strokeWidth = 3.dp
     linePaint.isAntiAlias = true
     linePaint.maskFilter = BlurMaskFilter(1.dp, BlurMaskFilter.Blur.SOLID)
+
     val lastPointY = pointBottomY - ((lastValue * 1f - minValue) / (maxValue - minValue)) *
         (pointBottomY - pointTopY)
+
     val nextPointY = pointBottomY -
         ((nextValue * 1f - minValue) / (maxValue - minValue)) *
         (pointBottomY - pointTopY)
 
 
+
     if (drawLeftLine) {
 
-      pathLeft = Path()
+      pathLeft.reset();
 
       // 七点
       pathLeft.moveTo(pointX, pointY)
@@ -194,7 +197,7 @@ class TempLineItem : View {
 
     if (drawRightLine) {
       // 绘制背景
-      pathRight = Path()
+      pathRight.reset()
       pathRight.moveTo(pointX, pointY)
       pathRight.lineTo(pointX, viewHeight.toFloat())
       pathRight.lineTo(viewWidth.toFloat(), height.toFloat())
@@ -222,11 +225,8 @@ class TempLineItem : View {
         viewHeight.toFloat() - dottedLinePaint.strokeWidth / 2F,
         dottedLinePaint
       )
-
-      Timber.i("lastP$nextPointY")
     }
 
-    Timber.i("======================")
   }
 
   private fun drawDottedLine(canvas: Canvas) {
