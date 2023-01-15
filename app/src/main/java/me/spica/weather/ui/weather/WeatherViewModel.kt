@@ -122,18 +122,18 @@ class WeatherViewModel @Inject constructor(
       )
     }
 
-  private val nowAir: Flow<AirBean?> =
-    cityFlow
-      .filterNotNull()
-      .flatMapLatest {
-        repository.fetchNowAir(
-          lon = it.lon,
-          lat = it.lat,
-          onError = { message ->
-            _errorMessage.value = message
-          }
-        )
-      }
+//  private val nowAir: Flow<AirBean?> =
+//    cityFlow
+//      .filterNotNull()
+//      .flatMapLatest {
+//        repository.fetchNowAir(
+//          lon = it.lon,
+//          lat = it.lat,
+//          onError = { message ->
+//            _errorMessage.value = message
+//          }
+//        )
+//      }
 
   val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
     weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)

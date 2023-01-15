@@ -116,7 +116,7 @@ class MiniNowWeatherSurfaceView :SurfaceView, SurfaceHolder.Callback {
     0f, 1f
   ).apply {
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatMode = ValueAnimator.REVERSE
     duration = 3000L
   }
 
@@ -124,7 +124,7 @@ class MiniNowWeatherSurfaceView :SurfaceView, SurfaceHolder.Callback {
     0f, 1f
   ).apply {
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatMode = ValueAnimator.REVERSE
     duration = 4000L
     interpolator = LinearInterpolator()
   }
@@ -133,7 +133,7 @@ class MiniNowWeatherSurfaceView :SurfaceView, SurfaceHolder.Callback {
   private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
     duration = 20 * 1000L
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.RESTART
+    repeatMode = ValueAnimator.RESTART
     interpolator = LinearInterpolator()
   }
 
@@ -181,7 +181,7 @@ class MiniNowWeatherSurfaceView :SurfaceView, SurfaceHolder.Callback {
         lastSyncTime = System.currentTimeMillis()
         doOnDraw()
         try {
-          Thread.sleep(Math.max(0, 32 - (System.currentTimeMillis() - lastSyncTime)))
+          Thread.sleep(Math.max(0, 24 - (System.currentTimeMillis() - lastSyncTime)))
         } catch (e: Exception) {
           e.printStackTrace()
         }

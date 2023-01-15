@@ -17,7 +17,7 @@
         android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="日出日落" />
+        android:text="@string/sun_rise_sun_set" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_subtitle"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="14dp"
         android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-        android:text="盈亏月"
+        android:text="@string/moon_mode"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

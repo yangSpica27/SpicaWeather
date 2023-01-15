@@ -37,8 +37,8 @@ open class NowWeatherView : View, SensorEventListener {
   private val cloudAnim = ValueAnimator.ofFloat(
     0f, 1f
   ).apply {
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatCount = ValueAnimator.INFINITE
+    repeatMode = ValueAnimator.REVERSE
     duration = 3000L
     addUpdateListener {
       postInvalidateOnAnimation()
@@ -51,8 +51,8 @@ open class NowWeatherView : View, SensorEventListener {
   private val cloudAnim2 = ValueAnimator.ofFloat(
     0f, 1f
   ).apply {
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatCount = ValueAnimator.INFINITE
+    repeatMode = ValueAnimator.REVERSE
     duration = 4000L
     interpolator = LinearInterpolator()
 
@@ -125,8 +125,8 @@ open class NowWeatherView : View, SensorEventListener {
 
   private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
     duration = 20 * 1000L
-    repeatCount = Animation.INFINITE
-    repeatMode = Animation.RESTART
+    repeatCount = ValueAnimator.INFINITE
+    repeatMode = ValueAnimator.RESTART
     interpolator = LinearInterpolator()
     addUpdateListener {
       postInvalidateOnAnimation()
@@ -134,7 +134,7 @@ open class NowWeatherView : View, SensorEventListener {
   }
 
   private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
+    repeatCount = ValueAnimator.INFINITE
     interpolator = LinearInterpolator()
     addUpdateListener {
       postInvalidateOnAnimation()
@@ -143,7 +143,7 @@ open class NowWeatherView : View, SensorEventListener {
 
 
   private val snowAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
+    repeatCount = ValueAnimator.INFINITE
     interpolator = LinearInterpolator()
     addUpdateListener {
       postInvalidateOnAnimation()

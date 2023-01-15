@@ -44,7 +44,7 @@ class MiuiWeatherLineView : View {
   private var bottomLineY = 200.dp - 40.dp
 
 
-  private val dashXs: ArrayList<Float> = ArrayList() //不同天气之间虚线的x坐标集合
+
 
   private val icons: MutableMap<String, Bitmap> = mutableMapOf()
 
@@ -96,7 +96,6 @@ class MiuiWeatherLineView : View {
     super.onDraw(canvas)
     if (weathers.isEmpty()) return
     drawAxis(canvas)
-    drawIcon(canvas)
   }
 
 
@@ -108,58 +107,6 @@ class MiuiWeatherLineView : View {
       style = Paint.Style.FILL
       textAlign = Paint.Align.CENTER
     }
-
-  // 绘制天气图标
-  private fun drawIcon(canvas: Canvas) {
-
-    var leftUsedScreenLeft = false
-
-    for (index in 0 until dashXs.size - 1) {
-      if (index>icons.toList().size-1)return
-      val icon = icons.toList()[index]
-
-      var minX = dashXs[index] // 左界
-      var maxX = dashXs[index + 1] // 右边界
-
-      if (minX < scrollX && maxX < scrollX + width) {
-        minX = scrollX * 1f
-        leftUsedScreenLeft = true
-      }
-
-      if (minX > scrollX && maxX > scrollX + width) {
-        maxX = scrollX + width * 1f
-      }
-
-      var iconX = if (maxX - minX > 48.dp) {
-        minX + (maxX - minX) / 2f
-      } else {
-        if (leftUsedScreenLeft) {
-          maxX - 48.dp / 2f
-        } else {
-          minX + 48.dp / 2f
-        }
-      }
-
-
-      if (maxX < scrollX) {
-        iconX = maxX - 48.dp / 2f
-      } else if (minX > scrollX + width) {
-        iconX = minX + 48.dp / 2f
-      } else if (minX < scrollX && maxX > scrollX + width) {
-        iconX = scrollX + width / 2f
-      }
-
-      canvas.drawBitmap(
-        icon.second,
-        iconX,
-        bottomLineY - icon.second.height - 12.dp,
-        null
-      )
-
-    }
-
-
-  }
 
 
   // 用于绘制坐标轴的虚线
@@ -199,16 +146,12 @@ class MiuiWeatherLineView : View {
   // 绘制时间轴
   private fun drawAxis(canvas: Canvas) {
     canvas.save()
-
     testPath.reset()
 
-    dashXs.clear()
 
-    val colorInts = IntArray(weathers.size)
-    val positions = FloatArray(weathers.size)
+
     weathers.forEachIndexed { index, hourlyWeatherBean ->
-      positions[index] = (index + 1) * (1f / weathers.size)
-      colorInts[index] = hourlyWeatherBean.getWeatherType().getThemeColor()
+
 
       pathPaint.shader = LinearGradient(
         0F,
@@ -275,7 +218,7 @@ class MiuiWeatherLineView : View {
           bgPath.lineTo(ITEM_WIDTH, bottomLineY)
           bgPath.lineTo(ITEM_WIDTH, (currentY + nextY) / 2f)
 
-//          canvas.drawPath(bgPath, pathPaint)
+          canvas.drawPath(bgPath, pathPaint)
 
 
           // 起始 不需要绘制开头
@@ -288,16 +231,16 @@ class MiuiWeatherLineView : View {
           )
 
 
-//          canvas.drawLine(
-//            ITEM_WIDTH / 2f,
-//            currentY,
-//            ITEM_WIDTH,
-//            (currentY + nextY) / 2f,
-//            linePaint
-//          )
+          canvas.drawLine(
+            ITEM_WIDTH / 2f,
+            currentY,
+            ITEM_WIDTH,
+            (currentY + nextY) / 2f,
+            linePaint
+          )
 
           canvas.drawLine(ITEM_WIDTH / 2f, currentY, ITEM_WIDTH / 2f, bottomLineY, axisPaint)
-          dashXs.add(ITEM_WIDTH / 2f)
+
 
         }
         weathers.size - 1 -> {
@@ -322,16 +265,16 @@ class MiuiWeatherLineView : View {
             bottomLineY
           )
 
-//          canvas.drawPath(bgPath, pathPaint)
+          canvas.drawPath(bgPath, pathPaint)
 
 
-//          canvas.drawLine(
-//            ITEM_WIDTH * (index),
-//            (currentY + lastY) / 2f,
-//            ITEM_WIDTH * (index + 1) - ITEM_WIDTH / 2f,
-//            currentY,
-//            linePaint
-//          )
+          canvas.drawLine(
+            ITEM_WIDTH * (index),
+            (currentY + lastY) / 2f,
+            ITEM_WIDTH * (index + 1) - ITEM_WIDTH / 2f,
+            currentY,
+            linePaint
+          )
 
           // 末尾
           canvas.drawLine(
@@ -342,11 +285,6 @@ class MiuiWeatherLineView : View {
             axisPaint
           )
 
-          if (weathers[index - 1].getWeatherType() != hourlyWeatherBean.getWeatherType()) {
-            //  不同天气的分割线
-            canvas.drawLine(ITEM_WIDTH * (index), (lastY + currentY) / 2f, ITEM_WIDTH * (index), bottomLineY, axisPaint)
-            dashXs.add(ITEM_WIDTH * (index))
-          }
 
           canvas.drawLine(
             ITEM_WIDTH * (index + 1) - ITEM_WIDTH / 2f,
@@ -356,7 +294,6 @@ class MiuiWeatherLineView : View {
             axisPaint
           )
 
-          dashXs.add(ITEM_WIDTH * (index + 1) - ITEM_WIDTH / 2f)
 
         }
         else -> {
@@ -369,9 +306,13 @@ class MiuiWeatherLineView : View {
             axisPaint
           )
 
+
+
           val nextY = getCentY(weathers[index + 1])
 
           val lastY = getCentY(weathers[index - 1])
+
+
 
           testPath.apply {
             moveTo(
@@ -409,39 +350,14 @@ class MiuiWeatherLineView : View {
             bottomLineY
           )
 
-//          canvas.drawPath(bgPath, pathPaint)
+          canvas.drawPath(bgPath, pathPaint)
 
-
-//          canvas.drawLine(
-//            ITEM_WIDTH * (index),
-//            (currentY + lastY) / 2f,
-//            ITEM_WIDTH * (index + 1),
-//            (currentY + nextY) / 2f,
-//            linePaint
-//          )
-
-
-          if (weathers[index - 1].getWeatherType() != hourlyWeatherBean.getWeatherType()) {
-            //  不同天气的分割线
-            canvas.drawLine(ITEM_WIDTH * (index), (lastY + currentY) / 2f, ITEM_WIDTH * (index), bottomLineY, axisPaint)
-            dashXs.add(ITEM_WIDTH * (index))
-          }
 
 
         }
       }
     }
-    linePaint.shader = LinearGradient(
-      0F,
-      0F,
-      weathers.size * ITEM_WIDTH,
-      0f,
-      colorInts,
-      null,
-      Shader.TileMode.REPEAT
-    )
-    linePaint.color = Color.BLACK
-    canvas.drawPath(testPath, linePaint)
+
     canvas.restore()
   }
 

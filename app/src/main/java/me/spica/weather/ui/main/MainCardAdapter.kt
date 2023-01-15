@@ -100,7 +100,7 @@ class MainCardAdapter(
         val itemView = NowWeatherCard(parent.context)
         itemView.layoutParams = lp
         itemView.setOnClickListener {
-          todayWeatherDetailDialog.show(activity)
+//          todayWeatherDetailDialog.show(activity)
         }
         return AbstractMainViewHolder(itemView, itemView)
       }

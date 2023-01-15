@@ -12,7 +12,6 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
-import timber.log.Timber
 
 class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -117,7 +116,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     0f, 1f
   ).apply {
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatMode =ValueAnimator.REVERSE
     duration = 3000L
   }
 
@@ -125,7 +124,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     0f, 1f
   ).apply {
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.REVERSE
+    repeatMode = ValueAnimator.REVERSE
     duration = 4000L
     interpolator = LinearInterpolator()
   }
@@ -134,7 +133,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
     duration = 20 * 1000L
     repeatCount = Animation.INFINITE
-    repeatMode = Animation.RESTART
+    repeatMode = ValueAnimator.RESTART
     interpolator = LinearInterpolator()
   }
 
@@ -157,16 +156,18 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
 
   private fun doOnDraw() {
-    val canvas = holder.lockCanvas(null) ?: return
-    // ================进行绘制==============
-    canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
-    roundClip(canvas)
-    drawSunny(canvas)
-    drawRain(canvas)
-    drawCloudy(canvas)
-    drawSnow(canvas)
-    // ================绘制结束===============
-    holder.unlockCanvasAndPost(canvas)
+    synchronized(this){
+      val canvas = holder.lockCanvas(null) ?: return
+      // ================进行绘制==============
+      canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
+      roundClip(canvas)
+      drawSunny(canvas)
+      drawRain(canvas)
+      drawCloudy(canvas)
+      drawSnow(canvas)
+      // ================绘制结束===============
+      holder.unlockCanvasAndPost(canvas)
+    }
   }
 
   private fun roundClip(canvas: Canvas) {
@@ -182,7 +183,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
         lastSyncTime = System.currentTimeMillis()
         doOnDraw()
         try {
-          Thread.sleep(32)
+          Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
         } catch (_: Exception) {
 
         }
@@ -249,6 +250,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     val centerY = 0 + 50.dp
     // 保存画布的位置
     canvas.save()
+
     // 将画布位移到右上角方便测量
     for (index in 1..4) {
       canvas.translate(centerX, centerY)
