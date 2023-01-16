@@ -281,7 +281,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
         Paint.FontMetricsInt fontMetrics = textLinePaint.getFontMetricsInt();
         int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
         textLinePaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(tmp + "°", targetRect.centerX(), baseline, textLinePaint);
+        canvas.drawText(tmp + "°C", targetRect.centerX(), baseline, textLinePaint);
       }
     }
   }
@@ -325,6 +325,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
           drawPoint = (screenWidth) / 2f + scrollX;
         }
       }
+
 
       // String code = hourlyWeatherList.get(dashLineList.get(i)).getIcon();
       // BitmapDrawable bd;

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -20,8 +21,10 @@ import me.spica.weather.databinding.FragmentListBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
+import me.spica.weather.tools.toast
 import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
+import me.spica.weather.view.card.NowWeatherCard
 import me.spica.weather.view.card.toHomeCardType
 import timber.log.Timber
 
@@ -55,6 +58,7 @@ class WeatherFragment(
   override fun onResume() {
     if (!isFirstLoad) {
       // TODO
+      (viewBinding.rvList.getChildAt(0) as NowWeatherCard?)?.onResume()
     } else {
       // 首次加载
       lifecycleScope.launch {
@@ -75,7 +79,9 @@ class WeatherFragment(
 
       lifecycleScope.launch {
         viewModel.errorMessage.collectLatest {
-
+          doOnMainThreadIdle({
+            toast(it)
+          })
         }
       }
 
@@ -87,6 +93,11 @@ class WeatherFragment(
 
   }
 
+  override fun onPause() {
+    super.onPause()
+    (viewBinding.rvList.getChildAt(0) as NowWeatherCard?)?.onPause()
+    Timber.tag("WeatherFragment").i("onPause:${currentCity?.cityName}")
+  }
 
   override fun onDestroyView() {
     super.onDestroyView()

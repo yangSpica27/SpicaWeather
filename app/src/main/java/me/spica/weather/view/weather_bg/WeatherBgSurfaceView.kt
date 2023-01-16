@@ -18,11 +18,11 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   private lateinit var syncThread: Thread
 
 
-
   private var isWork = false // 是否预备绘制
 
   private val clipPath = Path()
 
+  private var isPause = false;
 
   constructor(context: Context?) : super(context)
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -116,7 +116,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     0f, 1f
   ).apply {
     repeatCount = Animation.INFINITE
-    repeatMode =ValueAnimator.REVERSE
+    repeatMode = ValueAnimator.REVERSE
     duration = 3000L
   }
 
@@ -156,7 +156,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
 
   private fun doOnDraw() {
-    synchronized(this){
+    synchronized(this) {
       val canvas = holder.lockCanvas(null) ?: return
       // ================进行绘制==============
       canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
@@ -179,8 +179,14 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
     isWork = true
     syncThread = Thread {
+
+
+
       while (isWork) {
         lastSyncTime = System.currentTimeMillis()
+        if (isPause){
+          continue
+        }
         doOnDraw()
         try {
           Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
@@ -270,6 +276,16 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     canvas.restore()
   }
 
+  @Synchronized
+  fun resumeWeatherAnim() {
+    isPause = false;
+  }
+
+  @Synchronized
+  fun pauseWeatherAnim() {
+    isPause = true;
+  }
+
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
   }
@@ -336,5 +352,6 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     )
     canvas.restore()
   }
+
 
 }

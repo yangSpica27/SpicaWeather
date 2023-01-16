@@ -22,7 +22,6 @@ import me.spica.weather.databinding.CardNowWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +62,15 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
   private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
 
   private val showInAnimation by lazy { AnimationUtils.loadAnimation(context, R.anim.in_bottom) }
+
+
+  fun onResume(){
+    binding.weatherBg.resumeWeatherAnim()
+  }
+
+  fun onPause(){
+    binding.weatherBg.pauseWeatherAnim()
+  }
 
   @SuppressLint("SetTextI18n")
   override fun bindData(weather: Weather) {
