@@ -49,7 +49,18 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     val items = weather.hourlyWeather
 
     binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
-    binding.lineView.setData(weather.hourlyWeather)
+//    binding.lineView.setData(weather.hourlyWeather)
+
+    binding.indexScrollview2.setToday24HourView(binding.hourForecast2)
+
+    weather.hourlyWeather.toList().sortedBy {
+      it.temp
+    }.apply {
+      binding.hourForecast2.setLowestTemp(first().temp)
+      binding.hourForecast2.setHighestTemp(last().temp)
+      binding.hourForecast2.initData(weather.hourlyWeather)
+    }
+
     doOnMainThreadIdle({
       binding.tipDesc.text = weather.descriptionForToday
       if (weather.descriptionForToday.isNullOrEmpty()) {
