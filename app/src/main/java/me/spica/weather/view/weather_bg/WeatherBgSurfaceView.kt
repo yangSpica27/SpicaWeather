@@ -161,6 +161,10 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
       // ================进行绘制==============
       canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
       roundClip(canvas)
+      if (isPause){
+        holder.unlockCanvasAndPost(canvas)
+        return@synchronized
+      }
       drawSunny(canvas)
       drawRain(canvas)
       drawCloudy(canvas)
@@ -184,9 +188,6 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
       while (isWork) {
         lastSyncTime = System.currentTimeMillis()
-        if (isPause){
-          continue
-        }
         doOnDraw()
         try {
           Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))

@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import me.spica.weather.tools.getColorWithAlpha
 import timber.log.Timber
 
 class TempLineItem : View {
@@ -253,9 +254,5 @@ class TempLineItem : View {
     canvas.drawCircle(pointX, pointY, 5.dp, pointPaint)
   }
 
-  private fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
-    val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
-    val rgb = 0x00ffffff and baseColor
-    return a + rgb
-  }
+
 }

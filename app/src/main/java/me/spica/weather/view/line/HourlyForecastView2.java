@@ -26,10 +26,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import me.spica.weather.R;
+import me.spica.weather.common.WeatherTypeKt;
 import me.spica.weather.model.weather.HourlyWeatherBean;
 import me.spica.weather.tools.AppToolsKt;
+import me.spica.weather.tools.ColorExtKt;
 import timber.log.Timber;
-
 
 public class HourlyForecastView2 extends View implements ScrollWatcher {
 
@@ -142,7 +143,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
       idx++;
     }
     dashLineList.add(size - 1);//添加最后一条虚线位置的索引值idx
-    invalidate();
+    postInvalidate();
   }
 
   private void initDefValue() {
@@ -199,7 +200,8 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     textPaint.setTextSize(textSize);
 
     textLinePaint = new TextPaint();
-    textLinePaint.setTextSize(AppToolsKt.getDp(14));
+    textLinePaint.setTextSize(AppToolsKt.getDp(12));
+    textLinePaint.setColor(ContextCompat.getColor(getContext(), R.color.textColorPrimary));
     textLinePaint.setAntiAlias(true);
 
     textLinePaint.setColor(Color.BLACK);
@@ -238,18 +240,12 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     if (widthMode == MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY) {
       mWidth = widthSize + paddingL + paddingR;
       mHeight = heightSize;
-    } else  {
+    } else {
       mWidth = defWidthPixel + paddingL + paddingR;
       mHeight = defHeightPixel + paddingT + paddingB;
     }
 
     //设置视图的大小
-    Timber.tag("width").e(mWidth + "px");
-    Timber.tag("height").e(mHeight + "px");
-    Timber.tag("paddingT").e(paddingT + "px");
-    Timber.tag("paddingL").e(paddingL + "px");
-    Timber.tag("paddingR").e(paddingR + "px");
-    Timber.tag("paddingB").e(paddingB + "px");
     setMeasuredDimension(mWidth, mHeight);
 
   }
@@ -281,7 +277,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
         Paint.FontMetricsInt fontMetrics = textLinePaint.getFontMetricsInt();
         int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
         textLinePaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(tmp + "°C", targetRect.centerX(), baseline, textLinePaint);
+        canvas.drawText(tmp + "℃", targetRect.centerX(), baseline, textLinePaint);
       }
     }
   }
@@ -325,7 +321,6 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
           drawPoint = (screenWidth) / 2f + scrollX;
         }
       }
-
 
       // String code = hourlyWeatherList.get(dashLineList.get(i)).getIcon();
       // BitmapDrawable bd;
@@ -466,21 +461,34 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     }
 
     //画折线
+    if (!hourlyWeatherList.isEmpty()) {foldLinePaint.setColor(WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType()));}
+
     canvas.drawPath(path, foldLinePaint);
 
     path.lineTo(mWidth - paddingR, baseLineHeight);
     path.lineTo(paddingL, baseLineHeight);
     //画阴影
-    int[] shadeColors = new int[] {
-        Color.argb(100, 145, 145, 145), Color.argb(30, 145, 145, 145),
-        Color.argb(18, 237, 238, 240) };
+    int[] shadeColors = hourlyWeatherList.isEmpty() ?
+                        new int[] {
+                            Color.argb(100, 145, 145, 145),
+                            Color.argb(30, 145, 145, 145),
+                            Color.argb(18, 237, 238, 240) } :
+                        new int[] {
+                            ColorExtKt.getColorWithAlpha(.5f,
+                                WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType())),
+                            Color.TRANSPARENT
+                        };
 
     Shader mShader = new LinearGradient(0, 0, 0, getHeight(), shadeColors, null, Shader.TileMode.CLAMP);
 
     backPaint.setShader(mShader);
+
     canvas.drawPath(path, backPaint);
 
     //画虚线
+    if (!hourlyWeatherList.isEmpty()) {
+      dashPaint.setColor(WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType()));
+    }
     drawDashLine(dashWidth, dashHeight, canvas);
 
     for (int i = 0; i < hourlyWeatherList.size(); i++) {
@@ -492,6 +500,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
       //画时间
       String time = hourlyWeatherList.get(i).getFxTime();
       //画时间
+      String substring = time.substring(time.length() - 11, time.length() - 6);
       if (ITEM_SIZE > 8) {
         if (i % 2 == 0) {
           if (i == 0) {
@@ -499,14 +508,14 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
           } else {
             textPaint.setTextAlign(Paint.Align.CENTER);
           }
-          canvas.drawText(time.substring(time.length() - 11, time.length() - 6), w, baseLineHeight + textSize + AppToolsKt.getDp(3), textPaint);
+          canvas.drawText(substring, w, baseLineHeight + textSize + AppToolsKt.getDp(3), textPaint);
         }
       } else {
         textPaint.setTextAlign(Paint.Align.CENTER);
         if (i == 0) {
           canvas.drawText("现在", w, baseLineHeight + textSize + AppToolsKt.getDp(3), textPaint);
         } else {
-          canvas.drawText(time.substring(time.length() - 11, time.length() - 6), w, baseLineHeight + textSize + AppToolsKt.getDp(3), textPaint);
+          canvas.drawText(substring, w, baseLineHeight + textSize + AppToolsKt.getDp(3), textPaint);
         }
       }
     }
@@ -549,7 +558,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     this.maxScrollOffset = (int) (maxScrollOffset + AppToolsKt.getDp(50));
     scrollOffset = offset;
     currentItemIndex = calculateItemIndex();
-    invalidate();
+    postInvalidate();
   }
 
   //通过滚动条偏移量计算当前选择的时刻
