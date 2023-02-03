@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -89,6 +90,8 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
   private float baseLineHeight;
   private Paint paint1;
   private boolean isDark = false;
+
+  private final Paint roundRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
   public HourlyForecastView2(Context context) {
     this(context, null);
@@ -186,6 +189,8 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     backPaint.setStrokeWidth(2);
     backPaint.setAntiAlias(true);
+
+    roundRectPaint.setStyle(Paint.Style.FILL);
 
     dashPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     dashPaint.setColor(ContextCompat.getColor(mContext, R.color.line_default));
@@ -522,11 +527,34 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
 
   }
 
+  private final RectF roundRect = new RectF();
+
   //画虚线
   private void drawDashLine(List<Float> dashWidth, List<Float> dashHeight, Canvas canvas) {
     if (dashHeight != null && dashHeight.size() > 1) {
       for (int i = 1; i < dashHeight.size() - 1; i++) {
-        canvas.drawLine(dashWidth.get(i), dashHeight.get(i) + 3, dashWidth.get(i), baseLineHeight, dashPaint);
+        canvas.drawLine(
+            dashWidth.get(i),
+            dashHeight.get(i) + 3,
+            dashWidth.get(i),
+            baseLineHeight, dashPaint);
+
+        roundRectPaint.setColor(ColorExtKt.getColorWithAlpha(.2f,
+            WeatherTypeKt.getThemeColor(hourlyWeatherList.get(dashLineList.get(i)).getWeatherType())));
+
+        roundRect.setEmpty();
+        roundRect.left = dashWidth.get(i - 1) + AppToolsKt.getDp(2);
+        roundRect.right = dashWidth.get(i) - AppToolsKt.getDp(2);
+        roundRect.top = baseLineHeight + 24;
+        roundRect.bottom = baseLineHeight + 4;
+
+        canvas.drawRoundRect(
+            roundRect,
+            AppToolsKt.getDp(2),
+            AppToolsKt.getDp(2),
+            roundRectPaint
+        );
+
       }
     }
   }
