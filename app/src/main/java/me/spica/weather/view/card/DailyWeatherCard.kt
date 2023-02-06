@@ -6,14 +6,16 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import com.fondesa.recyclerviewdivider.dividerBuilder
+import me.spica.weather.R
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.dp
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
-import me.spica.weather.ui.today.TodayWeatherActivity
-import me.spica.weather.ui.weather.DailWeatherAdapter
+import me.spica.weather.ui.weather.DayInfoAdapter
 
 
 /**
@@ -21,10 +23,13 @@ import me.spica.weather.ui.weather.DailWeatherAdapter
  */
 class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
-  private val dailyWeatherAdapter by lazy {
-    DailWeatherAdapter()
-  }
+//  private val dailyWeatherAdapter by lazy {
+//    DailWeatherAdapter()
+//  }
 
+  private val dayInfoAdapter by lazy {
+    DayInfoAdapter()
+  }
 
   private val binding = CardDailyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -42,19 +47,23 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
   init {
     resetAnim()
-    binding.rvWeather.adapter = dailyWeatherAdapter
-    dailyWeatherAdapter.itemClickListener = {
-      TodayWeatherActivity.startActivity(context, it)
-    }
   }
 
   @SuppressLint("NotifyDataSetChanged")
   override fun bindData(weather: Weather) {
     val items = weather.dailyWeather
+    context.dividerBuilder()
+      .showFirstDivider()
+      .colorRes(R.color.window_background)
+      .size(2.dp.toInt())
+      .build()
+      .addTo(binding.rvDayInfo)
     binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
-    dailyWeatherAdapter.items.clear()
-    dailyWeatherAdapter.items.addAll(items)
-    dailyWeatherAdapter.syncTempMaxAndMin()
+    binding.rvDayInfo.adapter = dayInfoAdapter
+    dayInfoAdapter.items.clear()
+    dayInfoAdapter.items.addAll(items)
+    dayInfoAdapter.syncTempMaxAndMin()
+
     doOnMainThreadIdle({
       binding.tipDesc.text = weather.descriptionForToWeek
       if (weather.descriptionForToday.isNullOrEmpty()) {
@@ -62,13 +71,7 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
       } else {
         binding.tipDesc.show()
       }
-      dailyWeatherAdapter.notifyDataSetChanged()
-      binding.rvWeather.postDelayed(
-        {
-          binding.layoutLoading.hide()
-          binding.rvWeather.show()
-        }, 100
-      )
+      dayInfoAdapter.notifyDataSetChanged()
     })
   }
 

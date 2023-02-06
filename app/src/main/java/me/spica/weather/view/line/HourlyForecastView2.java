@@ -451,7 +451,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
         final float firstControlPointY = previousPointY + (0.2F * firstDiffY);
         final float secondControlPointX = currentPointX - (0.2F * secondDiffX);
         final float secondControlPointY = currentPointY - (0.2F * secondDiffY);
-        //画出曲线
+        // 用贝塞尔画出曲线
         path.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
             currentPointX, currentPointY);
       }
@@ -475,9 +475,8 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     //画阴影
     int[] shadeColors = hourlyWeatherList.isEmpty() ?
                         new int[] {
-                            Color.argb(100, 145, 145, 145),
-                            Color.argb(30, 145, 145, 145),
-                            Color.argb(18, 237, 238, 240) } :
+                            Color.parseColor("#FFC107"),
+                            Color.TRANSPARENT } :
                         new int[] {
                             ColorExtKt.getColorWithAlpha(.5f,
                                 WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType())),

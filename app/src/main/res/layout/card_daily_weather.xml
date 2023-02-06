@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
     android:background="@drawable/bg_card">
 
@@ -30,34 +31,22 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:text="最近的降雨带在东南109公里外呢" />
 
-    <LinearLayout
-        android:id="@+id/layout_loading"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginTop="12dp"
+        android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_day_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="加载中" />
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_day_info"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <me.spica.weather.view.HorizontalRecyclerView
-        android:id="@+id/rv_weather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:listitem="@layout/item_day_weather"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_marginTop="6dp" />
 
 </LinearLayout>
