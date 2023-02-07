@@ -22,6 +22,7 @@ import me.spica.weather.databinding.CardNowWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.*
 import me.spica.weather.ui.warn.WarningDetailActivity
+import me.spica.weather.view.weather_bg.NowWeatherView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,7 +80,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     val themeColor = weather.getWeatherType().getThemeColor()
     binding.weatherBg.bgColor = themeColor
     binding.weatherBg.currentWeatherType = weather.getWeatherType().getWeatherAnimType()
-
+//    binding.weatherBg.currentWeatherType = NowWeatherView.WeatherType.RAIN
     doOnMainThreadIdle({
       with(numAnim) {
         if (isRunning) cancel()
