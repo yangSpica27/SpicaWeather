@@ -20,7 +20,7 @@ class App : Application() {
     createAppCenter()
     DialogX.init(this)
 //    WebViewPool.init(this)
-    handlerDelegate()
+//    handlerDelegate()
   }
 
   private fun createAppCenter() {

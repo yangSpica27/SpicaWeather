@@ -138,7 +138,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     super.onCreate(savedInstanceState)
     // 绑定定位监听
     locationClint.registerLocationListener(locationListener)
-    setScreen()
+    window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.window_background))
     requestPermission()
   }
 
@@ -152,23 +152,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
   }
 
 
-  @Suppress("DEPRECATION")
-  private fun setScreen() {
-    // 获取系统window支持的模式
-    window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.window_background))
-    val modes = window.windowManager.defaultDisplay.supportedModes
-    // 对获取的模式，基于刷新率的大小进行排序，从小到大排序
-    modes.sortBy {
-      it.refreshRate
-    }
 
-    window.let {
-      val lp = it.attributes
-      // 取出最大的那一个刷新率，直接设置给window
-      lp.preferredDisplayModeId = modes.last().modeId
-      it.attributes = lp
-    }
-  }
 
   // 初始化Toolbar
   private fun initTitle() {

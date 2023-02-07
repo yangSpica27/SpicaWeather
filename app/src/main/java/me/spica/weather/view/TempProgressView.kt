@@ -78,8 +78,6 @@ class TempProgressView : View {
     canvas.drawLine(0f, 0f, width * 1f, 0f, bgPaint)
     val startX = (currentMinValue - minValue)*1f / (maxValue - minValue) * (width * 1f)
     val endX = width-((maxValue - currentMaxValue)*1f / (maxValue - minValue) * (width * 1f))
-    Timber.tag("startX").e("${startX}Px")
-    Timber.tag("endX").e("${endX}Px")
     canvas.drawLine(startX , 0f , endX, 0f, progressPaint)
   }
 

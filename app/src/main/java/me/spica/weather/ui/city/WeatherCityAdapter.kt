@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
+import me.spica.weather.R
 import me.spica.weather.common.WeatherCodeUtils
-import me.spica.weather.common.getThemeColor
-import me.spica.weather.common.getWeatherAnimType
+import me.spica.weather.common.getAnimRes
 import me.spica.weather.databinding.ItemWeatherCityBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
@@ -47,28 +48,33 @@ class WeatherCityAdapter(
 
   @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    // 设置背景为天气的主题色彩
-    holder.itemBinding.nowWeatherBg.bgColor = WeatherCodeUtils.getWeatherCode(
-      diffUtil.currentList[position].iconId
-    ).getThemeColor()
+
     // 代入文本
     holder.itemBinding.tvCityName.text = diffUtil.currentList[position].cityName
-    holder.itemBinding.nowWeatherBg.currentWeatherType = WeatherCodeUtils.getWeatherCode(
-      diffUtil.currentList[position].iconId
-    ).getWeatherAnimType()
 
-    holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon} 北纬${diffUtil.currentList[position].lat}"
+
+    val lottieAnimationView = holder.itemBinding.root.findViewById<LottieAnimationView>(R.id.lottie_view)
+    lottieAnimationView.setMaxProgress(.5f)
+    lottieAnimationView.setAnimation(
+      WeatherCodeUtils.getWeatherCode(
+        diffUtil.currentList[position].iconId
+      ).getAnimRes()
+    )
+    holder.itemBinding.tvLocation.text = "东经${diffUtil.currentList[position].lon}° | 北纬${diffUtil.currentList[position].lat}°"
     if (diffUtil.currentList[position].isSelected) {
-      holder.itemBinding.tvIsDefault.show()
+      holder.itemBinding.icSelected.show()
       holder.itemBinding.root.setOnTouchListener { _, _ ->
         // 不可操作目前选中的item
         return@setOnTouchListener true
       }
     } else {
       holder.itemBinding.root.setOnTouchListener(null)
-      holder.itemBinding.tvIsDefault.hide()
+      holder.itemBinding.icSelected.hide()
     }
     holder.itemView.rootView.setOnClickListener {
+      if (diffUtil.currentList[position].isSelected) {
+        holder.itemBinding.icSelected.hide()
+      }
       itemClickListener(diffUtil.currentList[position])
       holder.itemBinding.root.postDelayed(
         {

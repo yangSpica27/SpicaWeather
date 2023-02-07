@@ -2,6 +2,7 @@ package me.spica.weather.view.line;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -13,25 +14,21 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
 import me.spica.weather.R;
 import me.spica.weather.common.WeatherTypeKt;
 import me.spica.weather.model.weather.HourlyWeatherBean;
 import me.spica.weather.tools.AppToolsKt;
 import me.spica.weather.tools.ColorExtKt;
-import timber.log.Timber;
 
 public class HourlyForecastView2 extends View implements ScrollWatcher {
 
@@ -183,7 +180,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
 
     foldLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     foldLinePaint.setStyle(Paint.Style.STROKE);
-    foldLinePaint.setStrokeWidth(5);
+    foldLinePaint.setStrokeWidth(AppToolsKt.getDp(2));
     foldLinePaint.setColor(ContextCompat.getColor(mContext, R.color.line_default));
 
     backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -283,6 +280,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
         int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
         textLinePaint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(tmp + "℃", targetRect.centerX(), baseline, textLinePaint);
+        canvas.drawLine(targetRect.centerX(),0,targetRect.centerX(),getHeight(),dashPaint);
       }
     }
   }
@@ -328,30 +326,29 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
       }
 
       // String code = hourlyWeatherList.get(dashLineList.get(i)).getIcon();
-      // BitmapDrawable bd;
+      BitmapDrawable bd;
 
       // if (code.contains("d")) {
-      //     bd = (BitmapDrawable) mContext.getResources().getDrawable(IconUtils.getDayIconDark(code.replace("d", "")));
+      bd = (BitmapDrawable) ContextCompat.getDrawable(getContext(), R.drawable.ic_sun);
       // } else {
       //     bd = (BitmapDrawable) mContext.getResources().getDrawable(IconUtils.getNightIconDark(code.replace("n", "")));
       // }
 
       // assert bd != null;
-      // Bitmap bitmap = DisplayUtil.bitmapResize(bd.getBitmap(),
-      //         AppToolsKt.getDp(mContext, bitmapXY), AppToolsKt.getDp(mContext, bitmapXY));
+      Bitmap bitmap = getBitmap(R.drawable.ic_sun, (int) AppToolsKt.getDp(24), (int) AppToolsKt.getDp(24));
 
       //越界判断
-      // if (drawPoint >= right - bitmap.getWidth() / 2f) {
-      //     drawPoint = right - bitmap.getWidth() / 2f;
-      // }
-      // if (drawPoint <= left + bitmap.getWidth() / 2f) {
-      //     drawPoint = left + bitmap.getWidth() / 2f;
-      // }
+      if (drawPoint >= right - bitmap.getWidth() / 2f) {
+        drawPoint = right - bitmap.getWidth() / 2f;
+      }
+      if (drawPoint <= left + bitmap.getWidth() / 2f) {
+        drawPoint = left + bitmap.getWidth() / 2f;
+      }
       //
-      // drawBitmap(canvas, bitmap, drawPoint, bitmapHeight);
-      //            String text = hourlyWeatherList.get(dashLineList.get(i)).getCond_txt();
-      //            textPaint.setTextSize(DisplayUtil.sp2px(mContext, 8));
-      //            canvas.drawText(text, drawPoint, bitmapHeight + bitmap.getHeight() + 100 / 3f, textPaint);
+      drawBitmap(canvas, bitmap, drawPoint, bitmapHeight);
+      String text = hourlyWeatherList.get(dashLineList.get(i)).getWeatherName();
+      textPaint.setTextSize(AppToolsKt.getDp(8));
+      canvas.drawText(text, drawPoint, bitmapHeight + bitmap.getHeight() + AppToolsKt.getDp(8), textPaint);
 
     }
 
@@ -361,6 +358,16 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     canvas.save();
     canvas.drawBitmap(bitmap, left - bitmap.getWidth() / 2f, top, bitmapPaint);
     canvas.restore();
+  }
+
+  private Bitmap getBitmap(@DrawableRes int resId, int targetWidth, int targetHeight) {
+    BitmapFactory.Options option = new BitmapFactory.Options();
+    option.inJustDecodeBounds = true;
+    BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_sun, option);
+    option.inJustDecodeBounds = false;
+    option.inDensity = option.outWidth;
+    option.inTargetDensity = targetWidth;
+    return BitmapFactory.decodeResource(getResources(), R.drawable.ic_sun, option);
   }
 
   private void drawLines(Canvas canvas) {
@@ -466,7 +473,20 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     }
 
     //画折线
-    if (!hourlyWeatherList.isEmpty()) {foldLinePaint.setColor(WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType()));}
+    if (!hourlyWeatherList.isEmpty()) {
+      int[] shadeColors = new int[] {
+          ColorExtKt.getColorWithAlpha(.7f,
+              WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType())),
+          ColorExtKt.getColorWithAlpha(1f,
+              WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType())),
+          ColorExtKt.getColorWithAlpha(.7f,
+              WeatherTypeKt.getThemeColor(hourlyWeatherList.get(0).getWeatherType())),
+      };
+
+      Shader mShader = new LinearGradient(0, 0, hourlyWeatherList.size() * itemWidth, 0, shadeColors, null, Shader.TileMode.CLAMP);
+
+      foldLinePaint.setShader(mShader);
+    }
 
     canvas.drawPath(path, foldLinePaint);
 

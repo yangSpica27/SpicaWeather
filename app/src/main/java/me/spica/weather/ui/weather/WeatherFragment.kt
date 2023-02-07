@@ -111,7 +111,8 @@ class WeatherFragment(
     }
     mainCardAdapter = MainCardAdapter(
       requireActivity(),
-      viewBinding.rvList, lifecycleScope,
+      viewBinding.rvList,
+      lifecycleScope,
       viewBinding.scrollView
     )
 

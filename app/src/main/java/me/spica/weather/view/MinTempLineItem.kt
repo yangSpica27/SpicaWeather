@@ -193,10 +193,10 @@ class MinTempLineItem : View {
                 linePaint
             )
 
-            Timber.i("lastP$nextPointY")
+
         }
 
-        Timber.i("======================")
+
     }
 
     private fun drawDottedLine(canvas: Canvas) {

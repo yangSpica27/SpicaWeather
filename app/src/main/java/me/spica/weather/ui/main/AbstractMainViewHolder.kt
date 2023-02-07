@@ -21,8 +21,13 @@ open class AbstractMainViewHolder(val card: SpicaWeatherCard, itemView: View) :
 
     private val rect = Rect()
     fun checkEnterScreen(host: NestedScrollView) {
-        val isVisible = itemView.getGlobalVisibleRect(rect)
-        card.checkEnterScreen(isVisible&&rect.bottom-rect.top>=itemView.height/10f)
+        try {
+            val isVisible = itemView.getGlobalVisibleRect(rect)
+            card.checkEnterScreen(isVisible && rect.bottom - rect.top >= itemView.height / 10f)
+        } catch (e: Exception) {
+            e.message
+        }
+
     }
 
 }

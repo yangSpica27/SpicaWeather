@@ -156,6 +156,7 @@ class MainCardAdapter(
 
   fun onScroll() {
     var holder: AbstractMainViewHolder
+    if (itemCount == 0) return
     for (i in 0 until itemCount) {
       if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
         holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder

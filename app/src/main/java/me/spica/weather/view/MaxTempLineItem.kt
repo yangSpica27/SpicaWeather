@@ -164,10 +164,10 @@ class MaxTempLineItem : View {
                 (lastPointY + pointY) / 2F,
                 linePaint
             )
-            Timber.i("lastP$lastPointY")
+
         }
 
-        Timber.i("currentP$pointY")
+
 
         if (drawRightLine) {
 
