@@ -14,7 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        android:textStyle="bold"
+        android:textColor="@color/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/sun_rise_sun_set" />
@@ -33,7 +35,36 @@
     <me.spica.weather.view.SunriseView
         android:id="@+id/sunrise_view"
         android:layout_width="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_ll"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/bottom_ll"
+        android:paddingHorizontal="14dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_sunrise"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/textColorPrimaryHint"
+            android:text="上午 6:00"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_sunset"
+            android:layout_width="0dp"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:textColor="@color/textColorPrimaryHint"
+            android:text="下午 18:00"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

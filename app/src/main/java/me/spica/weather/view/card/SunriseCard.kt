@@ -1,12 +1,12 @@
 package me.spica.weather.view.card
 
 import android.animation.AnimatorSet
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import me.spica.weather.R
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
@@ -46,20 +46,20 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
+
+    @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
         val startTime = weather.dailyWeather[0].sunriseDate()
         val endTime = weather.dailyWeather[0].sunsetDate()
         val subTitle = weather.dailyWeather[0].moonParse
+        val themeColor = weather.getWeatherType().getThemeColor()
         binding.sunriseView.bindTime(startTime, endTime)
-        binding.sunriseView.themeColor =
-            weather.getWeatherType().getThemeColor()
+        binding.sunriseView.themeColor = themeColor
         doOnMainThreadIdle({
-            binding.tvTitle.text = String.format(
-                context.getString(R.string.sunrise_sunset_time),
-                sdf.format(startTime),
-                sdf.format(endTime)
-            )
+            binding.tvTitle.setTextColor(themeColor)
             binding.tvSubtitle.text = subTitle
+            binding.tvSunrise.text = "上午 ${sdf.format(startTime)}"
+            binding.tvSunset.text = "下午 ${sdf.format(endTime)}"
         })
 
     }

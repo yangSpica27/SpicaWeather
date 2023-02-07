@@ -333,6 +333,7 @@ open class NowWeatherView : View, SensorEventListener {
     CLOUDY,// 多云
     RAIN,// 下雨
     SNOW,// 下雪
+    FOG,
     UNKNOWN,// 无效果
   }
 

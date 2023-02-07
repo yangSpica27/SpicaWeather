@@ -12,6 +12,8 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 
 class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -28,6 +30,9 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+
+  private var threadPool: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+
   var bgColor = ContextCompat.getColor(context, R.color.window_background)
   var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
     set(value) {
@@ -39,6 +44,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
           .setInterpolator(LinearInterpolator())
           .setDuration(500L)
           .start()
+
         when (value) {
           NowWeatherView.WeatherType.SUNNY -> {
             stopAllAnim()
@@ -51,11 +57,9 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
           }
           NowWeatherView.WeatherType.RAIN -> {
             stopAllAnim()
-            rainAnim.start()
           }
           NowWeatherView.WeatherType.SNOW -> {
             stopAllAnim()
-            snowAnim.start()
           }
           NowWeatherView.WeatherType.UNKNOWN -> {
             stopAllAnim()
@@ -106,8 +110,6 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   // 停止所有的动画
   private fun stopAllAnim() {
     sunnyAnim.cancel()
-    rainAnim.cancel()
-    snowAnim.cancel()
     cloudAnim.cancel()
     cloudAnim2.cancel()
   }
@@ -137,21 +139,12 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     interpolator = LinearInterpolator()
   }
 
-  private val rainAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
-    interpolator = LinearInterpolator()
-  }
-
-
-  private val snowAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-    repeatCount = Animation.INFINITE
-    interpolator = LinearInterpolator()
-  }
 
 
   init {
     holder.addCallback(this)
     this.holder.setFormat(PixelFormat.TRANSLUCENT)
+
   }
 
 
@@ -169,6 +162,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
       drawRain(canvas)
       drawCloudy(canvas)
       drawSnow(canvas)
+      drawFog(canvas)
       // ================绘制结束===============
       holder.unlockCanvasAndPost(canvas)
     }
@@ -182,13 +176,28 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   private var lastSyncTime = 0L
   override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
     isWork = true
-    syncThread = Thread {
-
-
-
+    if (threadPool.isShutdown) {
+      threadPool = Executors.newSingleThreadScheduledExecutor()
+    }
+    // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
+    threadPool.execute {
       while (isWork) {
+        Thread.sleep(16)
+        rains.forEach {
+          // 每隔16ms给粒子单元计算下一帧的坐标
+          it.calculation(width, height)
+        }
+      }
+    }
+
+    // 渲染线程
+    syncThread = Thread {
+      while (isWork) {
+        // 记录上次执行渲染时间
         lastSyncTime = System.currentTimeMillis()
+        // 执行渲染
         doOnDraw()
+        // 保证两张帧之间间隔16ms(60帧)
         try {
           Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
         } catch (_: Exception) {
@@ -205,7 +214,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   private fun drawRain(canvas: Canvas) {
     if (currentWeatherType != NowWeatherView.WeatherType.RAIN) return
     rains.forEach {
-      it.draw(canvas)
+      it.onlyDraw(canvas)
     }
   }
 
@@ -216,6 +225,11 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     snows.forEach {
       it.draw(canvas)
     }
+  }
+
+  private fun drawFog(canvas: Canvas) {
+    if (currentWeatherType != NowWeatherView.WeatherType.FOG) return
+
   }
 
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -229,6 +243,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     )
 
     initSnowAndRain(width, height)
+
   }
 
 
@@ -246,6 +261,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   override fun surfaceDestroyed(p0: SurfaceHolder) {
     isWork = false
     syncThread.interrupt()
+    threadPool.shutdownNow()
   }
 
   // 晴天的实现

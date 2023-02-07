@@ -65,15 +65,16 @@ class SunriseView : View {
 
 
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        pathEffect = DashPathEffect(floatArrayOf(3.dp, 2.dp), 0F)
+        pathEffect = DashPathEffect(floatArrayOf(5.dp, 2.dp), 0F)
         strokeWidth = 2.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = 3.dp
+        strokeWidth = 4.dp
         style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
     }
 
@@ -124,13 +125,13 @@ class SunriseView : View {
                 MeasureSpec.EXACTLY
             ),
             MeasureSpec.makeMeasureSpec(
-                (height + 2 * mMargin).toInt(),
+                (height + 2 * 8.dp).toInt(),
                 MeasureSpec.EXACTLY
             )
         )
 
         val centerX = measuredWidth / 2F
-        val centerY = (mMargin + radius) * 1F
+        val centerY = (8.dp + radius) * 1F
         mRectF.set(
             centerX - radius,
             centerY - radius,
@@ -283,9 +284,9 @@ class SunriseView : View {
         // 绘制底线
         canvas.drawLine(
             mMargin,
-            measuredHeight - mMargin,
+            measuredHeight - 8.dp,
             measuredWidth - mMargin,
-            measuredHeight - mMargin,
+            measuredHeight - 8.dp,
             dottedLinePaint
         )
         val restoreCount: Int = canvas.save()

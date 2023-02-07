@@ -45,6 +45,27 @@ class RainFlake(// 雨滴
     drawLine(canvas, width, height)
   }
 
+  // 计算下落
+  fun calculation(width: Int,height: Int){
+    mPaint.strokeWidth = mFlakeSize
+    //y是豎直方向，就是下落
+    val y1: Double = mLine.y1 + mIncrement * Math.sin(1.5)
+    val y2: Double = mLine.y2 + mIncrement * Math.sin(1.5)
+
+    //這個是設置雨滴位置，如果在很短時間內刷新一次，就是連起來的動畫效果
+    mLine.set(mLine.x1, y1.toInt(), mLine.x2, y2.toInt())
+    if (!isInsideLine(height)) {
+      resetLine(width, height)
+    }
+  }
+
+  // 仅绘制
+  fun onlyDraw(canvas: Canvas){
+    //設置線寬
+    mPaint.strokeWidth = mFlakeSize
+    canvas.drawLine(mLine.x1*1f, mLine.y1*1f, mLine.x2*1f, mLine.y2*1f, mPaint)
+  }
+
   /**
    * 改成線條，類似於雨滴效果
    * @param canvas
