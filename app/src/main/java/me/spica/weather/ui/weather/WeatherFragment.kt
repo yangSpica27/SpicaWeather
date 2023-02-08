@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
+import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -25,8 +25,8 @@ import me.spica.weather.tools.toast
 import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.NowWeatherCard
+import me.spica.weather.view.card.SpicaWeatherCard
 import me.spica.weather.view.card.toHomeCardType
-import timber.log.Timber
 
 /**
  * 天气单元页面
@@ -57,7 +57,6 @@ class WeatherFragment(
 
   override fun onResume() {
     if (!isFirstLoad) {
-      // TODO
       (viewBinding.rvList.getChildAt(0) as NowWeatherCard?)?.onResume()
     } else {
       // 首次加载
@@ -96,7 +95,11 @@ class WeatherFragment(
   override fun onPause() {
     super.onPause()
     (viewBinding.rvList.getChildAt(0) as NowWeatherCard?)?.onPause()
-    Timber.tag("WeatherFragment").i("onPause:${currentCity?.cityName}")
+    viewBinding.rvList.children.forEach {
+      if (it is SpicaWeatherCard) {
+        it.resetAnim()
+      }
+    }
   }
 
   override fun onDestroyView() {
@@ -182,7 +185,6 @@ class WeatherFragment(
   }
 
   override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
-    Timber.tag("触发刷新").i(key)
     if (key == Preference.CARDS.key) {
       // 根据情况隐藏卡片
       lifecycleScope.launch {

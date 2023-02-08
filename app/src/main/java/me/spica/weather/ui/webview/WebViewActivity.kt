@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.webkit.WebView
-import androidx.core.view.updatePaddingRelative
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_CROSS
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_THROUGH
@@ -19,7 +18,6 @@ import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.databinding.ActivityWebviewBinding
 import me.spica.weather.tools.doOnMainThreadIdle
-import me.spica.weather.tools.getStatusBarHeight
 import me.spica.weather.view.WebViewPool
 
 

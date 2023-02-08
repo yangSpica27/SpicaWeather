@@ -8,18 +8,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import kotlinx.coroutines.runBlocking
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.ui.weather.WeatherFragment
-import me.spica.weather.view.weather_bg.NowWeatherView
 
 class MainPagerAdapter(
     fragmentActivity: FragmentActivity,
     private val scrollListener: View.OnScrollChangeListener
 ) :
     FragmentStateAdapter(fragmentActivity) {
-
-    private var backgroundColor = Color.parseColor("#1F787474")
 
 
     val diffUtil = AsyncListDiffer(

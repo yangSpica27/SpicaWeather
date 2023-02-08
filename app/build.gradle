@@ -164,8 +164,6 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
 
 
-    def dialogx_version = "0.0.46"
-    implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"

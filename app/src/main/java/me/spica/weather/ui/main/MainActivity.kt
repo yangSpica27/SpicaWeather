@@ -42,7 +42,6 @@ import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
 import me.spica.weather.ui.city.WeatherCityActivity
 import me.spica.weather.ui.setting.SettingActivity
-import me.spica.weather.view.dialog.DayWeatherDetailDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import javax.inject.Inject
@@ -182,11 +181,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
       startActivity(Intent(this, WeatherCityActivity::class.java))
     }
 
-    // 测试用
-    viewBinding.toolbar.tsLocation.setOnClickListener {
-      val dayWeatherDetailDialog = DayWeatherDetailDialog(this)
-      dayWeatherDetailDialog.show(supportFragmentManager, "one_detail")
-    }
+
 
   }
 
@@ -255,6 +250,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
     // 设置中心的viewpager适配器
     viewBinding.viewPager.adapter = mainPagerAdapter
+
+    viewBinding.viewPager.setPageTransformer { page, position -> {
+
+    } }
 
 
     lifecycleScope.launch {

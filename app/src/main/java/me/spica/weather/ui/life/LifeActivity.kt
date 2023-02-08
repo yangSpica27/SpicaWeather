@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_CROSS
 import com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_THROUGH
@@ -25,7 +26,7 @@ class LifeActivity : BindingActivity<ActivityLifeBinding>() {
 
   override fun initializer() {
     viewBinding.img.apply {
-      repeatMode = ValueAnimator.RESTART
+      repeatMode = LottieDrawable.RESTART
       post { playAnimation() }
     }
   }

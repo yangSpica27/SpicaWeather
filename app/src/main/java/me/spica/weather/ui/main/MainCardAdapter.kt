@@ -2,17 +2,12 @@ package me.spica.weather.ui.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
-import com.kongzue.dialogx.dialogs.FullScreenDialog
-import com.kongzue.dialogx.interfaces.OnBindView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.spica.weather.R
-import me.spica.weather.databinding.ActivityTodayWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.ui.life.LifeActivity
 import me.spica.weather.view.card.*
@@ -30,34 +25,7 @@ class MainCardAdapter(
   private var weather: Weather? = null
 
 
-  // 今天天气的弹窗
-  private val todayWeatherDetailDialog by lazy {
-    FullScreenDialog
-      .build()
-      .setCustomView(object : OnBindView<FullScreenDialog>(R.layout.activity_today_weather) {
-        override fun onBind(dialog: FullScreenDialog, v: View) {
-          val binding = ActivityTodayWeatherBinding.bind(v)
-          val info = weather?.dailyWeather?.get(0)
-          with(binding) {
-            binding.toolbar.setNavigationOnClickListener {
-              dialog.dismiss()
-            }
-            tvDayWeather.text = info?.weatherNameDay
-            tvNightWeather.text = info?.weatherNameNight
-            tvMaxTemp.text = "${info?.maxTemp}℃"
-            tvMinTemp.text = "${info?.minTemp}℃"
-            tvDayWindDir.text = info?.dayWindDir
-            tvNightWindDir.text = info?.nightWindDir
-            tvDayWindSpeed.text = info?.dayWindSpeed + "km/h"
-            tvNightWindSpeed.text = info?.nightWindSpeed + "km/h"
-            tvPressureTitle.text = "${info?.pressure}pa"
-            tvUvTitle.text = "${info?.uv}级"
-            tvVisTitle.text = "${info?.vis}km"
-            tvCloudTitle.text = "${info?.cloud}%"
-          }
-        }
-      })
-  }
+
 
 
   init {
@@ -141,7 +109,7 @@ class MainCardAdapter(
       }
     }
     recyclerView.post {
-      holder.checkEnterScreen(scrollview)
+      holder.checkEnterScreen()
     }
   }
 
@@ -160,7 +128,7 @@ class MainCardAdapter(
     for (i in 0 until itemCount) {
       if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
         holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
-        holder.checkEnterScreen(scrollview)
+        holder.checkEnterScreen()
       }
     }
   }
