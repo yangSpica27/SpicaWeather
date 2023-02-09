@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.View
 import me.spica.weather.R
 import me.spica.weather.tools.dp
-import timber.log.Timber
 
 class TempProgressView : View {
   constructor(context: Context?) : super(context)
@@ -61,7 +60,7 @@ class TempProgressView : View {
     val shader = LinearGradient(
       0F,
       0F,
-      (currentMaxValue - currentMinValue)*1f / (maxValue - minValue) * width * 1f,
+      width * 1f,
       0f,
       startColor,
       endColor,

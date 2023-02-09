@@ -85,7 +85,6 @@ class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
       currentMinValue = items[position].minTemp
     }
     holder.itemDayInfoBinding.tempView.init()
-    holder.itemDayInfoBinding.tempView.postInvalidate()
     holder.itemDayInfoBinding.icon.progress = .5f
     holder.itemDayInfoBinding.icon.setMaxProgress(.5f)
     holder.itemDayInfoBinding.icon.setOnClickListener {

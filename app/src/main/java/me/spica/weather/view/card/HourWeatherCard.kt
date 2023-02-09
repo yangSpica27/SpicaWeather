@@ -50,14 +50,11 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
 //    binding.lineView.setData(weather.hourlyWeather)
 
-    binding.indexScrollview2.setToday24HourView(binding.hourForecast2)
 
     weather.hourlyWeather.toList().sortedBy {
       it.temp
     }.apply {
-      binding.hourForecast2.setLowestTemp(first().temp)
-      binding.hourForecast2.setHighestTemp(last().temp)
-      binding.hourForecast2.initData(weather.hourlyWeather)
+      binding.hourForecastView.setData(weather.hourlyWeather)
     }
 
     doOnMainThreadIdle({

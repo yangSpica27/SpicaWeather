@@ -61,16 +61,16 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginTop="6dp" />
 
-    <me.spica.weather.view.line.IndexHorizontalScrollView2
-        android:id="@+id/index_scrollview2"
+    <me.spica.weather.view.line.IndexHorizontalScrollView
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
-        <me.spica.weather.view.line.HourlyForecastView2
-            android:id="@+id/hour_forecast_2"
-            android:layout_width="wrap_content"
+        <me.spica.weather.view.line.HourlyForecastView
+            android:id="@+id/hour_forecast_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </me.spica.weather.view.line.IndexHorizontalScrollView2>
+    </me.spica.weather.view.line.IndexHorizontalScrollView>
 
 </LinearLayout>

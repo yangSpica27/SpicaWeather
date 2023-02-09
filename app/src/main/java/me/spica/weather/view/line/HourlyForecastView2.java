@@ -123,7 +123,7 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
     int size = weatherData.size();
     ITEM_SIZE = size;
 
-    List<HourlyWeatherBean> sorts = new ArrayList<>(weatherData);
+
 
     dashLineList = new ArrayList<>();
 
@@ -395,10 +395,13 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
 
     float prePreviousPointX = Float.NaN;
     float prePreviousPointY = Float.NaN;
+
     float previousPointX = Float.NaN;
     float previousPointY = Float.NaN;
+
     float currentPointX = Float.NaN;
     float currentPointY = Float.NaN;
+
     float nextPointX;
     float nextPointY;
 
@@ -452,12 +455,16 @@ public class HourlyForecastView2 extends View implements ScrollWatcher {
         // 求出控制点坐标
         final float firstDiffX = (currentPointX - prePreviousPointX);
         final float firstDiffY = (currentPointY - prePreviousPointY);
+
         final float secondDiffX = (nextPointX - previousPointX);
         final float secondDiffY = (nextPointY - previousPointY);
+
         final float firstControlPointX = previousPointX + (0.2F * firstDiffX);
         final float firstControlPointY = previousPointY + (0.2F * firstDiffY);
+
         final float secondControlPointX = currentPointX - (0.2F * secondDiffX);
         final float secondControlPointY = currentPointY - (0.2F * secondDiffY);
+
         // 用贝塞尔画出曲线
         path.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
             currentPointX, currentPointY);

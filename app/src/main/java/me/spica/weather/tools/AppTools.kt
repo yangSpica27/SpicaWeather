@@ -196,6 +196,8 @@ val Int.dp: Float
         Resources.getSystem().displayMetrics
     )
 
+
+
 fun View.show() {
     this.visibility = View.VISIBLE
     startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
