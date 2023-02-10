@@ -159,8 +159,8 @@ class HourlyForecastView : View {
     )
 
     shadowPath.close()
+    requestLayout()
     postInvalidate()
-
   }
 
   private var minTemp = 0
@@ -198,9 +198,9 @@ class HourlyForecastView : View {
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
-    drawPops(canvas)
     drawDate(canvas)
     drawLines(canvas)
+    drawPops(canvas)
     drawTemp(canvas)
   }
 
@@ -387,24 +387,36 @@ class HourlyForecastView : View {
       style = Paint.Style.FILL
     }
 
+  private val popTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = context.getColor(R.color.textColorPrimaryLight)
+    textSize = 12.dp
+  }
 
   private fun drawPops(canvas: Canvas) {
     mPointList.forEachIndexed { index, point ->
 
-      if (weathers[index].pop >= 40) {
-        popPaint.color = context.getColor(R.color.light_blue_200)
-      } else {
-        popPaint.color = context.getColor(R.color.light_blue_50)
-      }
+
+      popPaint.color = getColorWithAlpha(weathers[index].pop * 1f / 100, context.getColor(R.color.light_blue_200))
+
+      val showText = "${weathers[index].pop}%"
+      popTextPaint.getTextBounds(showText, 0, showText.toCharArray().size, textRect)
 
       canvas.drawRoundRect(
-        point.x - 6.dp,
+        point.x + 2.dp,
         ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT,
-        point.x + 6.dp,
+        point.x + ITEM_WIDTH - 2.dp,
         ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
             ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)), 3.dp, 3.dp,
         popPaint
       )
+      canvas.drawText(
+        showText,
+        point.x - textRect.width() / 2f + ITEM_WIDTH / 2f,
+        ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
+            ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)) - 4.dp,
+        popTextPaint
+      )
+
     }
   }
 
