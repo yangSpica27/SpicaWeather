@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private val sdf = SimpleDateFormat(
-  "yyyy-MM-dd'T'mm:HH+08:00",
+  "yyyy-MM-dd'T'HH:mm+08:00",
   Locale.CHINA
 )
 

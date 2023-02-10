@@ -131,7 +131,7 @@ class MiuiWeatherLineView : View {
   }
 
   // 被格式化的时间格式
-  private val sdfAfter = SimpleDateFormat("m时", Locale.CHINA)
+  private val sdfAfter = SimpleDateFormat("H时", Locale.CHINA)
 
 
   // 绘制背景的位置

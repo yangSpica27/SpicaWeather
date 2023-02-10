@@ -16,7 +16,7 @@ class HourWeatherAdapter : RecyclerView.Adapter<HourWeatherAdapter.ViewHolder>()
   val items = mutableListOf<HourlyWeatherBean>()
 
   // 被格式化的时间格式
-  private val sdfAfter = SimpleDateFormat("m时", Locale.CHINA)
+  private val sdfAfter = SimpleDateFormat("H时", Locale.CHINA)
 
   // 用于排序的列表
   private val sortItems = mutableListOf<HourlyWeatherBean>()

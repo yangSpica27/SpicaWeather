@@ -60,7 +60,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     }
 
   // 12:00
-  private val sdfAfter = SimpleDateFormat("更新于 mm:HH", Locale.CHINA)
+  private val sdfAfter = SimpleDateFormat("更新于 HH:mm", Locale.CHINA)
 
   private val showInAnimation by lazy { AnimationUtils.loadAnimation(context, R.anim.in_bottom) }
 

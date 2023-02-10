@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val sdf = SimpleDateFormat("yyyy-MM-dd mm:HH:ss", Locale.CHINA)
+private val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 
 @JsonClass(generateAdapter = true)
 @Parcelize
