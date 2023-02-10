@@ -6,12 +6,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import me.spica.weather.R
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardDailyWeatherBinding
 import me.spica.weather.model.weather.Weather
-import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
@@ -64,15 +64,21 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
     dayInfoAdapter.items.addAll(items)
     dayInfoAdapter.syncTempMaxAndMin()
 
-    doOnMainThreadIdle({
-      binding.tipDesc.text = weather.descriptionForToWeek
-      if (weather.descriptionForToday.isNullOrEmpty()) {
-        binding.tipDesc.hide()
-      } else {
-        binding.tipDesc.show()
-      }
+    binding.tipDesc.text = weather.descriptionForToWeek
+    if (weather.descriptionForToday.isNullOrEmpty()) {
+      binding.tipDesc.hide()
+    } else {
+      binding.tipDesc.show()
+    }
+
+    (parent as RecyclerView).post {
       dayInfoAdapter.notifyDataSetChanged()
-    })
+    }
+
+
+//    doOnMainThreadIdle({
+//
+//    })
   }
 
 

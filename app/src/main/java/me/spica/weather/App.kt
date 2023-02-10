@@ -18,7 +18,7 @@ class App : Application() {
     // 初始化AppCenter
     createAppCenter()
 //    WebViewPool.init(this)
-//    handlerDelegate()
+    handlerDelegate()
   }
 
   private fun createAppCenter() {

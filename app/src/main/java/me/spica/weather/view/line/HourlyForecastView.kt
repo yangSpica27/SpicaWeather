@@ -2,6 +2,7 @@ package me.spica.weather.view.line
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.Paint.FontMetricsInt
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -10,12 +11,11 @@ import me.spica.weather.common.getThemeColor
 import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getColorWithAlpha
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
 // 宽度75dp 高度200dp
-class HourlyForecastView : View, ScrollWatcher {
+class HourlyForecastView : View {
 
   constructor(context: Context) : super(context)
   constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -39,6 +39,7 @@ class HourlyForecastView : View, ScrollWatcher {
     tempLinePath.reset()
     shadowPath.reset()
 
+    dashLineList.clear()
     weathers.forEachIndexed { index, hourlyWeatherBean ->
       // 横坐标
       val w: Float = (ITEM_WIDTH * index + paddingL)
@@ -52,6 +53,7 @@ class HourlyForecastView : View, ScrollWatcher {
         dashLineList.add(index)
       }
 
+
       if (dashLineList.contains(index)) {
         dashWidth.add(w)
         dashHeight.add(h)
@@ -62,10 +64,12 @@ class HourlyForecastView : View, ScrollWatcher {
         tempLinePaint.color = themeColor
         dashLinePaint.color = themeColor
         shadowPaint.shader = LinearGradient(
-          0f, paddingT + TEMP_TEXT_HEIGHT * 1f, 0f,
-          ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT,
-          getColorWithAlpha(.3f, themeColor),
-          getColorWithAlpha(.1f, themeColor),
+          0f,
+          0f,
+          0f,
+          paddingT + ITEM_MIN_HEIGHT + TEMP_TEXT_HEIGHT + TEMP_HEIGHT_SECTION,
+          getColorWithAlpha(.4f, themeColor),
+          Color.TRANSPARENT,
           Shader.TileMode.CLAMP
         )
       }
@@ -123,25 +127,15 @@ class HourlyForecastView : View, ScrollWatcher {
         val secondDiffX: Float = nextPoint.x * 1f - lastPoint.x
         val secondDiffY: Float = nextPoint.y * 1f - lastPoint.y
 
-        //
-        Timber.e("==========")
-        Timber.tag("序号").e("$index")
-        Timber.tag("上上一个坐标").e("x:${lastLastPoint.x} y:${lastLastPoint.y}")
-        Timber.tag("上一个坐标").e("x:${lastPoint.x} y:${lastPoint.y}")
-        Timber.tag("当前坐标").e("x:${point.x} y:${point.y}")
-        Timber.tag("下一个坐标").e("x:${nextPoint.x} y:${nextPoint.y}")
 
-        Timber.e("===========")
-        //
-
-        // 根据锚点间坐标差 求出 两个控制点 参数给的越大 曲率越大
+        // 根据锚点间坐标差 求出 两个控制点 参数给的越大 斜率越小
 
         val controlPointLeft = PointF(
-          lastPoint.x + 0.2f * firstDiffX, lastPoint.y + 0.2f * firstDiffY
+          lastPoint.x + 0.1f * firstDiffX, lastPoint.y + 0.1f * firstDiffY
         )
 
         val controlPointRight = PointF(
-          point.x - 0.2f * secondDiffX, point.y - 0.2f * secondDiffY
+          point.x - 0.1f * secondDiffX, point.y - 0.1f * secondDiffY
         )
 
         // 做二阶贝塞尔
@@ -184,7 +178,7 @@ class HourlyForecastView : View, ScrollWatcher {
 
     private val ITEM_MIN_HEIGHT = 35.dp // 每个单元最低的高度
 
-    private val TEMP_TEXT_HEIGHT = 20.dp // 预留给温度指示器的间距
+    private val TEMP_TEXT_HEIGHT = 24.dp // 预留给温度指示器的间距
 
     private val DATE_TEXT_HEIGHT = 20.dp // 日期文本预留空间
 
@@ -204,9 +198,59 @@ class HourlyForecastView : View, ScrollWatcher {
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
-    drawTemps(canvas)
+    drawPops(canvas)
     drawDate(canvas)
     drawLines(canvas)
+    drawTemp(canvas)
+  }
+
+  private val tempTextRect = Rect()
+
+  private val tempTextPaint = TextPaint().apply {
+    textSize = 12.dp
+    color = context.getColor(R.color.window_background)
+  }
+  private val tempTextBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+  }
+
+  private fun drawTemp(canvas: Canvas) {
+    val item = weathers[currentItemIndex]
+    tempTextBgPaint.color = item.getWeatherType().getThemeColor()
+    val showText = "${item.weatherName},${item.temp}℃"
+    val y = (tempHeightPixel(item.temp)).toInt()
+    val offset = ITEM_WIDTH / 4f
+    tempTextRect.left = getScrollBarX().toInt()
+    tempTextRect.top = (y - TEMP_TEXT_HEIGHT).toInt()
+    tempTextRect.right = (getScrollBarX() + offset).toInt()
+    tempTextRect.bottom = (y - TEMP_TEXT_HEIGHT + 20.dp).toInt()
+
+    val fontMetrics: FontMetricsInt = tempTextPaint.fontMetricsInt
+    val baseline: Int = (tempTextRect.bottom + tempTextRect.top - fontMetrics.bottom - fontMetrics.top) / 2
+
+    tempTextPaint.textAlign = Paint.Align.LEFT
+    dateTextPaint.getTextBounds(showText, 0, showText.toCharArray().size, textRect)
+
+    canvas.drawRoundRect(
+      tempTextRect.centerX() - 4.dp,
+      tempTextRect.top * 1f,
+      tempTextRect.centerX() + textRect.width().toFloat(),
+      tempTextRect.bottom * 1f, 3.dp, 3.dp, tempTextBgPaint
+    )
+
+    tempTextBgPaint.color = getColorWithAlpha(.1f, tempTextBgPaint.color)
+
+    canvas.drawRoundRect(
+      tempTextRect.centerX() - ITEM_WIDTH / 2f + textRect.width() / 2f,
+      paddingT / 2f,
+      tempTextRect.centerX() + ITEM_WIDTH / 2f + textRect.width() / 2f,
+      height * 1f - paddingB / 2f,
+      4.dp,
+      4.dp,
+      tempTextBgPaint
+    )
+
+    canvas.drawText(showText, tempTextRect.centerX().toFloat(), baseline.toFloat(), tempTextPaint)
 
   }
 
@@ -245,6 +289,7 @@ class HourlyForecastView : View, ScrollWatcher {
   //画虚线的点的index
   private val dashLineList: MutableList<Int> = arrayListOf()
 
+
   private val paddingL = 20.dp
   private val paddingT = 12.dp
 
@@ -261,8 +306,9 @@ class HourlyForecastView : View, ScrollWatcher {
 
   // 气温折线的配套画笔
   private val tempLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    strokeWidth = 2.dp
+    strokeWidth = 3.dp
     style = Paint.Style.STROKE
+    strokeCap = Paint.Cap.ROUND
   }
 
   private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -342,28 +388,59 @@ class HourlyForecastView : View, ScrollWatcher {
     }
 
 
-  private fun drawTemps(canvas: Canvas) {
+  private fun drawPops(canvas: Canvas) {
     mPointList.forEachIndexed { index, point ->
 
       if (weathers[index].pop >= 40) {
         popPaint.color = context.getColor(R.color.light_blue_200)
       } else {
-        popPaint.color = context.getColor(R.color.rainRectColor)
+        popPaint.color = context.getColor(R.color.light_blue_50)
       }
 
-      canvas.drawRect(
+      canvas.drawRoundRect(
         point.x - 6.dp,
         ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT,
         point.x + 6.dp,
         ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
-            ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)),
+            ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)), 3.dp, 3.dp,
         popPaint
       )
     }
   }
 
-  override fun update(scrollX: Int) {
 
+  private var maxScrollOffset = 0 //滚动条最长滚动距离
+
+  private var scrollOffset = 0 //滚动条偏移量
+
+  private var currentItemIndex = 0 //当前滚动的位置所对应的item下标
+
+
+  //设置scrollerView的滚动条的位置，通过位置计算当前的时段
+  fun setScrollOffset(offset: Int, maxScrollOffset: Int) {
+    this.maxScrollOffset = (maxScrollOffset + 50.dp).toInt()
+    this.scrollOffset = offset
+    currentItemIndex = calculateItemIndex()
+    postInvalidate()
+  }
+
+  private fun calculateItemIndex(): Int {
+    val x: Float = getScrollBarX()
+    var sum: Float = (paddingL - ITEM_WIDTH / 2)
+    for (i in 0 until weathers.size - 1) {
+      sum += ITEM_WIDTH
+      if (x < sum) {
+        return i
+      }
+    }
+    return weathers.size - 1
+  }
+
+
+  private fun getScrollBarX(): Float {
+    var x: Float = (weathers.size - 1) * ITEM_WIDTH * scrollOffset * 1f / maxScrollOffset
+    x = (x - 3.dp)
+    return x
   }
 
 

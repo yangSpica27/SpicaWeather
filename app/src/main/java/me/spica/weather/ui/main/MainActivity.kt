@@ -119,9 +119,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         syncNewCity(result.city, result)
       } else {
         toast("获取地理位置失败")
-        viewModel.changeCity(
-          cityList.first()
-        )
+        if (viewModel.getAllCity().isEmpty())
+          viewModel.changeCity(cityList.first())
       }
     }
   }

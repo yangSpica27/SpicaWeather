@@ -40,7 +40,6 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
   init {
     resetAnim()
-    binding.rvHourWeather.adapter = hourWeatherAdapter
   }
 
   @SuppressLint("NotifyDataSetChanged")
@@ -50,7 +49,7 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
 //    binding.lineView.setData(weather.hourlyWeather)
 
-
+    binding.layoutLoading.hide()
     weather.hourlyWeather.toList().sortedBy {
       it.temp
     }.apply {
@@ -69,16 +68,6 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     hourWeatherAdapter.items.addAll(items)
     hourWeatherAdapter.sortList()
 
-    binding.rvHourWeather.post {
-      hourWeatherAdapter.notifyDataSetChanged()
-    }
-    binding.rvHourWeather.postDelayed(
-      {
-        binding.layoutLoading.hide()
-        binding.rvHourWeather.show()
-
-      }, 100
-    )
   }
 
 

@@ -64,7 +64,12 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
 
     val idleHandler = MessageQueue.IdleHandler {
         handler.removeCallbacksAndMessages(null)
-        action()
+        try {
+            action()
+        }catch (_:Exception){
+
+        }
+
         return@IdleHandler false
     }
 
@@ -72,7 +77,11 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
         if (timeout != null) {
             handler.postDelayed({
                 queue.removeIdleHandler(idleHandler)
-                action()
+                try {
+                    action()
+                }catch (_:Exception){
+
+                }
                 if (BuildConfig.DEBUG) {
                     Timber.d("doOnMainThreadIdle: ${timeout}ms timeout!")
                 }

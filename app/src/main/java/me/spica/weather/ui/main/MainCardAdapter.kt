@@ -108,9 +108,10 @@ class MainCardAdapter(
         holder.bindView(it)
       }
     }
-    recyclerView.post {
+    holder.itemView.post {
       holder.checkEnterScreen()
     }
+
   }
 
 
