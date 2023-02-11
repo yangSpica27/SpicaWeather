@@ -436,6 +436,7 @@ class HourlyForecastView : View {
     postInvalidate()
   }
 
+  // 计算当前指向了哪个Item
   private fun calculateItemIndex(): Int {
     val x: Float = getScrollBarX()
     var sum: Float = (paddingL - ITEM_WIDTH / 2)
@@ -449,6 +450,7 @@ class HourlyForecastView : View {
   }
 
 
+  // 获取x轴滚动
   private fun getScrollBarX(): Float {
     var x: Float = (weathers.size - 1) * ITEM_WIDTH * scrollOffset * 1f / maxScrollOffset
     x = (x - 3.dp)
