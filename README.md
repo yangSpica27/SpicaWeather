@@ -7,6 +7,11 @@
 <img src="/img/preview2.jpg" width="32%"/>
 </p>
 
+
+## 已知问题&目前工作：
+  - 频繁切换页面，天气动画surfaceView的holder概率会因为lock后未解绑而crash或者渲染异常
+  - 城市选择重新设计
+
 ## 技术栈及其使用的开源库
 - Minimum SDK level 21
 - [Kotlin](https://kotlinlang.org/), [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
