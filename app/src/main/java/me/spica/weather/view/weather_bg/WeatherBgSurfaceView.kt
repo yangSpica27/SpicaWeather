@@ -4,9 +4,12 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
@@ -15,16 +18,18 @@ import me.spica.weather.tools.dp
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
+
 class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
-  private lateinit var syncThread: Thread
 
-
+  @Volatile
   private var isWork = false // 是否预备绘制
 
   private val clipPath = Path()
 
   private var isPause = false;
+
+  private val lock = Any()
 
   constructor(context: Context?) : super(context)
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -32,6 +37,10 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
 
   private var threadPool: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+
+  private lateinit var drawThread: HandlerThread
+
+  private lateinit var drawHandler: Handler
 
   var bgColor = ContextCompat.getColor(context, R.color.window_background)
   var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
@@ -144,28 +153,25 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   init {
     holder.addCallback(this)
     this.holder.setFormat(PixelFormat.TRANSLUCENT)
-
   }
 
 
   private fun doOnDraw() {
-    synchronized(this) {
-      val canvas = holder.lockCanvas(null) ?: return
-      // ================进行绘制==============
-      canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
-      roundClip(canvas)
-      if (isPause){
-        holder.unlockCanvasAndPost(canvas)
-        return@synchronized
-      }
-      drawSunny(canvas)
-      drawRain(canvas)
-      drawCloudy(canvas)
-      drawSnow(canvas)
-      drawFog(canvas)
-      // ================绘制结束===============
+    val canvas = holder.lockCanvas(null) ?: return
+    // ================进行绘制==============
+    canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
+    roundClip(canvas)
+    if (isPause) {
       holder.unlockCanvasAndPost(canvas)
+      return
     }
+    drawSunny(canvas)
+    drawRain(canvas)
+    drawCloudy(canvas)
+    drawSnow(canvas)
+    drawFog(canvas)
+    // ================绘制结束===============
+    holder.unlockCanvasAndPost(canvas)
   }
 
   private fun roundClip(canvas: Canvas) {
@@ -179,6 +185,9 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     if (threadPool.isShutdown) {
       threadPool = Executors.newSingleThreadScheduledExecutor()
     }
+    drawThread = HandlerThread("draw-thread")
+    drawThread.start()
+    drawHandler = Handler(drawThread.looper)
     // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
     threadPool.execute {
       while (isWork) {
@@ -191,22 +200,22 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     // 渲染线程
-    syncThread = Thread {
-      while (isWork) {
+    drawHandler.post(drawRunnable)
+  }
+
+  private val drawRunnable = object : Runnable {
+    override fun run() {
+      while (isWork && holder.surface.isValid) {
         // 记录上次执行渲染时间
         lastSyncTime = System.currentTimeMillis()
         // 执行渲染
-        doOnDraw()
-        // 保证两张帧之间间隔16ms(60帧)
-        try {
-          Thread.sleep(Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
-        } catch (_: Exception) {
-
+        synchronized(lock) {
+          doOnDraw()
         }
-
+        // 保证两张帧之间间隔16ms(60帧)
+        drawHandler.postDelayed(this, Math.min(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
       }
     }
-    syncThread.start()
   }
 
 
@@ -259,9 +268,21 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   }
 
   override fun surfaceDestroyed(p0: SurfaceHolder) {
-    isWork = false
-    syncThread.interrupt()
-    threadPool.shutdownNow()
+
+    synchronized(lock) {
+      isWork = false
+      drawHandler.removeCallbacks(drawRunnable)
+    }
+    threadPool.shutdown()
+  }
+
+  override fun onVisibilityChanged(changedView: View, visibility: Int) {
+    super.onVisibilityChanged(changedView, visibility)
+    if (visibility == View.VISIBLE) {
+
+    } else {
+      drawHandler.removeCallbacks(drawRunnable)
+    }
   }
 
   // 晴天的实现
@@ -303,9 +324,6 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     isPause = true;
   }
 
-  override fun onDraw(canvas: Canvas) {
-    super.onDraw(canvas)
-  }
 
   //画笔
   private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -369,6 +387,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     )
     canvas.restore()
   }
+
 
 
 }
