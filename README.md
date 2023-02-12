@@ -9,7 +9,7 @@
 
 
 ## 已知问题&目前工作：
-  - ~~频繁切换页面，天气动画surfaceView的holder概率会因为lock后未解绑而crash或者渲染异常(已经修)~~
+  - ~~频繁切换页面，天气动画surfaceView的holder概率会因为lock后未解绑而crash或者渲染异常(已经修复)~~
   - 城市选择重新设计
   - 雾天的动画
 
