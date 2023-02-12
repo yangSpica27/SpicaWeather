@@ -3,9 +3,15 @@
 
 ## Screenshots
 <p align="center">
-<img src="/img/preview1.jpg" width="32%"/>
-<img src="/img/preview2.jpg" width="32%"/>
+<img src="/img/preview01.jpg" width="32%"/>
+<img src="/img/preview02.jpg" width="32%"/>
 </p>
+
+
+## 已知问题&目前工作：
+  - ~~频繁切换页面，天气动画surfaceView的holder概率会因为lock后未解绑而crash或者渲染异常(已经修复)~~
+  - 城市选择重新设计
+  - 雾天的动画
 
 ## 技术栈及其使用的开源库
 - Minimum SDK level 21
