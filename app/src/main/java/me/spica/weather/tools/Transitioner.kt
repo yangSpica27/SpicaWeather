@@ -60,6 +60,7 @@ class Transitioner(startingView: View, endingView: View) {
      */
     fun animateTo(percent: Float, duration: Long? = null, interpolator: TimeInterpolator? = null) {
         if (currentProgress == percent || percent < 0f || percent > 1f) return
+
         ValueAnimator.ofFloat(currentProgress, percent).apply{
             this.duration = duration ?: this@Transitioner.duration.toLong()
             this.interpolator = interpolator ?: this@Transitioner.interpolator

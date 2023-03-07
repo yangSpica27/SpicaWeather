@@ -2,7 +2,6 @@ package me.spica.weather.ui.weather
 
 import android.content.SharedPreferences
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
@@ -22,6 +21,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.toast
+import me.spica.weather.ui.main.MainActivity
 import me.spica.weather.ui.main.MainCardAdapter
 import me.spica.weather.view.card.HomeCardType
 import me.spica.weather.view.card.NowWeatherCard
@@ -32,9 +32,7 @@ import me.spica.weather.view.card.toHomeCardType
  * 天气单元页面
  */
 @AndroidEntryPoint
-class WeatherFragment(
-  private val scrollListener: View.OnScrollChangeListener
-) : BindingFragment<FragmentListBinding>(),
+class WeatherFragment() : BindingFragment<FragmentListBinding>(),
   SharedPreferences.OnSharedPreferenceChangeListener {
 
   private val viewModel by viewModels<WeatherViewModel>()
@@ -61,7 +59,7 @@ class WeatherFragment(
     } else {
       // 首次加载
       lifecycleScope.launch {
-        viewModel.weatherFlow.collectLatest {
+        viewModel.weatherFlow.collect {
           viewBinding.swipeRefreshLayout.isRefreshing = false
         }
       }
@@ -77,7 +75,7 @@ class WeatherFragment(
       }
 
       lifecycleScope.launch {
-        viewModel.errorMessage.collectLatest {
+        viewModel.errorMessage.collect {
           doOnMainThreadIdle({
             toast(it)
           })
@@ -87,9 +85,11 @@ class WeatherFragment(
 
     }
     super.onResume()
-    scrollListener.onScrollChange(viewBinding.rvList, 0, viewBinding.scrollView.scrollY, 0, 0)
+    if (requireActivity() is MainActivity) {
+      (requireActivity() as MainActivity).listScrollerListener
+        .onScrollChange(viewBinding.rvList, 0, viewBinding.scrollView.scrollY, 0, 0)
+    }
     mainCardAdapter.onScroll()
-
   }
 
   override fun onPause() {
@@ -122,7 +122,10 @@ class WeatherFragment(
     // 滑动检测
     viewBinding.scrollView.setOnScrollChangeListener { _, x, y, ox, oy ->
       mainCardAdapter.onScroll()
-      scrollListener.onScrollChange(viewBinding.rvList, x, y, ox, oy)
+      if (requireActivity() is MainActivity) {
+        (requireActivity() as MainActivity).listScrollerListener
+          .onScrollChange(viewBinding.rvList, x, y, ox, oy)
+      }
     }
 
     viewBinding.swipeRefreshLayout.isEnabled = false

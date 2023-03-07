@@ -102,10 +102,10 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
     }
 
     // 提示结果
-    lifecycleScope.launch {
+    lifecycleScope.launch{
       cityViewModel.tipsFlow.filter {
         it.isNotBlank()
-      }.collectLatest {
+      }.collect {
         withContext(Dispatchers.Main) {
           toast(it)
         }

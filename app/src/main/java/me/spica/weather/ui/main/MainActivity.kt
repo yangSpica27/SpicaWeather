@@ -30,6 +30,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
@@ -68,7 +69,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
   private var mLastAppBarTranslationY = 0f
 
-  private val listScrollerListener =
+  val listScrollerListener =
 
     View.OnScrollChangeListener { view, _, scrollY, _, _ ->
 
@@ -88,7 +89,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
       }
     }
 
-  private val mainPagerAdapter = MainPagerAdapter(this, listScrollerListener)
+  private val mainPagerAdapter = MainPagerAdapter(this)
 
   @Inject
   lateinit var cityList: List<CityBean>
@@ -256,7 +257,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
     lifecycleScope.launch {
-      viewModel.allCityFlow.collectLatest {
+      viewModel.allCityFlow
+        .distinctUntilChanged()
+        .collectLatest {
         // 刷新城市列表
         mainPagerAdapter.diffUtil.submitList(it)
       }

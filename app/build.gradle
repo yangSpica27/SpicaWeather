@@ -15,8 +15,8 @@ android {
         applicationId "me.spica.weather"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
@@ -58,8 +58,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             signingConfig signingConfigs.signingConfig
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -110,9 +112,9 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // 协程支持
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3-native-mt'
+
 
     // 生命周期+协程
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
@@ -144,7 +146,8 @@ dependencies {
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
 
     //network 网络请求相关
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation 'com.github.skydoves:sandwich:1.2.3'

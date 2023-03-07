@@ -276,14 +276,6 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     threadPool.shutdown()
   }
 
-  override fun onVisibilityChanged(changedView: View, visibility: Int) {
-    super.onVisibilityChanged(changedView, visibility)
-    if (visibility == View.VISIBLE) {
-
-    } else {
-      drawHandler.removeCallbacks(drawRunnable)
-    }
-  }
 
   // 晴天的实现
   private fun drawSunny(canvas: Canvas) {

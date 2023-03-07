@@ -124,3 +124,9 @@
  -keep class com.qweather.sdk.** { *;}
 
  -keep class com.baidu.location.** {*;}
+
+-keep class kotlinx.coroutines.android.** {*;}
+-keep class kotlinx.coroutines.internal.MainDispatchersKt
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
+-keep class kotlinx.coroutines.android.AndroidExceptionPreHandler {*;}
+-keep class kotlinx.coroutines.android.** {*;}
