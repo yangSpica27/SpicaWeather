@@ -12,9 +12,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.ui.weather.WeatherFragment
 
 class MainPagerAdapter(
-    fragmentActivity: FragmentActivity,
-    private val scrollListener: View.OnScrollChangeListener
-) :
+    fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
 
 
@@ -32,7 +30,7 @@ class MainPagerAdapter(
     override fun getItemCount(): Int = diffUtil.currentList.size
 
     override fun createFragment(position: Int): Fragment {
-        val fragment = WeatherFragment(scrollListener)
+        val fragment = WeatherFragment()
         fragment.arguments = Bundle().apply {
             putParcelable("city", diffUtil.currentList[position])
         }
