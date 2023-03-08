@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class CoilInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val imageLoader = ImageLoader.Builder(context)
                 .crossfade(true)
                 .allowRgb565(true)

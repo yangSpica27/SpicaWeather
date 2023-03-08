@@ -71,7 +71,7 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
       binding.tipDesc.show()
     }
 
-    (parent as RecyclerView).post {
+    (parent as RecyclerView?)?.post {
       dayInfoAdapter.notifyDataSetChanged()
     }
 

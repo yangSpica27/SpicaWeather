@@ -1,5 +1,6 @@
 package me.spica.weather.ui.main
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class MainViewModel @Inject constructor(
     val selectCityFlow = cityRepository.selectedCityFlow()
 
 
+    @WorkerThread
     fun  getAllCity() = cityRepository.allCityList()
 
 

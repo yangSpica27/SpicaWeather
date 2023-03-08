@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.spica.weather.model.city.CityBean
-import me.spica.weather.model.weather.AirBean
 import me.spica.weather.model.weather.CaiyunExtendBean
 import me.spica.weather.persistence.dao.WeatherDao
 import me.spica.weather.repository.HeRepository
@@ -28,12 +27,14 @@ class WeatherViewModel @Inject constructor(
 
   fun changeCity(cityBean: CityBean) {
     viewModelScope.launch {
-      cityFlow.value = CityBean(
-        cityName = cityBean.cityName,
-        sortName = cityBean.sortName,
-        lon = cityBean.lon,
-        lat = cityBean.lat,
-        isSelected = cityBean.isSelected
+      cityFlow.emit(
+        CityBean(
+          cityName = cityBean.cityName,
+          sortName = cityBean.sortName,
+          lon = cityBean.lon,
+          lat = cityBean.lat,
+          isSelected = cityBean.isSelected
+        )
       )
     }
   }
@@ -137,7 +138,7 @@ class WeatherViewModel @Inject constructor(
 
   val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
     weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)
-  }
+  }.flowOn(Dispatchers.IO)
 
   // 和风系 接口
   val weatherFlow = cityFlow

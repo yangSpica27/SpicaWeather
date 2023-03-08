@@ -2,6 +2,8 @@ package me.spica.weather.persistence.repository
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.persistence.dao.CityDao
@@ -16,7 +18,7 @@ class CityRepository @Inject constructor(
     /**
      * 获取所有城市的flow
      */
-    fun allCityFlow() = cityDao.getAllDistinctUntilChanged()
+    fun allCityFlow() = cityDao.getAllDistinctUntilChanged().distinctUntilChanged().flowOn(Dispatchers.IO)
 
 
     /**

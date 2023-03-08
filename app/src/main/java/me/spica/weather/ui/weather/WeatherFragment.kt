@@ -64,7 +64,7 @@ class WeatherFragment() : BindingFragment<FragmentListBinding>(),
         }
       }
 
-      lifecycleScope.launch(Dispatchers.Default) {
+      lifecycleScope.launch {
         // 监听数据库中的对应的天气对象
         viewModel.weatherCacheFlow.filterNotNull().collectLatest {
           doOnMainThreadIdle({

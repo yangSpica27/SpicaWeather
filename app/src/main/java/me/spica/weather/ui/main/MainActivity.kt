@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.spica.weather.R
 import me.spica.weather.base.BindingActivity
 import me.spica.weather.common.Preference
@@ -120,8 +121,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
         syncNewCity(result.city, result)
       } else {
         toast("获取地理位置失败")
-        if (viewModel.getAllCity().isEmpty())
-          viewModel.changeCity(cityList.first())
+        lifecycleScope.launch(Dispatchers.IO) {
+          if (viewModel.getAllCity().isEmpty())
+            viewModel.changeCity(cityList.first())
+        }
       }
     }
   }
@@ -293,17 +296,19 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
 
 
   private fun syncNewCity(cityName: String, bdLocation: BDLocation) {
-    lifecycleScope.launch(Dispatchers.Default) {
+    lifecycleScope.launch(Dispatchers.IO) {
       // 根据百度返回的位置信息 更新当前城市
       cityList.forEach {
         if (cityName.contains(it.cityName)) {
           // 地点存在
           if (viewModel.getAllCity().contains(it) || viewModel.getAllCity().isEmpty()) {
-            Snackbar.make(
-              viewBinding.root,
-              "检测您所在城市在${it.cityName},正在切换",
-              Snackbar.LENGTH_SHORT
-            ).show()
+            withContext(Dispatchers.Main){
+              Snackbar.make(
+                viewBinding.root,
+                "检测您所在城市在${it.cityName},正在切换",
+                Snackbar.LENGTH_SHORT
+              ).show()
+            }
             // 使用定位获取的地理位置以提高精度
             it.lat = bdLocation.latitude.toString()
             it.lon = bdLocation.longitude.toString()

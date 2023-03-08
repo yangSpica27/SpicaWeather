@@ -40,6 +40,7 @@ class HourlyForecastView : View {
     shadowPath.reset()
 
     dashLineList.clear()
+    mPointList.clear()
     weathers.forEachIndexed { index, hourlyWeatherBean ->
       // 横坐标
       val w: Float = (ITEM_WIDTH * index + paddingL)

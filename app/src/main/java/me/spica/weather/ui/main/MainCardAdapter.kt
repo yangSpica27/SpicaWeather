@@ -104,7 +104,7 @@ class MainCardAdapter(
   override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
     holder.reset()
     weather?.let {
-      scope.launch(Dispatchers.Default) {
+      scope.launch(Dispatchers.Unconfined) {
         holder.bindView(it)
       }
     }
