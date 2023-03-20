@@ -22,6 +22,7 @@ class IndexHorizontalScrollView : HorizontalScrollView {
 
 
 
+  @SuppressLint("SuspiciousIndentation")
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
     val offset = computeHorizontalScrollOffset()

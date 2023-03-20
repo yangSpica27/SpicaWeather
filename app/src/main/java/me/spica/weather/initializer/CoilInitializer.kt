@@ -24,7 +24,6 @@ class CoilInitializer : Initializer<Unit> {
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .allowHardware(true)
-                .bitmapPoolingEnabled(false)
                 .build()
             Coil.setImageLoader(imageLoader)
         }

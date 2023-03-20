@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
@@ -157,7 +158,11 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
 
   private fun doOnDraw() {
-    val canvas = holder.lockCanvas(null) ?: return
+    val canvas = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      holder.lockCanvas()?: return
+    } else {
+      holder.lockCanvas()?: return
+    }
     // ================进行绘制==============
     canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
     roundClip(canvas)

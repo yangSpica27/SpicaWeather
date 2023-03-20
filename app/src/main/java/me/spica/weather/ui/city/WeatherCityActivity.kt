@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.weather.R
@@ -21,6 +23,7 @@ import me.spica.weather.model.city.CityBean
 import me.spica.weather.persistence.dao.WeatherDao
 import me.spica.weather.tools.dp
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 /**
  * 城市选择【已经选择了的】
@@ -100,7 +103,11 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
     finish()
   }
 
+
+
+
   override fun initializer() {
+
     val animation = AnimationUtils.loadLayoutAnimation(
       this,
       R.anim.layout_animation_fall_down

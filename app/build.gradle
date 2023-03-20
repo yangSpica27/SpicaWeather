@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "me.spica.weather"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 3
         versionName "3.0"
 
@@ -97,14 +97,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.github.zhpanvip:viewpagerindicator:1.2.1'
+
 
     // hilt
     implementation 'com.google.dagger:hilt-android:2.41'
     kapt 'com.google.dagger:hilt-compiler:2.41'
 
     // 图片加载
-    implementation("io.coil-kt:coil:1.4.0")
+    implementation("io.coil-kt:coil:2.2.2")
 
     def roomVersion = "2.4.1"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -164,7 +164,7 @@ dependencies {
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation("androidx.preference:preference-ktx:1.2.0")
     implementation 'com.airbnb.android:lottie:5.2.0'
 
 
