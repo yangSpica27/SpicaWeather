@@ -10,7 +10,6 @@ import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import me.spica.weather.R
 import me.spica.weather.tools.dp
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 
 class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
@@ -194,15 +194,21 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
     drawThread.start()
     drawHandler = Handler(drawThread.looper)
     // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
-    threadPool.execute {
-      while (isWork) {
-        Thread.sleep(16)
+    threadPool.scheduleWithFixedDelay({
+
+      if (currentWeatherType == NowWeatherView.WeatherType.RAIN) {
         rains.forEach {
           // 每隔16ms给粒子单元计算下一帧的坐标
           it.calculation(width, height)
         }
+      } else if (currentWeatherType == NowWeatherView.WeatherType.SNOW) {
+        snows.forEach {
+          // 计算雪的坐标
+          it.onlyCalculation(width, height)
+        }
       }
-    }
+
+    }, 0, 16, TimeUnit.MILLISECONDS)
 
     // 渲染线程
     drawHandler.post(drawRunnable)
@@ -218,7 +224,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
           doOnDraw()
         }
         // 保证两张帧之间间隔16ms(60帧)
-        drawHandler.postDelayed(this, Math.min(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
+        drawHandler.postDelayed(this, 16)
       }
     }
   }
@@ -237,7 +243,7 @@ class WeatherBgSurfaceView : SurfaceView, SurfaceHolder.Callback {
   private fun drawSnow(canvas: Canvas) {
     if (currentWeatherType != NowWeatherView.WeatherType.SNOW) return
     snows.forEach {
-      it.draw(canvas)
+      it.onlyDraw(canvas)
     }
   }
 

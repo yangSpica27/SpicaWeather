@@ -55,6 +55,18 @@ public class SnowFlake {
     canvas.drawCircle(mPosition.x, mPosition.y, mFlakeSize, mPaint);
   }
 
+
+  // 仅计算移动
+  public void onlyCalculation(int width, int height){
+    move(width, height);
+  }
+
+  // 仅绘制
+  public void onlyDraw(Canvas canvas){
+    canvas.drawCircle(mPosition.x, mPosition.y, mFlakeSize, mPaint);
+  }
+
+
   // 移动雪花
   private void move(int width, int height) {
     double x = mPosition.x + (mIncrement * Math.cos(mAngle));
@@ -69,6 +81,8 @@ public class SnowFlake {
       reset(width);
     }
   }
+
+
 
   // 判断是否在其中
   private boolean isInside(int width, int height) {
