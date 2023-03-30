@@ -6,11 +6,15 @@ import android.graphics.Paint.FontMetricsInt
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import me.spica.weather.R
+import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.model.weather.HourlyWeatherBean
+import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getColorWithAlpha
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,9 +28,13 @@ class HourlyForecastView : View {
   private val weathers: ArrayList<HourlyWeatherBean> = arrayListOf() // 数据源
 
 
-  fun setData(weathers: List<HourlyWeatherBean>) {
+  private var themeColor = ContextCompat.getColor(context, R.color.black)
+
+  fun setData(weather: Weather) {
     this.weathers.clear()
-    this.weathers.addAll(weathers)
+    this.weathers.addAll(weather.hourlyWeather)
+    themeColor = WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getThemeColor()
+    levelPaint.color = getColorWithAlpha(.2f, themeColor)
     init()
   }
 
@@ -41,6 +49,7 @@ class HourlyForecastView : View {
 
     dashLineList.clear()
     mPointList.clear()
+
     weathers.forEachIndexed { index, hourlyWeatherBean ->
       // 横坐标
       val w: Float = (ITEM_WIDTH * index + paddingL)
@@ -50,7 +59,10 @@ class HourlyForecastView : View {
       val point = Point(w.toInt(), h.toInt())
       mPointList.add(point)
 
-      if (index != 0 && hourlyWeatherBean.getWeatherType() != weathers[index - 1].getWeatherType()) {
+      if (index != 0 &&
+        hourlyWeatherBean.getWeatherType() !=
+        weathers[index - 1].getWeatherType()
+      ) {
         dashLineList.add(index)
       }
 
@@ -61,7 +73,6 @@ class HourlyForecastView : View {
       }
       if (index == 0) {
         // 使用当前的做线段的主题色
-        val themeColor = hourlyWeatherBean.getWeatherType().getThemeColor()
         tempLinePaint.color = themeColor
         dashLinePaint.color = themeColor
         shadowPaint.shader = LinearGradient(
@@ -332,7 +343,37 @@ class HourlyForecastView : View {
   private fun drawLines(canvas: Canvas) {
     // 绘制气温折线
 
+    if (dashLineList.isEmpty()) {
+      // 绘制一整个块
+      roundRect.setEmpty()
+      roundRect.left = paddingL + 2.dp
+      roundRect.right = width - paddingR - 2.dp
+      roundRect.top = ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT + 4
+      roundRect.bottom = paddingT + ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + LEVEL_RECT_HEIGHT + TEMP_TEXT_HEIGHT + 4
+      canvas.drawRoundRect(
+        roundRect,
+        2.dp,
+        2.dp,
+        levelPaint
+      )
+    } else {
+      // 补充绘制末尾的item块
+      levelPaint.color = getColorWithAlpha(.3f, weathers.last().getWeatherType().getThemeColor())
+      roundRect.setEmpty()
+      roundRect.left = mPointList[dashLineList.last()].x * 1f
+      roundRect.right = width - paddingR - 2.dp
+      roundRect.top = ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT + 4
+      roundRect.bottom = paddingT + ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + LEVEL_RECT_HEIGHT + TEMP_TEXT_HEIGHT + 4
+      canvas.drawRoundRect(
+        roundRect,
+        2.dp,
+        2.dp,
+        levelPaint
+      )
+    }
+
     dashLineList.forEachIndexed { index, i ->
+      Timber.tag("dashIndex").e("$i")
       canvas.drawLine(
         mPointList[i].x * 1f,
         mPointList[i].y * 1f,
@@ -341,24 +382,18 @@ class HourlyForecastView : View {
         dashLinePaint
       )
 
-      levelPaint.color = getColorWithAlpha(
-        .2f,
-        weathers[i].getWeatherType().getThemeColor()
-      )
-
+      levelPaint.color = getColorWithAlpha(.3f, weathers[i - 1].getWeatherType().getThemeColor())
       // 绘制下方的色块
       roundRect.setEmpty()
 
-      roundRect.left = if (index != 0) {
-        ITEM_WIDTH * i + paddingL + 2.dp
-      } else {
+      roundRect.left = if (index == 0) {
         paddingL + 2.dp
-      }
-      roundRect.right = if (index == dashLineList.size - 1) {
-        width - paddingR - 2.dp
       } else {
-        ITEM_WIDTH * dashLineList[index + 1] + paddingL - 2.dp
+        mPointList[dashLineList[index - 1]].x * 1f + 2.dp
       }
+
+      roundRect.right = mPointList[i].x * 1f - 2.dp
+
       roundRect.top = ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT + 4
       roundRect.bottom = paddingT + ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + LEVEL_RECT_HEIGHT + TEMP_TEXT_HEIGHT + 4
 
@@ -397,7 +432,7 @@ class HourlyForecastView : View {
     mPointList.forEachIndexed { index, point ->
 
 
-      popPaint.color = getColorWithAlpha(weathers[index].pop * 1f / 100, context.getColor(R.color.light_blue_200))
+      popPaint.color = getColorWithAlpha(weathers[index].pop * 1f / 100 / 2f, weathers[index].getWeatherType().getThemeColor())
 
       val showText = "${weathers[index].pop}%"
       popTextPaint.getTextBounds(showText, 0, showText.toCharArray().size, textRect)

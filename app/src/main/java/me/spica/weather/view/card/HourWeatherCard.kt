@@ -53,7 +53,7 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     weather.hourlyWeather.toList().sortedBy {
       it.temp
     }.apply {
-      binding.hourForecastView.setData(weather.hourlyWeather)
+      binding.hourForecastView.setData(weather)
     }
 
     doOnMainThreadIdle({
