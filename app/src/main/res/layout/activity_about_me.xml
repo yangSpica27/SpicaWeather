@@ -24,10 +24,9 @@
             android:layout_height="wrap_content"
             app:dividerColor="@color/line_divider" />
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_app"
+        <me.spica.weather.ui.about.WaveView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginTop="12dp"
             android:layout_gravity="center"
             tools:ignore="ContentDescription" />
