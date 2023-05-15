@@ -1,8 +1,6 @@
 package me.spica.weather.ui.main
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer

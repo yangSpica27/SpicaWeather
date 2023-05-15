@@ -120,7 +120,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
         WarningDetailActivity.startActivity(context, weather.alerts[0])
       }
 
-    })
+    },200)
 
 
   }

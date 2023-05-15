@@ -104,9 +104,7 @@ class MainCardAdapter(
   override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
     holder.reset()
     weather?.let {
-      scope.launch(Dispatchers.Unconfined) {
-        holder.bindView(it)
-      }
+      holder.bindView(it)
     }
     holder.itemView.post {
       holder.checkEnterScreen()
