@@ -20,55 +20,57 @@ import me.spica.weather.ui.weather.HourWeatherAdapter
  */
 class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-  private val binding = CardHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
-
-
-  private val hourWeatherAdapter by lazy {
-    HourWeatherAdapter()
-  }
+    private val binding = CardHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, true)
 
 
-  override var animatorView: View = this
-
-  override var enterAnim: AnimatorSet = AnimatorSet()
-  override var index: Int = 1
-  override var hasInScreen: Boolean = false
-
-  init {
-    resetAnim()
-  }
-
-  @SuppressLint("NotifyDataSetChanged")
-  override fun bindData(weather: Weather) {
-    val items = weather.hourlyWeather
-
-    binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
-//    binding.lineView.setData(weather.hourlyWeather)
-
-    binding.layoutLoading.hide()
-    weather.hourlyWeather.toList().sortedBy {
-      it.temp
-    }.apply {
-      binding.hourForecastView.setData(weather)
+    private val hourWeatherAdapter by lazy {
+        HourWeatherAdapter()
     }
 
-    doOnMainThreadIdle({
-      binding.tipDesc.text = weather.descriptionForToday
-      if (weather.descriptionForToday.isNullOrEmpty()) {
-        binding.tipDesc.hide()
-      } else {
-        binding.tipDesc.show()
-      }
-    })
-    hourWeatherAdapter.items.clear()
-    hourWeatherAdapter.items.addAll(items)
-    hourWeatherAdapter.sortList()
 
-  }
+    override var animatorView: View = this
 
+    override var enterAnim: AnimatorSet = AnimatorSet()
+    override var index: Int = 1
+    override var hasInScreen: Boolean = false
 
+    init {
+        resetAnim()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun bindData(weather: Weather) {
+        val items = weather.hourlyWeather
+
+        binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
+
+        binding.layoutLoading.hide()
+        weather.hourlyWeather.toList().sortedBy {
+            it.temp
+        }.apply {
+            binding.hourForecastView.setData(weather)
+        }
+
+        doOnMainThreadIdle({
+            binding.tipDesc.text = weather.descriptionForToday
+            if (weather.descriptionForToday.isNullOrEmpty()) {
+                binding.tipDesc.hide()
+            } else {
+                binding.tipDesc.show()
+            }
+        })
+        hourWeatherAdapter.items.clear()
+        hourWeatherAdapter.items.addAll(items)
+        hourWeatherAdapter.sortList()
+
+    }
+
+    override fun startEnterAnim() {
+        super.startEnterAnim()
+        binding.hourForecastView.startAnim(150)
+    }
 }
