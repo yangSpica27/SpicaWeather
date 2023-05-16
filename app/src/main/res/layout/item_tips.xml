@@ -11,7 +11,6 @@
     android:layout_margin="8dp"
     android:clickable="false"
     android:paddingBottom="12dp"
-    android:gravity="center_vertical"
     tools:ignore="RtlSymmetry">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -26,17 +25,15 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/textColorPrimary"
         android:lines="1"
         android:textStyle="bold"
-        app:layout_goneMarginStart="12dp"
+        app:layout_constraintStart_toEndOf="@id/iv_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
         android:layout_marginStart="14dp"
         tools:text="运动指数" />
