@@ -34,7 +34,6 @@ class HourlyForecastView : View {
 
     private var fraction = 1f
 
-
     private val showInAnim = ObjectAnimator.ofFloat(1f, 0f)
         .apply {
             interpolator = OvershootInterpolator()
@@ -43,9 +42,10 @@ class HourlyForecastView : View {
                     visibility = VISIBLE
                 }
                 fraction = this.animatedValue as Float
+                // 计算绘制的折线图Y轴坐标 并且重绘 实现从下向上浮动效果
                 init()
             }
-            duration = 5000
+            duration = 850
         }
 
 
@@ -448,10 +448,13 @@ class HourlyForecastView : View {
 
         canvas.drawPath(shadowPath, shadowPaint)
 
+        // 保存部分的已绘制内容 如坐标等
         val layerId = canvas.saveLayer(0f, 0f, width * 1f, height * 1f, null)
 
+        // 绘制折线图
         canvas.drawPath(tempLinePath, tempLinePaint)
 
+        // 根据fraction 按比例从右向左擦除掉折线图
         canvas.drawRect(
             screenWidth * 1f + scrollOffset,
             height * 1f,
@@ -459,6 +462,7 @@ class HourlyForecastView : View {
             0f, ditherPaint
         )
 
+        // 恢复图层
         canvas.restoreToCount(layerId)
 
     }
