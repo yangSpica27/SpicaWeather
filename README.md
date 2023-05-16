@@ -3,8 +3,8 @@
 
 ## Screenshots
 <p align="center">
-<img src="/img/preview01.jpg" width="32%"/>
-<img src="/img/preview02.jpg" width="32%"/>
+<img src="/img/preview01.png" width="32%"/>
+<img src="/img/preview02.png" width="32%"/>
 </p>
 
 
