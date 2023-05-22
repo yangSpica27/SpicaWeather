@@ -5,6 +5,7 @@
     style="@style/spica_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="14dp"
     android:background="@drawable/bg_card"
     android:paddingBottom="12dp"
     android:paddingTop="12dp">

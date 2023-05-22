@@ -1,6 +1,7 @@
 package me.spica.weather.view.weather_bg
 
 import android.content.Context
+import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.SurfaceTexture
@@ -13,9 +14,11 @@ import androidx.core.content.ContextCompat
 import me.spica.weather.R
 import me.spica.weather.tools.dp
 import me.spica.weather.view.weather_drawable.CloudDrawable
+import me.spica.weather.view.weather_drawable.FoggyDrawable
 import me.spica.weather.view.weather_drawable.RainDrawable
 import me.spica.weather.view.weather_drawable.SnowDrawable
 import me.spica.weather.view.weather_drawable.SunnyDrawable
+import me.spica.weather.view.weather_drawable.TranslationDrawable
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -43,6 +46,8 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
 
     private var threadPool: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
 
+    private val translationDrawable = TranslationDrawable(context)
+
     private lateinit var drawThread: HandlerThread
 
     private lateinit var drawHandler: Handler
@@ -52,12 +57,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         set(value) {
             field = value
             post {
-                animate()
-                    .alpha(0f)
-                    .alpha(1f)
-                    .setInterpolator(LinearInterpolator())
-                    .setDuration(500L)
-                    .start()
+                animate().alpha(0f).alpha(1f).setInterpolator(LinearInterpolator()).setDuration(500L).start()
 
                 when (value) {
                     NowWeatherView.WeatherType.SUNNY -> {
@@ -83,9 +83,9 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
                         cloudDrawable.startAnim()
                     }
 
-                    else -> {
+                    NowWeatherView.WeatherType.FOG -> {
                         stopAllAnim()
-                        cloudDrawable.startAnim()
+                        foggyDrawable.startAnim()
                     }
                 }
             }
@@ -93,6 +93,8 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
 
 
     private val cloudDrawable = CloudDrawable(context)
+
+    private val foggyDrawable = FoggyDrawable(context)
 
     private val rainDrawable = RainDrawable()
 
@@ -110,9 +112,11 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
     private fun stopAllAnim() {
         sunnyDrawable.cancelAnim()
         cloudDrawable.cancelAnim()
+        foggyDrawable.cancelAnim()
     }
 
     private var mCanvas: Canvas? = null
+
 
 
     private fun doOnDraw() {
@@ -122,6 +126,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         // ================进行绘制==============
         mCanvas?.let { canvas ->
 
+//            translationDrawable.doOnDraw(canvas, width, height)
             canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
             roundClip(canvas)
 
@@ -130,15 +135,18 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
                 return
             }
 
+//            translationDrawable.doOnDraw(canvas, width, height)
+
             when (currentWeatherType) {
                 NowWeatherView.WeatherType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherType.RAIN -> rainDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherType.SNOW -> snowDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.FOG -> cloudDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherType.FOG -> foggyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
             }
             // ================绘制结束===============
+
             unlockCanvasAndPost(canvas)
         }
 
@@ -167,6 +175,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         }
     }
 
+    private var scaleValue = 0f
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -177,7 +186,6 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
                 8.dp, 8.dp, 8.dp, 8.dp,
             ), Path.Direction.CCW
         )
-
         initSnowAndRain(width, height)
 
     }
@@ -208,12 +216,16 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
                 rainDrawable.calculate(width, height)
             } else if (currentWeatherType == NowWeatherView.WeatherType.SNOW) {
                 snowDrawable.calculate(width, height)
+            } else if (currentWeatherType == NowWeatherView.WeatherType.FOG) {
+                foggyDrawable.calculate(width, height)
             }
 
         }, 0, 16, TimeUnit.MILLISECONDS)
 
         // 渲染线程
         drawHandler.post(drawRunnable)
+        translationDrawable.ready(width / 2, height / 2)
+        scaleValue = (width / width - 28.dp)
     }
 
     override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
@@ -226,6 +238,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
             drawHandler.removeCallbacks(drawRunnable)
         }
         threadPool.shutdown()
+        translationDrawable.cancel()
         return true
     }
 

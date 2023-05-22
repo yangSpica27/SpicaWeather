@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginHorizontal="14dp"
     android:visibility="visible"
     android:background="@drawable/bg_card">
 

@@ -16,7 +16,6 @@ import me.spica.weather.model.weather.HourlyWeatherBean
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getColorWithAlpha
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -414,7 +413,6 @@ class HourlyForecastView : View {
         }
 
         dashLineList.forEachIndexed { index, i ->
-            Timber.tag("dashIndex").e("$i")
             canvas.drawLine(
                 mPointList[i].x * 1f,
                 mPointList[i].y * 1f,

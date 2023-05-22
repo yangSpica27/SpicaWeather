@@ -33,7 +33,7 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
 
     fun startAnim() {
         cloudAnim.start()
-        cloudAnim.start()
+        cloudAnim2.start()
     }
 
     fun cancelAnim() {
