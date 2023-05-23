@@ -32,13 +32,13 @@ android {
             }
         }
 
-        buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("")
-        buildConfigField 'String', 'BAIDU_AK', quotWrapper("")
-        buildConfigField 'String', 'He_KEY', quotWrapper("")
-        buildConfigField 'String', 'Accu_Key', quotWrapper("")
-        buildConfigField 'String', 'HE_ID', quotWrapper("")
-        buildConfigField 'String', 'CAIYUN', quotWrapper("")
-        buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("")
+        buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("s")
+        buildConfigField 'String', 'BAIDU_AK', quotWrapper("p")
+        buildConfigField 'String', 'He_KEY', quotWrapper("c")
+        buildConfigField 'String', 'Accu_Key', quotWrapper("a")
+        buildConfigField 'String', 'HE_ID', quotWrapper("2")
+        buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
+        buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("0")
     }
 
     signingConfigs {
