@@ -15,8 +15,8 @@ android {
         applicationId "me.spica.weather"
         minSdk 23
         targetSdk 33
-        versionCode 3
-        versionName "3.0"
+        versionCode 4
+        versionName "3.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
@@ -32,13 +32,13 @@ android {
             }
         }
 
-        buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("bd8a590d691a45f389a23b52c20453d0")
-        buildConfigField 'String', 'BAIDU_AK', quotWrapper("9fokNjwZ20sOccj7GXblgLHEWagrebQr")
-        buildConfigField 'String', 'He_KEY', quotWrapper("01425b0eb61144c9966b38093f648765")
-        buildConfigField 'String', 'Accu_Key', quotWrapper("y4vUOQUcDlRS3QGzuPhEFur8uQEggG2H")
-        buildConfigField 'String', 'HE_ID', quotWrapper("HE2112081349381915")
-        buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
-        buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("3afb30f9-48ce-4e88-8d79-5316f004b653")
+        buildConfigField 'String', 'HE_WEB_KEY', quotWrapper("")
+        buildConfigField 'String', 'BAIDU_AK', quotWrapper("")
+        buildConfigField 'String', 'He_KEY', quotWrapper("")
+        buildConfigField 'String', 'Accu_Key', quotWrapper("")
+        buildConfigField 'String', 'HE_ID', quotWrapper("")
+        buildConfigField 'String', 'CAIYUN', quotWrapper("")
+        buildConfigField 'String', 'APP_CENTER_KEY', quotWrapper("")
     }
 
     signingConfigs {
@@ -171,6 +171,7 @@ dependencies {
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation("androidx.hilt:hilt-work:1.0.0")
 
     //  testImplementation 'junit:junit:4.13.2'
     //  androidTestImplementation 'androidx.test.ext:junit:1.1.3'

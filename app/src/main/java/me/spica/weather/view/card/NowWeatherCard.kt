@@ -76,10 +76,12 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
 
+
         val nowWeatherBean = weather.todayWeather
         val themeColor = weather.getWeatherType().getThemeColor()
+//        val themeColor = WeatherType.WEATHER_FOG.getThemeColor()
         binding.weatherBg.bgColor = themeColor
-    binding.weatherBg.currentWeatherType = weather.getWeatherType().getWeatherAnimType()
+        binding.weatherBg.currentWeatherAnimType = weather.getWeatherType().getWeatherAnimType()
 //        binding.weatherBg.currentWeatherType = NowWeatherView.WeatherType.FOG
         doOnMainThreadIdle({
             with(numAnim) {

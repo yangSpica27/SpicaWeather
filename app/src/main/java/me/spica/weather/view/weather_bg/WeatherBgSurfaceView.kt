@@ -1,7 +1,6 @@
 package me.spica.weather.view.weather_bg
 
 import android.content.Context
-import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.SurfaceTexture
@@ -53,37 +52,37 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
     private lateinit var drawHandler: Handler
 
     var bgColor = ContextCompat.getColor(context, R.color.window_background)
-    var currentWeatherType = NowWeatherView.WeatherType.UNKNOWN
+    var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
         set(value) {
             field = value
             post {
                 animate().alpha(0f).alpha(1f).setInterpolator(LinearInterpolator()).setDuration(500L).start()
 
                 when (value) {
-                    NowWeatherView.WeatherType.SUNNY -> {
+                    NowWeatherView.WeatherAnimType.SUNNY -> {
                         stopAllAnim()
                         sunnyDrawable.startAnim()
                     }
 
-                    NowWeatherView.WeatherType.CLOUDY -> {
+                    NowWeatherView.WeatherAnimType.CLOUDY -> {
                         stopAllAnim()
                         cloudDrawable.startAnim()
                     }
 
-                    NowWeatherView.WeatherType.RAIN -> {
+                    NowWeatherView.WeatherAnimType.RAIN -> {
                         stopAllAnim()
                     }
 
-                    NowWeatherView.WeatherType.SNOW -> {
+                    NowWeatherView.WeatherAnimType.SNOW -> {
                         stopAllAnim()
                     }
 
-                    NowWeatherView.WeatherType.UNKNOWN -> {
+                    NowWeatherView.WeatherAnimType.UNKNOWN -> {
                         stopAllAnim()
                         cloudDrawable.startAnim()
                     }
 
-                    NowWeatherView.WeatherType.FOG -> {
+                    NowWeatherView.WeatherAnimType.FOG -> {
                         stopAllAnim()
                         foggyDrawable.startAnim()
                     }
@@ -118,7 +117,6 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
     private var mCanvas: Canvas? = null
 
 
-
     private fun doOnDraw() {
 
         mCanvas = lockCanvas()
@@ -137,13 +135,13 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
 
 //            translationDrawable.doOnDraw(canvas, width, height)
 
-            when (currentWeatherType) {
-                NowWeatherView.WeatherType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.RAIN -> rainDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.SNOW -> snowDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.FOG -> foggyDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
+            when (currentWeatherAnimType) {
+                NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.RAIN -> rainDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.SNOW -> snowDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.FOG -> foggyDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
             }
             // ================绘制结束===============
 
@@ -187,7 +185,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
             ), Path.Direction.CCW
         )
         initSnowAndRain(width, height)
-
+        foggyDrawable.ready(width, height)
     }
 
 
@@ -212,11 +210,11 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
         threadPool.scheduleWithFixedDelay({
 
-            if (currentWeatherType == NowWeatherView.WeatherType.RAIN) {
+            if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.RAIN) {
                 rainDrawable.calculate(width, height)
-            } else if (currentWeatherType == NowWeatherView.WeatherType.SNOW) {
+            } else if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.SNOW) {
                 snowDrawable.calculate(width, height)
-            } else if (currentWeatherType == NowWeatherView.WeatherType.FOG) {
+            } else if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.FOG) {
                 foggyDrawable.calculate(width, height)
             }
 

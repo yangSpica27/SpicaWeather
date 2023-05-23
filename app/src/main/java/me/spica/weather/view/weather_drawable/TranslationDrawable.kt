@@ -61,7 +61,6 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
     private var currentY = 0f
 
 
-
     private val animation = ObjectAnimator.ofFloat(0f, 1f).apply {
         addUpdateListener {
             currentX = (it.animatedValue as Float) * (scrollX - lastX) + lastX
@@ -82,17 +81,14 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
     private val mMatrix = Matrix()
     private val mCamera = Camera()
 
-    private fun rotateCanvas(canvas: Canvas, mCanvasRotateX: Float, mCanvasRotateY: Float) {
-        mMatrix.reset()
-        mCamera.save()
-        mCamera.rotateX(mCanvasRotateX * 8)
-        mCamera.rotateY(mCanvasRotateY * 8)
-        mCamera.getMatrix(mMatrix)
-        mCamera.restore()
-        mMatrix.preTranslate(-mCenterX.toFloat(), -mCenterY.toFloat())
-        mMatrix.postTranslate(mCenterX.toFloat(), mCenterY.toFloat())
-        canvas.concat(mMatrix)
-    }
+//    private fun rotateCanvas(canvas: Canvas, mCanvasRotateX: Float, mCanvasRotateY: Float) {
+//        mMatrix.reset()
+//        mCamera.save()
+//        mMatrix.preTranslate(-mCenterX.toFloat(), -mCenterY.toFloat())
+//        mMatrix.postTranslate(mCenterX.toFloat(), mCenterY.toFloat())
+//        mMatrix.postTranslate
+//        canvas.concat(mMatrix)
+//    }
 
 
     // 方向传感器
@@ -104,8 +100,11 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
     }
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        rotateCanvas(canvas, currentX / 100, currentX / 100)
-//        canvas.translate(-currentX, -currentY)
+//        rotateCanvas(canvas, currentX / 100, currentX / 100)
+        mMatrix.reset()
+        mCamera.save()
+        mMatrix.setTranslate(-currentX, -currentY)
+        canvas.concat(mMatrix)
     }
 
 

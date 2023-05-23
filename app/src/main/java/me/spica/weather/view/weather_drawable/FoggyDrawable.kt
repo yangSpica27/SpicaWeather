@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
 import android.view.animation.Animation
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
@@ -22,92 +23,174 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
 
     // 锚点
-    private val points = arrayListOf<PointF>()
+    private val circles = arrayListOf<Circle>()
 
-
-    private val interval = 12.dp
-
-    private var isBack = false
 
     private val anim = ObjectAnimator.ofFloat(0f, 1f)
         .apply {
             interpolator = LinearInterpolator()
-            addUpdateListener {
-                if (it.animatedValue as Float == 1f) {
-//                    isBack = !isBack
-                }
-            }
-            duration = 800L
+            duration = 2800L
+            repeatCount = Animation.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+        }
+
+
+    private val anim2 = ObjectAnimator.ofFloat(0f, 1f)
+        .apply {
+            interpolator = DecelerateInterpolator()
+            duration = 3200L
             repeatCount = Animation.INFINITE
             repeatMode = ValueAnimator.REVERSE
         }
 
     fun startAnim() {
         anim.start()
+        anim2.start()
     }
 
     fun cancelAnim() {
         anim.cancel()
+        anim2.cancel()
     }
+
+
+    fun ready(viewWidth: Int, viewHeight: Int) {
+        circles.clear()
+        path.reset()
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth / 4f,
+                    viewHeight / 4f,
+                ),
+                viewHeight / 5f,
+                8.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewHeight / 6f,
+                    viewHeight / 2f,
+                ),
+                viewWidth / 5.5f,
+                10.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewHeight / 4f,
+                    viewHeight - viewHeight / 4f,
+                ),
+                viewHeight / 4f,
+                20.dp
+            )
+        )
+
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewHeight / 3f,
+                    viewHeight - viewHeight / 4f,
+                ),
+                viewHeight / 4f,
+                12.dp
+            )
+        )
+
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewHeight / 2f,
+                    viewHeight - viewHeight / 4f,
+                ),
+                viewHeight / 4f,
+                12.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth - viewWidth / 3f,
+                    viewHeight - viewHeight / 5f,
+                ),
+                viewHeight / 5f,
+                10.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth - viewWidth / 6f,
+                    viewHeight - viewHeight / 4f,
+                ),
+                viewHeight / 4.5f,
+                12.dp
+            )
+        )
+
+
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth - viewWidth / 5f,
+                    viewHeight - viewHeight / 1.9f - 22.dp,
+                ),
+                viewHeight / 5.5f,
+                6.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth - viewWidth / 3.6f + 6.dp,
+                    viewHeight / 5f,
+                ),
+                viewHeight / 5f,
+                8.dp
+            )
+        )
+
+        circles.add(
+            Circle(
+                PointF(
+                    viewWidth / 2f,
+                    viewHeight / 3.5f,
+                ),
+                viewHeight / 4f,
+                10.dp
+            )
+        )
+
+        path.moveTo(circles[0].centerPoint.x, circles[0].centerPoint.y)
+        circles.forEach {
+            path.lineTo(it.centerPoint.x, it.centerPoint.y)
+        }
+        path.close()
+    }
+
+    private val path = Path()
 
     @WorkerThread
     fun calculate(viewWidth: Int, viewHeight: Int) {
-        val currentPadding = (anim.animatedValue as Float) * interval
-        synchronized(points) {
-            points.clear()
-            // 左
-            for (index in 0..5) {
-                val heightStep = index * ((viewHeight - 2 * interval)/ 5f)
-                val pointF = PointF(interval, heightStep)
-                if (index % 2 == 0 == isBack) {
-                    pointF.x += currentPadding
+        synchronized(circles) {
+            circles.forEachIndexed { index, circle ->
+                if (index % 3 == 0) {
+                    circle.currentRadius = circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
+                } else if (index % 3 == 1) {
+                    circle.currentRadius = circle.defaultRadius - (anim2.animatedValue as Float) * circle.variableRadius
                 } else {
-                    pointF.x -= currentPadding
+                    circle.currentRadius = circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
                 }
-                points.add(pointF)
-            }
-            // 下
-            for (index in 0..5) {
-                val widthStep = index * ((viewWidth - 2 * interval)/ 5f)
-
-                val pf = PointF(widthStep, viewHeight * 1f - interval)
-
-                if (index % 2 == 0 == isBack) {
-                    pf.y += currentPadding
-                } else {
-                    pf.y -= currentPadding
-                }
-
-                points.add(
-                    pf
-                )
-            }
-            // 右
-            for (index in 0..5) {
-                val heightStep = index * ((viewHeight - 2 * interval)/ 5f)
-
-                val pf = PointF(viewWidth - interval, viewHeight - interval - heightStep)
-
-                if (index % 2 == 0 == isBack) {
-                    pf.x += currentPadding
-                } else {
-                    pf.x -= currentPadding
-                }
-                points.add(pf)
-            }
-            // 上
-            for (index in 0..5) {
-                val widthStep = index * ((viewWidth - 2 * interval)/ 5f)
-
-                val pf = PointF(viewWidth - interval - widthStep, interval)
-
-                if (index % 2 == 0 == isBack) {
-                    pf.y += currentPadding
-                } else {
-                    pf.y -= currentPadding
-                }
-
-                points.add(pf)
             }
         }
 
@@ -115,30 +198,32 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
     private val fogPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = ContextCompat.getColor(context, R.color.water_color)
+        color = ContextCompat.getColor(context, R.color.fog_color)
         pathEffect = CornerPathEffect(12.dp)
     }
 
-    private val pointPint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-
-    }
-
-    private val path = Path()
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        synchronized(points) {
-            if (points.isEmpty()) return
-            path.reset()
-            path.moveTo(points[0].x, points[0].y)
-            points.forEach { pointF ->
-                path.lineTo(pointF.x, pointF.y)
-                canvas.drawPoint(pointF.x, pointF.y, pointPint)
+        synchronized(circles) {
+            circles.forEach {
+                canvas.drawCircle(
+                    it.centerPoint.x,
+                    it.centerPoint.y,
+                    it.currentRadius,
+                    fogPaint
+                )
+                canvas.drawPath(path, fogPaint)
             }
-            path.close()
-            canvas.drawPath(path, fogPaint)
-            canvas.rotate(180f)
-            canvas.scale(1.1f, 1.1f)
-            canvas.drawPath(path, fogPaint)
         }
     }
+
+
+    private data class Circle(
+        val centerPoint: PointF,
+        val defaultRadius: Float,
+        val variableRadius: Float,
+        var currentRadius: Float = 0.dp
+    )
+
+
 }

@@ -46,71 +46,7 @@ class WeatherViewModel @Inject constructor(
 
   private val _isLoading = MutableStateFlow(false)
 
-  // 即时天气
-//  private val nowWeatherFlow: Flow<NowWeatherBean?> =
-//    cityFlow
-//      .filterNotNull()
-//      .flatMapLatest {
-//        repository.fetchNowWeather(
-//          lon = it.lon,
-//          lat = it.lat,
-//          onError = { message ->
-//            _errorMessage.value = message
-//          }
-//        )
-//      }
-//
-//
-//  private val dailyWeatherFlow: Flow<List<DailyWeatherBean>?> =
-//    cityFlow.filterNotNull().flatMapLatest {
-//      repository.fetchDailyWeather(
-//        lon = it.lon,
-//        lat = it.lat,
-//        onError = { message ->
-//          _errorMessage.value = message
-//        }
-//      )
-//    }
-//
-//  private val hourlyWeatherFlow: Flow<List<HourlyWeatherBean>?> =
-//    cityFlow
-//      .filterNotNull()
-//      .flatMapLatest {
-//        repository.fetchHourlyWeather(
-//          lon = it.lon,
-//          lat = it.lat,
-//          onError = { message ->
-//            _errorMessage.value = message
-//          }
-//        )
-//      }
-//
-//  private val currentIndices: Flow<List<LifeIndexBean>?> =
-//    cityFlow
-//      .filterNotNull()
-//      .flatMapLatest {
-//        repository.fetchTodayLifeIndex(
-//          lon = it.lon,
-//          lat = it.lat,
-//          onError = { message ->
-//            _errorMessage.value = message
-//          }
-//        )
-//      }
-//
-//  private val nowAir: Flow<AirBean?> =
-//    cityFlow
-//      .filterNotNull()
-//      .flatMapLatest {
-//        repository.fetchNowAir(
-//          lon = it.lon,
-//          lat = it.lat,
-//          onError = { message ->
-//            _errorMessage.value = message
-//          }
-//        )
-//      }
-//
+
   private val alert: Flow<CaiyunExtendBean?> = cityFlow
     .filterNotNull()
     .flatMapLatest {
@@ -123,18 +59,6 @@ class WeatherViewModel @Inject constructor(
       )
     }
 
-//  private val nowAir: Flow<AirBean?> =
-//    cityFlow
-//      .filterNotNull()
-//      .flatMapLatest {
-//        repository.fetchNowAir(
-//          lon = it.lon,
-//          lat = it.lat,
-//          onError = { message ->
-//            _errorMessage.value = message
-//          }
-//        )
-//      }
 
   val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
     weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)

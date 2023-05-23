@@ -44,6 +44,7 @@ import me.spica.weather.tools.keyboard.FluidContentResizer
 import me.spica.weather.tools.toast
 import me.spica.weather.ui.city.WeatherCityActivity
 import me.spica.weather.ui.setting.SettingActivity
+import me.spica.weather.work.SyncService
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import javax.inject.Inject
@@ -193,7 +194,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     initSetting()
     initView()
     initTitle()
+    startService(Intent(this,SyncService::class.java))
   }
+
+
 
 
   // 初始化设置项
@@ -332,6 +336,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(),
     if (permissionDialog.isShowing) {
       permissionDialog.cancel()
     }
+    stopService(Intent(this,SyncService::class.java))
   }
 
   override fun onRationaleAccepted(requestCode: Int) {

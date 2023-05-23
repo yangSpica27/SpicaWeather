@@ -41,7 +41,7 @@ fun WeatherType.getIconRes(): Int {
 }
 
 @RawRes
-fun WeatherType.getAnimRes():Int{
+fun WeatherType.getAnimRes(): Int {
     return when (this) {
         WeatherType.WEATHER_CLEAR -> R.raw.sunny
         WeatherType.WEATHER_CLOUDY -> R.raw.windy
@@ -60,9 +60,10 @@ fun WeatherType.getAnimRes():Int{
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
-        WeatherType.WEATHER_CLEAR->Color.parseColor("#FFC107")
+        WeatherType.WEATHER_CLEAR -> Color.parseColor("#FFC107")
         WeatherType.WEATHER_CLOUDY
         -> Color.parseColor("#03A9F4")
+
         WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")
         WeatherType.WEATHER_THUNDER -> Color.parseColor("#3F51B5")
         WeatherType.WEATHER_FOG -> Color.parseColor("#5A5A5A")
@@ -72,18 +73,18 @@ fun WeatherType.getThemeColor(): Int {
     }
 }
 
-fun WeatherType.getWeatherAnimType():NowWeatherView.WeatherType{
-    return when(this){
-        WeatherType.WEATHER_CLEAR -> NowWeatherView.WeatherType.SUNNY
-        WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherType.CLOUDY
-        WeatherType.WEATHER_CLOUD -> NowWeatherView.WeatherType.CLOUDY
-        WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherType.RAIN
-        WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherType.RAIN
-        WeatherType.WEATHER_SLEET -> NowWeatherView.WeatherType.RAIN
-        WeatherType.WEATHER_FOG -> NowWeatherView.WeatherType.CLOUDY
-        WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherType.CLOUDY
-        WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherType.CLOUDY
-        WeatherType.WEATHER_THUNDER -> NowWeatherView.WeatherType.RAIN
-        WeatherType.WEATHER_THUNDERSTORM -> NowWeatherView.WeatherType.RAIN
+fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
+    return when (this) {
+        WeatherType.WEATHER_CLEAR -> NowWeatherView.WeatherAnimType.SUNNY
+        WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherAnimType.CLOUDY
+        WeatherType.WEATHER_CLOUD -> NowWeatherView.WeatherAnimType.CLOUDY
+        WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherAnimType.RAIN
+        WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherAnimType.RAIN
+        WeatherType.WEATHER_SLEET -> NowWeatherView.WeatherAnimType.RAIN
+        WeatherType.WEATHER_FOG -> NowWeatherView.WeatherAnimType.FOG
+        WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherAnimType.FOG
+        WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherAnimType.FOG
+        WeatherType.WEATHER_THUNDER -> NowWeatherView.WeatherAnimType.RAIN
+        WeatherType.WEATHER_THUNDERSTORM -> NowWeatherView.WeatherAnimType.RAIN
     }
 }
