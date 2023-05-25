@@ -102,9 +102,6 @@ class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
         holder.ItemDayWeather2Binding.tempView.init()
         holder.ItemDayWeather2Binding.icon.progress = .5f
         holder.ItemDayWeather2Binding.icon.setMaxProgress(.5f)
-        holder.ItemDayWeather2Binding.icon.setOnClickListener {
-            holder.ItemDayWeather2Binding.icon.playAnimation()
-        }
         val dayExtraInfoAdapter = DayExtraInfoAdapter()
         dayExtraInfoAdapter.items.clear()
         dayExtraInfoAdapter.items.addAll(
