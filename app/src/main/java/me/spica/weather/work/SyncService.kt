@@ -89,5 +89,10 @@ class SyncService : Service() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
+
 
 }

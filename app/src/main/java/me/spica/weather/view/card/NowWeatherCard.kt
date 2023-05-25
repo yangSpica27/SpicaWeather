@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import me.spica.weather.R
+import me.spica.weather.common.WeatherType
 import me.spica.weather.common.getAnimRes
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.common.getWeatherAnimType
@@ -82,7 +83,7 @@ class NowWeatherCard : ConstraintLayout, SpicaWeatherCard {
 //        val themeColor = WeatherType.WEATHER_FOG.getThemeColor()
         binding.weatherBg.bgColor = themeColor
         binding.weatherBg.currentWeatherAnimType = weather.getWeatherType().getWeatherAnimType()
-//        binding.weatherBg.currentWeatherType = NowWeatherView.WeatherType.FOG
+//        binding.weatherBg.currentWeatherAnimType = NowWeatherView.WeatherAnimType.HAZE
         doOnMainThreadIdle({
             with(numAnim) {
                 if (isRunning) cancel()

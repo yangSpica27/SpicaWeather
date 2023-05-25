@@ -31,8 +31,7 @@ public class RainRandomGenerator {
    * 可以负数到正数
    */
   public int getRandomNum(int smallistNum, int BiggestNum) {
-    Random random = new Random();
-    return (Math.abs(random.nextInt()) % (BiggestNum - smallistNum + 1)) + smallistNum;
+    return (Math.abs(RANDOM.nextInt()) % (BiggestNum - smallistNum + 1)) + smallistNum;
   }
 
   //随机产生划线的起始点坐标和结束点坐标

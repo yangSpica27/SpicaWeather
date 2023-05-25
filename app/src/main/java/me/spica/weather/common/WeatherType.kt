@@ -61,15 +61,12 @@ fun WeatherType.getAnimRes(): Int {
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
         WeatherType.WEATHER_CLEAR -> Color.parseColor("#FFC107")
-        WeatherType.WEATHER_CLOUDY
-        -> Color.parseColor("#03A9F4")
-
+        WeatherType.WEATHER_CLOUDY -> Color.parseColor("#03A9F4")
         WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")
         WeatherType.WEATHER_THUNDER -> Color.parseColor("#3F51B5")
         WeatherType.WEATHER_FOG -> Color.parseColor("#5A5A5A")
         WeatherType.WEATHER_HAZE -> Color.parseColor("#FF5722")
         else -> Color.parseColor("#00BCD4")
-
     }
 }
 
@@ -79,11 +76,11 @@ fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
         WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherAnimType.CLOUDY
         WeatherType.WEATHER_CLOUD -> NowWeatherView.WeatherAnimType.CLOUDY
         WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherAnimType.RAIN
-        WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherAnimType.RAIN
+        WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherAnimType.SNOW
         WeatherType.WEATHER_SLEET -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_FOG -> NowWeatherView.WeatherAnimType.FOG
-        WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherAnimType.FOG
-        WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherAnimType.FOG
+        WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherAnimType.HAZE
+        WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_THUNDER -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_THUNDERSTORM -> NowWeatherView.WeatherAnimType.RAIN
     }
