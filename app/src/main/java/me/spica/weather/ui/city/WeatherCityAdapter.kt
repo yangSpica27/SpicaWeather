@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +13,11 @@ import com.airbnb.lottie.LottieAnimationView
 import me.spica.weather.R
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getAnimRes
+import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.ItemWeatherCityBinding
 import me.spica.weather.model.city.CityBean
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.getColorWithAlpha
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.main.MainActivity
@@ -61,6 +65,16 @@ class WeatherCityAdapter(
         // 代入文本
         holder.itemBinding.tvCityName.text = items[position].cityName
 
+
+        val themeColor = WeatherCodeUtils.getWeatherCode(
+            items[position].iconId
+        ).getThemeColor()
+
+        val bgDrawable = holder.itemBinding.bgView.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            getColorWithAlpha(.08f, themeColor), PorterDuff.Mode.SRC_IN
+        )
+        holder.itemBinding.bgView.background = bgDrawable
 
         val lottieAnimationView = holder.itemBinding.root.findViewById<LottieAnimationView>(R.id.lottie_view)
         lottieAnimationView.setMaxProgress(.5f)
