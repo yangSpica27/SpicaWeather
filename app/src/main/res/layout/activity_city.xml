@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_left"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="城市管理" />
+        app:title="@string/city_manager" />
 
     <TextView
         android:id="@+id/btn_search"

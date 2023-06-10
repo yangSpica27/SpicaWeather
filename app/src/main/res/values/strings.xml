@@ -46,5 +46,6 @@
     <string name="sun_rise_sun_set">日出日落</string>
     <string name="moon_mode">盈亏月</string>
     <string name="life_index">生活预报</string>
+    <string name="city_manager">城市管理</string>
 
 </resources>
