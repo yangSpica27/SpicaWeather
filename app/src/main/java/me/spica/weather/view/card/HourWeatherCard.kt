@@ -3,6 +3,8 @@ package me.spica.weather.view.card
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardHourlyWeatherBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.getColorWithAlpha
 import me.spica.weather.tools.hide
 import me.spica.weather.tools.show
 import me.spica.weather.ui.weather.HourWeatherAdapter
@@ -46,7 +49,15 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
     override fun bindData(weather: Weather) {
         val items = weather.hourlyWeather
 
-        binding.cardName.setTextColor(weather.getWeatherType().getThemeColor())
+        val themeColor = weather.getWeatherType().getThemeColor()
+
+        val bgDrawable = binding.root.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            getColorWithAlpha(.08f, themeColor), PorterDuff.Mode.SRC_IN
+        )
+        binding.root.background = bgDrawable
+
+        binding.cardName.setTextColor(themeColor)
 
         binding.layoutLoading.hide()
         weather.hourlyWeather.toList().sortedBy {

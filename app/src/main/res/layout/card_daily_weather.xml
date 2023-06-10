@@ -17,7 +17,7 @@
         android:textColor="@color/textColorPrimary"
         android:textStyle="bold"
         android:layout_marginTop="12dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:text="天级气象信息" />
 
     <androidx.appcompat.widget.AppCompatTextView

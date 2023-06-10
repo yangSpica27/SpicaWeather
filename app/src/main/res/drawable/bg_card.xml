@@ -5,6 +5,6 @@
     <corners android:radius="8dp" />
 
 
-    <solid android:color="@color/white" />
+    <solid android:color="@color/cardview_light_background" />
 
 </shape>

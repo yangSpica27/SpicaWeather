@@ -11,7 +11,7 @@
         android:id="@+id/tv_alert_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="海淀区气象台发布大风蓝色预警[IV/一般]" />

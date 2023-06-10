@@ -5,8 +5,8 @@
     <corners android:radius="8dp"
         />
 
-    <stroke android:color="@color/textColorPrimaryHintLight"/>
-    <solid android:color="@color/window_background" />
+<!--    <stroke android:color="@color/textColorPrimaryHintLight"/>-->
+    <solid android:color="@color/md_theme_light_surfaceVariant" />
 
 
 

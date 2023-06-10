@@ -1,5 +1,8 @@
 package me.spica.weather.ui.weather
 
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
@@ -12,6 +15,8 @@ class DayExtraInfoAdapter : RecyclerView.Adapter<DayExtraInfoAdapter.ViewHolder>
     // 数据
     val items: MutableList<ShowData> = mutableListOf()
 
+    var backgroundColor = Color.WHITE
+
     class ViewHolder(val itemTipsBinding: ItemTipsBinding) :
         RecyclerView.ViewHolder(itemTipsBinding.root)
 
@@ -23,6 +28,11 @@ class DayExtraInfoAdapter : RecyclerView.Adapter<DayExtraInfoAdapter.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val bgDrawable = holder.itemTipsBinding.root.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            backgroundColor, PorterDuff.Mode.SRC_IN
+        )
+         holder.itemTipsBinding.root.background = bgDrawable
         items[position].let { item ->
             holder.itemTipsBinding.tvName.text = item.title
             holder.itemTipsBinding.tvDesc.text = item.value

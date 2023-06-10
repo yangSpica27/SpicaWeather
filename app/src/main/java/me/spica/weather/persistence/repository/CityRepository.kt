@@ -49,7 +49,7 @@ class CityRepository @Inject constructor(
      */
     @WorkerThread
     suspend fun selected(cityBean: CityBean) = withContext(Dispatchers.IO) {
-        cityDao.getAllList().forEach {
+        cityDao.getSelectedCity()?.let {
             it.isSelected = false
             cityDao.update(it)
         }

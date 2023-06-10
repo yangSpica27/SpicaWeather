@@ -3,14 +3,21 @@ package me.spica.weather.view.card
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.widget.DrawableUtils
+import androidx.appcompat.widget.ThemeUtils
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
 import me.spica.weather.common.WeatherCodeUtils
 import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardAirBinding
 import me.spica.weather.model.weather.Weather
+import me.spica.weather.tools.getColorWithAlpha
 
 
 /**
@@ -33,7 +40,13 @@ class AirCard : ConstraintLayout, SpicaWeatherCard {
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
-        binding.tvTitle.setTextColor(weather.getWeatherType().getThemeColor())
+        val themeColor = weather.getWeatherType().getThemeColor()
+        binding.tvTitle.setTextColor(themeColor)
+        val bgDrawable =  binding.root.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            getColorWithAlpha(.08f,themeColor), PorterDuff.Mode.SRC_IN)
+        binding.root.background = bgDrawable
+
         binding.progressView.bindProgress(weather.air.aqi,weather.air.category)
         binding.tvC0Value.text = "${weather.air.co}微克/m³"
         binding.tvNo2Value.text = "${weather.air.no2}微克/m³"

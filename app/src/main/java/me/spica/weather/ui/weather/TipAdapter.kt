@@ -1,17 +1,23 @@
 package me.spica.weather.ui.weather
 
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import me.spica.weather.databinding.ItemTipsBinding
 import me.spica.weather.model.weather.LifeIndexBean
+import me.spica.weather.tools.getColorWithAlpha
 
 // 生活指数适配器
 class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
 
     // 数据
     val items: MutableList<LifeIndexBean> = mutableListOf()
+
+    var themeColor:Int = Color.WHITE
 
     class ViewHolder(val itemTipsBinding: ItemTipsBinding) :
         RecyclerView.ViewHolder(itemTipsBinding.root)
@@ -24,6 +30,12 @@ class TipAdapter : RecyclerView.Adapter<TipAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val bgDrawable =  holder.itemTipsBinding.root.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            getColorWithAlpha(.08f,themeColor), PorterDuff.Mode.SRC_IN)
+        holder.itemTipsBinding.root.background = bgDrawable
+
         items[position].let { item ->
             holder.itemTipsBinding.tvName.text = item.name
             holder.itemTipsBinding.tvDesc.text = item.category

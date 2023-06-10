@@ -1,21 +1,24 @@
 package me.spica.weather.ui.weather
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.weather.R
 import me.spica.weather.common.getAnimRes
-import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.ItemDayWeather2Binding
 import me.spica.weather.model.weather.DailyWeatherBean
+import me.spica.weather.tools.getColorWithAlpha
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
 
     val items = mutableListOf<DailyWeatherBean>()
+
+    var themeColor:Int = Color.BLACK
 
 
     // 格式化为"周几"
@@ -70,7 +73,7 @@ class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
         holder.ItemDayWeather2Binding.tvDay.text = sdfWeek.format(items[position].fxTime())
         if (position == 0) {
             holder.ItemDayWeather2Binding.tvDay.text = "今天"
-            holder.ItemDayWeather2Binding.tvDay.setTextColor(items[position].getWeatherType().getThemeColor())
+            holder.ItemDayWeather2Binding.tvDay.setTextColor(themeColor)
         } else {
             holder.ItemDayWeather2Binding.tvDay.setTextColor(holder.itemView.context.getColor(R.color.textColorPrimary))
         }
@@ -103,6 +106,7 @@ class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
         holder.ItemDayWeather2Binding.icon.progress = .5f
         holder.ItemDayWeather2Binding.icon.setMaxProgress(.5f)
         val dayExtraInfoAdapter = DayExtraInfoAdapter()
+        dayExtraInfoAdapter.backgroundColor = getColorWithAlpha(.2f,themeColor)
         dayExtraInfoAdapter.items.clear()
         dayExtraInfoAdapter.items.addAll(
             listOf(
