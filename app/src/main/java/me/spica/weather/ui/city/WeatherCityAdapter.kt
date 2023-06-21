@@ -32,9 +32,7 @@ class WeatherCityAdapter(
 
     val items: MutableList<CityBean> = arrayListOf()
 
-    init {
-        setHasStableIds(true)
-    }
+
 
 
     @SuppressLint("NotifyDataSetChanged")

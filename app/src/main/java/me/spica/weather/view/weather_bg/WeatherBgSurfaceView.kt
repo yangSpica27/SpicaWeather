@@ -257,10 +257,10 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         synchronized(lock) {
             isWork = false
             drawHandler.removeCallbacks(drawRunnable)
-        }
-        threadPool.shutdown()
+            threadPool.shutdown()
 //        translationDrawable.cancel()
-        return true
+            return true
+        }
     }
 
     override fun onSurfaceTextureUpdated(p0: SurfaceTexture) = Unit

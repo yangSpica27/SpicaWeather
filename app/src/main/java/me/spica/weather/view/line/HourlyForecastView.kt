@@ -20,7 +20,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 // 宽度75dp 高度200dp
-class               HourlyForecastView : View {
+
+class HourlyForecastView : View {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
