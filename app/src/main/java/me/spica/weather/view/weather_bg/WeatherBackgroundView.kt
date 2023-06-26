@@ -18,14 +18,14 @@ import me.spica.weather.view.weather_drawable.HazeDrawable
 import me.spica.weather.view.weather_drawable.RainDrawable
 import me.spica.weather.view.weather_drawable.SnowDrawable
 import me.spica.weather.view.weather_drawable.SunnyDrawable
-import me.spica.weather.view.weather_drawable.TranslationDrawable
+import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 
-class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
+class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
 
     @Volatile
@@ -136,7 +136,6 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
         mCanvas?.let { canvas ->
 
 
-
 //            translationDrawable.doOnDraw(canvas, width, height)
             canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
             roundClip(canvas)
@@ -160,6 +159,7 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
             // ================绘制结束===============
 
             unlockCanvasAndPost(canvas)
+            Timber.tag("surface生命周期" + drawThread.name).e("绘制")
         }
 
     }
@@ -174,16 +174,17 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
 
     private val drawRunnable = object : Runnable {
         override fun run() {
-            while (isWork) {
-                // 记录上次执行渲染时间
-                lastSyncTime = System.currentTimeMillis()
-                // 执行渲染
-                synchronized(lock) {
-                    doOnDraw()
+                while (isWork) {
+                    // 记录上次执行渲染时间
+                    lastSyncTime = System.currentTimeMillis()
+                    // 执行渲染
+                    synchronized(lock){
+                        doOnDraw()
+                    }
+                    // 保证两张帧之间间隔16ms(60帧)
+                    drawHandler.postDelayed(this, 16)
                 }
-                // 保证两张帧之间间隔16ms(60帧)
-                drawHandler.postDelayed(this, 16)
-            }
+
         }
     }
 
@@ -213,40 +214,44 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
     }
 
     override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
-     synchronized(lock){
-         isWork = true
-         if (threadPool.isShutdown) {
-             threadPool = Executors.newSingleThreadScheduledExecutor()
-         }
-         drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
-         drawThread.start()
-         drawHandler = Handler(drawThread.looper)
-         // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
-         threadPool.scheduleWithFixedDelay({
+        synchronized(lock) {
+            isWork = true
+            if (threadPool.isShutdown) {
+                threadPool = Executors.newSingleThreadScheduledExecutor()
+            }
+            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
+            drawThread.start()
+            drawHandler = Handler(drawThread.looper)
+            // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
+            threadPool.scheduleWithFixedDelay({
 
-             when (currentWeatherAnimType) {
-                 NowWeatherView.WeatherAnimType.RAIN -> {
-                     rainDrawable.calculate(width, height)
-                 }
-                 NowWeatherView.WeatherAnimType.SNOW -> {
-                     snowDrawable.calculate(width, height)
-                 }
-                 NowWeatherView.WeatherAnimType.FOG -> {
-                     foggyDrawable.calculate(width, height)
-                 }
-                 NowWeatherView.WeatherAnimType.HAZE -> {
-                     hazeDrawable.calculate()
-                 }
-                 else -> {}
-             }
+                when (currentWeatherAnimType) {
+                    NowWeatherView.WeatherAnimType.RAIN -> {
+                        rainDrawable.calculate(width, height)
+                    }
 
-         }, 0, 16, TimeUnit.MILLISECONDS)
+                    NowWeatherView.WeatherAnimType.SNOW -> {
+                        snowDrawable.calculate(width, height)
+                    }
 
-         // 渲染线程
-         drawHandler.post(drawRunnable)
+                    NowWeatherView.WeatherAnimType.FOG -> {
+                        foggyDrawable.calculate(width, height)
+                    }
+
+                    NowWeatherView.WeatherAnimType.HAZE -> {
+                        hazeDrawable.calculate()
+                    }
+
+                    else -> {}
+                }
+
+            }, 0, 16, TimeUnit.MILLISECONDS)
+
+            // 渲染线程
+            drawHandler.post(drawRunnable)
 //         translationDrawable.ready(width / 2, height / 2)
-         scaleValue = (width / width - 28.dp)
-     }
+            scaleValue = (width / width - 28.dp)
+        }
     }
 
     override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
@@ -256,9 +261,11 @@ class WeatherBgSurfaceView : TextureView, TextureView.SurfaceTextureListener {
     override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
         synchronized(lock) {
             isWork = false
-            drawHandler.removeCallbacks(drawRunnable)
+//            drawHandler.removeCallbacksAndMessages(null)
             threadPool.shutdown()
+            drawThread.quitSafely()
 //        translationDrawable.cancel()
+            Timber.tag("surface生命周期" + drawThread.name).e("销毁")
             return true
         }
     }
