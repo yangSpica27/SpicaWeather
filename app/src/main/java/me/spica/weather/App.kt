@@ -4,13 +4,14 @@ import android.app.Application
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 import android.os.Process
+import android.util.Log
+import dagger.hilt.android.HiltAndroidApp
+import io.sentry.Sentry
+import io.sentry.event.User
+import me.spica.weather.tools.SentryUtils
+import timber.log.Timber
+import java.util.UUID
 
 @HiltAndroidApp
 class App : Application() {
@@ -21,14 +22,17 @@ class App : Application() {
         createAppCenter()
 //    WebViewPool.init(this)
         handlerDelegate()
+        Sentry.getStoredClient().context.user = User(
+            UUID.randomUUID().toString(),
+            "测试用户-"+UUID.randomUUID(),
+            "",
+            ""
+        )
+        SentryUtils.sendMessage("测试消息")
     }
 
     private fun createAppCenter() {
-        AppCenter.start(
-            this,
-            BuildConfig.APP_CENTER_KEY,
-            Analytics::class.java, Crashes::class.java
-        )
+        SentryUtils.init(this,"http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2")
     }
 
     private fun handlerDelegate() {
