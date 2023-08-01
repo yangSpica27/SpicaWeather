@@ -16,7 +16,7 @@
         android:layout_marginTop="12dp"
         android:textStyle="bold"
         android:textColor="@color/textColorPrimary"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:text="@string/life_index" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -25,9 +25,10 @@
         android:layout_marginStart="14dp"
         android:layout_marginTop="12dp"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:layout_marginEnd="14dp"
         android:textColor="@color/textColorPrimary"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:text="查看更多" />
 
     <androidx.recyclerview.widget.RecyclerView

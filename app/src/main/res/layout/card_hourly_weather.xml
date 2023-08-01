@@ -16,7 +16,7 @@
         android:layout_marginTop="12dp"
         android:textStyle="bold"
         android:textColor="@color/textColorPrimary"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:text="小时级气象信息" />
 
     <androidx.appcompat.widget.AppCompatTextView

@@ -3,6 +3,8 @@ package me.spica.weather.view.card
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import me.spica.weather.common.getThemeColor
 import me.spica.weather.databinding.CardSunriseBinding
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.doOnMainThreadIdle
+import me.spica.weather.tools.getColorWithAlpha
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +52,12 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
+
+        val bgDrawable =  binding.root.background
+        bgDrawable.colorFilter = PorterDuffColorFilter(
+            getColorWithAlpha(.08f,weather.getWeatherType().getThemeColor()), PorterDuff.Mode.SRC_IN)
+        binding.root.background = bgDrawable
+
         val startTime = weather.dailyWeather[0].sunriseDate()
         val endTime = weather.dailyWeather[0].sunsetDate()
         val subTitle = weather.dailyWeather[0].moonParse

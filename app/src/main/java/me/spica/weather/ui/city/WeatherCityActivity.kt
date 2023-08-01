@@ -44,7 +44,7 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
         viewHolder: RecyclerView.ViewHolder
       ): Int {
         val item = cityWeatherAdapter
-          .diffUtil.currentList[viewHolder.bindingAdapterPosition]
+          .items[viewHolder.bindingAdapterPosition]
         val dragFlags = 0
         // 只允许左右滑动
         val swipeFlags: Int = if (item.isSelected) {
@@ -88,7 +88,7 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
       ) {
         lifecycleScope.launch(Dispatchers.IO) {
           val item = cityWeatherAdapter
-            .diffUtil.currentList[viewHolder.bindingAdapterPosition]
+            .items[viewHolder.bindingAdapterPosition]
           cityViewModel.deleteItem(item)
         }
       }
@@ -155,7 +155,7 @@ class WeatherCityActivity : BindingActivity<ActivityCityBinding>() {
             val weather = weatherDao.getWeatherEntity(city.cityName)
             city.iconId = weather?.todayWeather?.iconId ?: 100
           }
-          viewBinding.rvCity.post { cityWeatherAdapter.diffUtil.submitList(it.reversed()) }
+          viewBinding.rvCity.post { cityWeatherAdapter.notifyDataChanged(it) }
         }
       }
     }
