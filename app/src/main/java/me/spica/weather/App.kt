@@ -8,10 +8,8 @@ import android.os.Process
 import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 import io.sentry.Sentry
-import io.sentry.event.User
-import me.spica.weather.tools.SentryUtils
+import io.sentry.android.AndroidSentryClientFactory
 import timber.log.Timber
-import java.util.UUID
 
 @HiltAndroidApp
 class App : Application() {
@@ -19,21 +17,12 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         // 初始化AppCenter
-        createAppCenter()
-//    WebViewPool.init(this)
         handlerDelegate()
-        Sentry.getStoredClient().context.user = User(
-            UUID.randomUUID().toString(),
-            "测试用户-"+UUID.randomUUID(),
-            "",
-            ""
-        )
-        SentryUtils.sendMessage("测试消息")
+        checkUIThreadPriority()
+        Sentry.init("http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2",AndroidSentryClientFactory(this))
     }
 
-    private fun createAppCenter() {
-        SentryUtils.init(this,"http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2")
-    }
+
 
     private fun handlerDelegate() {
         // 接管主线程loop  https://api.caiyunapp.com/v2.6/
@@ -52,7 +41,8 @@ class App : Application() {
                         ) {
                             Timber.tag("warning!").w(e.message!!)
                         } else {
-                            // 其他错误可以进行上报...
+                            // 其他错误可以进行上报..
+                            Sentry.getStoredClient().sendException(e)
                             throw e
                         }
                     }

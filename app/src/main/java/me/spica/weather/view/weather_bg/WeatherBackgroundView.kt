@@ -159,7 +159,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
             // ================绘制结束===============
 
             unlockCanvasAndPost(canvas)
-            Timber.tag("surface生命周期" + drawThread.name).e("绘制")
         }
 
     }
@@ -265,7 +264,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
             threadPool.shutdown()
             drawThread.quitSafely()
 //        translationDrawable.cancel()
-            Timber.tag("surface生命周期" + drawThread.name).e("销毁")
             return true
         }
     }

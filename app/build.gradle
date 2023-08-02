@@ -23,7 +23,7 @@ android {
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a","x86_64"
+            abiFilters "arm64-v8a"
         }
 
         javaCompileOptions {
@@ -59,7 +59,7 @@ android {
         }
         debug {
             minifyEnabled false
-//            shrinkResources true
+            //            shrinkResources true
             signingConfig signingConfigs.signingConfig
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -89,6 +89,8 @@ static String quotWrapper(key) {
     }
     return "\"".concat(key).concat("\"")
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -161,15 +163,12 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'pub.devrel:easypermissions:3.0.0'
 
-
     def appCenterSdkVersion = '4.4.5'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation 'com.airbnb.android:lottie:5.2.0'
-
-
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
