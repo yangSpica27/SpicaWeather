@@ -2,8 +2,18 @@ package me.spica.weather.view.line
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.LinearGradient
+import android.graphics.Paint
 import android.graphics.Paint.FontMetricsInt
+import android.graphics.Path
+import android.graphics.Point
+import android.graphics.PointF
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Shader
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -17,7 +27,7 @@ import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
 import me.spica.weather.tools.getColorWithAlpha
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 // 宽度75dp 高度200dp
 
@@ -91,7 +101,9 @@ class HourlyForecastView : View {
                 hourlyWeatherBean.getWeatherType() !=
                 weathers[index - 1].getWeatherType()
             ) {
-                dashLineList.add(index)
+                if (index != weathers.size - 1) {
+                    dashLineList.add(index)
+                }
             }
 
 
@@ -322,7 +334,6 @@ class HourlyForecastView : View {
         weathers.forEachIndexed { index, hourlyWeatherBean ->
             val drawText = sdfHHMM.format(hourlyWeatherBean.fxTime())
             dateTextPaint.getTextBounds(drawText, 0, drawText.toCharArray().size, textRect)
-
             canvas.drawText(
                 drawText,
                 ITEM_WIDTH * index + paddingL - textRect.width() / 2f,
@@ -414,6 +425,8 @@ class HourlyForecastView : View {
         }
 
         dashLineList.forEachIndexed { index, i ->
+
+
             canvas.drawLine(
                 mPointList[i].x * 1f,
                 mPointList[i].y * 1f,
@@ -487,27 +500,29 @@ class HourlyForecastView : View {
     private fun drawPops(canvas: Canvas) {
         mPointList.forEachIndexed { index, point ->
 
-
             popPaint.color = getColorWithAlpha(weathers[index].pop * 1f / 100 / 2f, weathers[index].getWeatherType().getThemeColor())
 
             val showText = "${weathers[index].pop}%"
             popTextPaint.getTextBounds(showText, 0, showText.toCharArray().size, textRect)
 
-            canvas.drawRoundRect(
-                point.x + 2.dp,
-                ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT,
-                point.x + ITEM_WIDTH - 2.dp,
-                ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
-                    ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)), 3.dp, 3.dp,
-                popPaint
-            )
-            canvas.drawText(
-                showText,
-                point.x - textRect.width() / 2f + ITEM_WIDTH / 2f,
-                ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
-                    ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)) - 4.dp,
-                popTextPaint
-            )
+
+            if ((point.x + ITEM_WIDTH) <= width) {
+                canvas.drawRoundRect(
+                    point.x + 2.dp,
+                    ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT,
+                    point.x + ITEM_WIDTH - 2.dp,
+                    ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
+                        ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)), 3.dp, 3.dp,
+                    popPaint
+                )
+                canvas.drawText(
+                    showText,
+                    point.x - textRect.width() / 2f + ITEM_WIDTH / 2f,
+                    ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + paddingT + TEMP_TEXT_HEIGHT -
+                        ((weathers[index].pop) * 1f / (100f) * (TEMP_HEIGHT_SECTION + ITEM_MIN_HEIGHT)) - 4.dp,
+                    popTextPaint
+                )
+            }
 
         }
     }

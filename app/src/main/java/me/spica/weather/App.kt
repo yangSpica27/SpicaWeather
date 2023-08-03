@@ -19,7 +19,8 @@ class App : Application() {
         // 初始化AppCenter
         handlerDelegate()
         checkUIThreadPriority()
-        Sentry.init("http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2",AndroidSentryClientFactory(this))
+        Sentry.init("http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2",
+            AndroidSentryClientFactory(this))
     }
 
 
