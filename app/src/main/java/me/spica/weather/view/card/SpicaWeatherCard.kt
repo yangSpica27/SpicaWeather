@@ -3,14 +3,11 @@ package me.spica.weather.view.card
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
 import me.spica.weather.model.weather.Weather
 import me.spica.weather.tools.dp
-import me.spica.weather.view.anim.Rotate3dAnimation
 
 interface SpicaWeatherCard {
 

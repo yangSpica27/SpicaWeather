@@ -42,11 +42,6 @@ class AirCard : ConstraintLayout, SpicaWeatherCard {
     override fun bindData(weather: Weather) {
         val themeColor = weather.getWeatherType().getThemeColor()
         binding.tvTitle.setTextColor(themeColor)
-        val bgDrawable =  binding.root.background
-        bgDrawable.colorFilter = PorterDuffColorFilter(
-            getColorWithAlpha(.08f,themeColor), PorterDuff.Mode.SRC_IN)
-        binding.root.background = bgDrawable
-
         binding.progressView.bindProgress(weather.air.aqi,weather.air.category)
         binding.tvC0Value.text = "${weather.air.co}微克/m³"
         binding.tvNo2Value.text = "${weather.air.no2}微克/m³"

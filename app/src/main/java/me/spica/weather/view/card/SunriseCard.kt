@@ -52,12 +52,6 @@ class SunriseCard : SpicaWeatherCard, ConstraintLayout {
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
-
-        val bgDrawable =  binding.root.background
-        bgDrawable.colorFilter = PorterDuffColorFilter(
-            getColorWithAlpha(.08f,weather.getWeatherType().getThemeColor()), PorterDuff.Mode.SRC_IN)
-        binding.root.background = bgDrawable
-
         val startTime = weather.dailyWeather[0].sunriseDate()
         val endTime = weather.dailyWeather[0].sunsetDate()
         val subTitle = weather.dailyWeather[0].moonParse

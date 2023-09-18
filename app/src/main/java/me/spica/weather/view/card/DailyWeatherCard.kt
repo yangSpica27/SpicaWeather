@@ -61,13 +61,6 @@ class DailyWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
         val themeColor = weather.getWeatherType().getThemeColor()
 
-        val bgDrawable = binding.root.background
-        bgDrawable.colorFilter = PorterDuffColorFilter(
-            getColorWithAlpha(.05f, themeColor), PorterDuff.Mode.SRC_IN
-        )
-        binding.root.background = bgDrawable
-
-
         binding.cardName.setTextColor(themeColor)
         dayInfoAdapter.themeColor = themeColor
 

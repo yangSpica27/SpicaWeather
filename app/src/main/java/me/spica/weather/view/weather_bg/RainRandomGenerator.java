@@ -7,7 +7,7 @@ import java.util.Random;
  */
 @SuppressWarnings("unused")
 public class RainRandomGenerator {
-  private final Random RANDOM = new Random();
+  private static final Random RANDOM = new Random();
 
   // 区间随机
   public float getRandom(float lower, float upper) {

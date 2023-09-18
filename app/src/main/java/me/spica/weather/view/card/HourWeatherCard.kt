@@ -51,14 +51,7 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
         val themeColor = weather.getWeatherType().getThemeColor()
 
-        val bgDrawable = binding.root.background
-        bgDrawable.colorFilter = PorterDuffColorFilter(
-            getColorWithAlpha(.08f, themeColor), PorterDuff.Mode.SRC_IN
-        )
-        binding.root.background = bgDrawable
-
         binding.cardName.setTextColor(themeColor)
-
         binding.layoutLoading.hide()
         weather.hourlyWeather.toList().sortedBy {
             it.temp
