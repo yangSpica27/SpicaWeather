@@ -23,7 +23,7 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
     val tipsFlow: Flow<String> = _tips.filterNotNull()
 
     fun selectCity(cityBean: CityBean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             cityRepository.selected(cityBean)
         }
     }

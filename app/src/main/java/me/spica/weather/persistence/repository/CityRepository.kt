@@ -33,11 +33,15 @@ class CityRepository @Inject constructor(
     @WorkerThread
     suspend fun addCity(cityBean: CityBean): String {
         var result = "添加成功"
-        cityDao.getAllList().forEach {
+        val cities = cityDao.getAllList()
+        cities.forEach {
             if (it.cityName == cityBean.cityName) {
                 result = "已经添加过了"
                 return result
             }
+        }
+        if (cities.isEmpty()) {
+            cityBean.isSelected = true
         }
         cityDao.insert(cityBean)
         return result

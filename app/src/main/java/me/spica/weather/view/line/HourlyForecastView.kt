@@ -182,22 +182,17 @@ class HourlyForecastView : View {
                 val secondDiffX: Float = nextPoint.x * 1f - lastPoint.x
                 val secondDiffY: Float = nextPoint.y * 1f - lastPoint.y
 
-
                 // 根据锚点间坐标差 求出 两个控制点 参数给的越大 斜率越小
-
                 val controlPointLeft = PointF(
                     lastPoint.x + 0.1f * firstDiffX, lastPoint.y + 0.1f * firstDiffY
                 )
-
                 val controlPointRight = PointF(
                     point.x - 0.1f * secondDiffX, point.y - 0.1f * secondDiffY
                 )
-
                 // 做二阶贝塞尔
                 tempLinePath.cubicTo(
                     controlPointLeft.x, controlPointLeft.y, controlPointRight.x, controlPointRight.y, point.x * 1f, point.y * 1f
                 )
-
                 shadowPath.cubicTo(
                     controlPointLeft.x, controlPointLeft.y, controlPointRight.x, controlPointRight.y, point.x * 1f, point.y * 1f
                 )

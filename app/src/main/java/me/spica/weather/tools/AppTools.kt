@@ -66,7 +66,7 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
         handler.removeCallbacksAndMessages(null)
         try {
             action()
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
@@ -79,7 +79,7 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
                 queue.removeIdleHandler(idleHandler)
                 try {
                     action()
-                }catch (_:Exception){
+                } catch (_: Exception) {
 
                 }
                 if (BuildConfig.DEBUG) {
@@ -114,6 +114,7 @@ fun View.expand(dx: Int, dy: Int) {
                 MotionEvent.ACTION_DOWN -> {
                     delegateView = findDelegateViewUnder(x, y)
                 }
+
                 MotionEvent.ACTION_CANCEL -> {
                     delegateView = null
                 }
@@ -206,11 +207,13 @@ val Int.dp: Float
     )
 
 
-
-fun View.show() {
+fun View.show(anim:Boolean = true) {
     this.visibility = View.VISIBLE
-    startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
+    if (anim){
+        startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
+    }
 }
+
 
 fun View.hide() {
     this.visibility = View.GONE

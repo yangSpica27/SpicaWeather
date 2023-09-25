@@ -25,7 +25,6 @@ class TipsCard : RelativeLayout, SpicaWeatherCard {
     private val tipAdapter = TipAdapter()
 
     private val binding = CardLifeIndexBinding.inflate(LayoutInflater.from(context), this, true)
-
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)

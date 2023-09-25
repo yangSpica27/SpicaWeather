@@ -33,8 +33,6 @@ class WeatherCityAdapter(
     val items: MutableList<CityBean> = arrayListOf()
 
 
-
-
     @SuppressLint("NotifyDataSetChanged")
     fun notifyDataChanged(cities: List<CityBean>) {
         items.clear()
@@ -83,7 +81,7 @@ class WeatherCityAdapter(
         )
         holder.itemBinding.tvLocation.text = "东经${items[position].lon}° | 北纬${items[position].lat}°"
         if (items[position].isSelected) {
-            holder.itemBinding.icSelected.show()
+            holder.itemBinding.icSelected.show(false)
             holder.itemBinding.root.setOnTouchListener { _, _ ->
                 // 不可操作目前选中的item
                 return@setOnTouchListener true

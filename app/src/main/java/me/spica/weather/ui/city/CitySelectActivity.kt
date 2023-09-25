@@ -89,7 +89,7 @@ class CitySelectActivity : BindingActivity<ActivityCitySelectBinding>() {
 
     // 设置点击item
     cityAdapter.itemClickListener = { cityBean ->
-      cityViewModel.selectCity(cityBean)
+      cityViewModel.addCity(cityBean)
       supportFinishAfterTransition()
     }
 
