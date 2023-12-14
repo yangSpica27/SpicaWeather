@@ -291,7 +291,7 @@ class SunriseView : View {
         )
         val restoreCount: Int = canvas.save()
 
-        Timber.i("progress${progressEndAngle}")
+//        Timber.i("progress${progressEndAngle}")
 
 
         canvas.translate(iconPositionX, iconPositionY)

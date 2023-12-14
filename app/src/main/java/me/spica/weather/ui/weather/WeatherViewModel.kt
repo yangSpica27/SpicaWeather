@@ -54,7 +54,7 @@ class WeatherViewModel @Inject constructor(
         lon = it.lon,
         lat = it.lat,
         onError = { message ->
-          _errorMessage.value = message
+//          _errorMessage.value = message
         }
       )
     }

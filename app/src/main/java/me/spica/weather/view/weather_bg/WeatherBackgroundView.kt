@@ -46,9 +46,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         surfaceTextureListener = this
     }
 
-    private var threadPool: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-
-//    private val translationDrawable = TranslationDrawable(context)
 
     private lateinit var drawThread: HandlerThread
 
@@ -134,9 +131,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
-
-
-//            translationDrawable.doOnDraw(canvas, width, height)
             canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
             roundClip(canvas)
 
@@ -144,9 +138,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
                 unlockCanvasAndPost(canvas)
                 return
             }
-
-//            translationDrawable.doOnDraw(canvas, width, height)
-
             when (currentWeatherAnimType) {
                 NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
@@ -157,7 +148,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
                 NowWeatherView.WeatherAnimType.HAZE -> hazeDrawable.doOnDraw(canvas, width, height)
             }
             // ================绘制结束===============
-
             unlockCanvasAndPost(canvas)
         }
 
@@ -173,21 +163,32 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
     private val drawRunnable = object : Runnable {
         override fun run() {
-            // 记录上次执行渲染时间
-            lastSyncTime = System.currentTimeMillis()
-            // 执行渲染
             synchronized(lock) {
+                // 记录上次执行渲染时间
+                lastSyncTime = System.currentTimeMillis()
+                when (currentWeatherAnimType) {
+                    NowWeatherView.WeatherAnimType.RAIN -> {
+                        rainDrawable.calculate(width, height)
+                    }
+
+                    NowWeatherView.WeatherAnimType.SNOW -> {
+                        snowDrawable.calculate(width, height)
+                    }
+
+                    NowWeatherView.WeatherAnimType.FOG -> {
+                        foggyDrawable.calculate(width, height)
+                    }
+
+                    NowWeatherView.WeatherAnimType.HAZE -> {
+                        hazeDrawable.calculate()
+                    }
+                    else -> {}
+                }
                 doOnDraw()
+                // 30帧
+                drawHandler.postDelayed(this, Math.max(0, 32 - (System.currentTimeMillis() - lastSyncTime)))
             }
-            // 保证两张帧之间间隔16ms(60帧)
-            drawHandler.postDelayed(this, 32)        // 记录上次执行渲染时间
-            lastSyncTime = System.currentTimeMillis()
-            // 执行渲染
-            synchronized(lock) {
-                doOnDraw()
-            }
-            // 保证两张帧之间间隔16ms(60帧)
-            drawHandler.postDelayed(this, 32)
+
         }
     }
 
@@ -219,40 +220,11 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
     override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
         synchronized(lock) {
             isWork = true
-            if (threadPool.isShutdown) {
-                threadPool = Executors.newSingleThreadScheduledExecutor()
-            }
             drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
             drawThread.start()
             drawHandler = Handler(drawThread.looper)
-            // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
-            threadPool.scheduleWithFixedDelay({
-
-                when (currentWeatherAnimType) {
-                    NowWeatherView.WeatherAnimType.RAIN -> {
-                        rainDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.SNOW -> {
-                        snowDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.FOG -> {
-                        foggyDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.HAZE -> {
-                        hazeDrawable.calculate()
-                    }
-
-                    else -> {}
-                }
-
-            }, 0, 32, TimeUnit.MILLISECONDS)
-
             // 渲染线程
             drawHandler.post(drawRunnable)
-//         translationDrawable.ready(width / 2, height / 2)
             scaleValue = (width / width - 28.dp)
         }
     }
@@ -265,9 +237,7 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         synchronized(lock) {
             isWork = false
             drawHandler.removeCallbacksAndMessages(null)
-            threadPool.shutdown()
             drawThread.quitSafely()
-//        translationDrawable.cancel()
             return true
         }
     }
