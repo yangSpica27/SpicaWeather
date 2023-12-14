@@ -59,8 +59,7 @@
         <me.spica.weather.view.line.HourlyForecastView
             android:id="@+id/hour_forecast_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible" />
+            android:layout_height="wrap_content" />
 
     </me.spica.weather.view.line.IndexHorizontalScrollView>
 

@@ -42,30 +42,9 @@ class HourlyForecastView : View {
 
     private var themeColor = ContextCompat.getColor(context, R.color.black)
 
-    private var fraction = 1f
-
-    private val showInAnim = ObjectAnimator.ofFloat(1f, 0f)
-        .apply {
-            interpolator = OvershootInterpolator()
-            addUpdateListener {
-                if (visibility == View.INVISIBLE) {
-                    visibility = VISIBLE
-                }
-                fraction = this.animatedValue as Float
-                // 计算绘制的折线图Y轴坐标 并且重绘 实现从下向上浮动效果
-                init()
-            }
-            duration = 850
-        }
 
 
-    fun startAnim(delay: Long) {
-        if (showInAnim.isRunning) {
-            showInAnim.cancel()
-        }
-        showInAnim.startDelay = delay
-        showInAnim.start()
-    }
+
 
     fun setData(weather: Weather) {
         this.weathers.clear()
@@ -91,8 +70,7 @@ class HourlyForecastView : View {
             // 横坐标
             val w: Float = (ITEM_WIDTH * index + paddingL)
             // 纵坐标
-            val h: Float = tempHeightPixel(hourlyWeatherBean.temp) + fraction *
-                (ITEM_MIN_HEIGHT + paddingT + paddingB + DATE_TEXT_HEIGHT)
+            val h: Float = tempHeightPixel(hourlyWeatherBean.temp)
             // 当前点
             val point = Point(w.toInt(), h.toInt())
             mPointList.add(point)
@@ -207,14 +185,11 @@ class HourlyForecastView : View {
         shadowPath.lineTo(
             paddingL, paddingT + ITEM_MIN_HEIGHT + TEMP_HEIGHT_SECTION + TEMP_TEXT_HEIGHT
         )
-
         shadowPath.close()
-
         if (isAnim) {
             postInvalidateOnAnimation()
             return
         }
-        requestLayout()
         postInvalidate()
     }
 
@@ -461,13 +436,6 @@ class HourlyForecastView : View {
         // 绘制折线图
         canvas.drawPath(tempLinePath, tempLinePaint)
 
-        // 根据fraction 按比例从右向左擦除掉折线图
-        canvas.drawRect(
-            screenWidth * 1f + scrollOffset,
-            height * 1f,
-            screenWidth + scrollOffset - screenWidth * fraction,
-            0f, ditherPaint
-        )
 
         // 恢复图层
         canvas.restoreToCount(layerId)

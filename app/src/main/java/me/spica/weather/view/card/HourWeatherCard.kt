@@ -75,6 +75,5 @@ class HourWeatherCard : CardLinearlayout, SpicaWeatherCard {
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-        binding.hourForecastView.startAnim(150)
     }
 }

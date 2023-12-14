@@ -3,11 +3,11 @@ package me.spica.weather.view.weather_bg
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
-import android.graphics.SurfaceTexture
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
-import android.view.TextureView
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.weather.R
@@ -18,15 +18,9 @@ import me.spica.weather.view.weather_drawable.HazeDrawable
 import me.spica.weather.view.weather_drawable.RainDrawable
 import me.spica.weather.view.weather_drawable.SnowDrawable
 import me.spica.weather.view.weather_drawable.SunnyDrawable
-import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
 
-
-class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
-
+class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     @Volatile
     private var isWork = false // 是否预备绘制
@@ -38,17 +32,15 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
     private val lock = Any()
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        surfaceTextureListener = this
+        holder.addCallback(this)
+//        setZOrderOnTop(true)
     }
 
-    private var threadPool: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-
-//    private val translationDrawable = TranslationDrawable(context)
 
     private lateinit var drawThread: HandlerThread
 
@@ -130,22 +122,38 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
     private fun doOnDraw() {
 
-        mCanvas = lockCanvas()
+        mCanvas = holder.lockCanvas()
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
 
-
-//            translationDrawable.doOnDraw(canvas, width, height)
             canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
             roundClip(canvas)
 
             if (isPause) {
-                unlockCanvasAndPost(canvas)
+                holder.unlockCanvasAndPost(canvas)
                 return
             }
 
-//            translationDrawable.doOnDraw(canvas, width, height)
+            when (currentWeatherAnimType) {
+                NowWeatherView.WeatherAnimType.RAIN -> {
+                    rainDrawable.calculate(width, height)
+                }
+
+                NowWeatherView.WeatherAnimType.SNOW -> {
+                    snowDrawable.calculate(width, height)
+                }
+
+                NowWeatherView.WeatherAnimType.FOG -> {
+                    foggyDrawable.calculate(width, height)
+                }
+
+                NowWeatherView.WeatherAnimType.HAZE -> {
+                    hazeDrawable.calculate()
+                }
+
+                else -> {}
+            }
 
             when (currentWeatherAnimType) {
                 NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
@@ -158,7 +166,7 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
             }
             // ================绘制结束===============
 
-            unlockCanvasAndPost(canvas)
+            holder.unlockCanvasAndPost(canvas)
         }
 
     }
@@ -174,13 +182,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
     private val drawRunnable = object : Runnable {
         override fun run() {
             // 记录上次执行渲染时间
-            lastSyncTime = System.currentTimeMillis()
-            // 执行渲染
-            synchronized(lock) {
-                doOnDraw()
-            }
-            // 保证两张帧之间间隔16ms(60帧)
-            drawHandler.postDelayed(this, 32)        // 记录上次执行渲染时间
             lastSyncTime = System.currentTimeMillis()
             // 执行渲染
             synchronized(lock) {
@@ -216,40 +217,12 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         isPause = true
     }
 
-    override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
         synchronized(lock) {
             isWork = true
-            if (threadPool.isShutdown) {
-                threadPool = Executors.newSingleThreadScheduledExecutor()
-            }
-            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
+            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}", Thread.MIN_PRIORITY)
             drawThread.start()
             drawHandler = Handler(drawThread.looper)
-            // 单独列出一个线程用于计算 避免绘制线程执行过多的任务
-            threadPool.scheduleWithFixedDelay({
-
-                when (currentWeatherAnimType) {
-                    NowWeatherView.WeatherAnimType.RAIN -> {
-                        rainDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.SNOW -> {
-                        snowDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.FOG -> {
-                        foggyDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.HAZE -> {
-                        hazeDrawable.calculate()
-                    }
-
-                    else -> {}
-                }
-
-            }, 0, 16, TimeUnit.MILLISECONDS)
-
             // 渲染线程
             drawHandler.post(drawRunnable)
 //         translationDrawable.ready(width / 2, height / 2)
@@ -257,22 +230,15 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         }
     }
 
-    override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
 
     }
 
-    override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
         synchronized(lock) {
             isWork = false
             drawHandler.removeCallbacksAndMessages(null)
-            threadPool.shutdown()
             drawThread.quitSafely()
-//        translationDrawable.cancel()
-            return true
         }
     }
-
-    override fun onSurfaceTextureUpdated(p0: SurfaceTexture) = Unit
-
-
 }
