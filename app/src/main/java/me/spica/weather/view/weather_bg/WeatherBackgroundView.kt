@@ -248,7 +248,7 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
                     else -> {}
                 }
 
-            }, 0, 16, TimeUnit.MILLISECONDS)
+            }, 0, 32, TimeUnit.MILLISECONDS)
 
             // 渲染线程
             drawHandler.post(drawRunnable)
