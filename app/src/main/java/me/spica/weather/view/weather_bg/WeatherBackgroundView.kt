@@ -186,7 +186,7 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
                 }
                 doOnDraw()
                 // 30帧
-                drawHandler.postDelayed(this, Math.max(0, 32 - (System.currentTimeMillis() - lastSyncTime)))
+                drawHandler.postDelayed(this, Math.max(0, 16 - (System.currentTimeMillis() - lastSyncTime)))
             }
 
         }
