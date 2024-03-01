@@ -7,6 +7,7 @@
 <img src="/img/preview02.png" width="32%"/>
 </p>
 
+## 后面仅维护bug，新功能请关注[SPICaWeatherⅡ](https://github.com/yangSpica27/SpicaWeather2)
 
 ## 已知问题&目前工作：
   - ~~空气质量信息指示器~~
