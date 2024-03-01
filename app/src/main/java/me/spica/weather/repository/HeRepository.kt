@@ -26,7 +26,6 @@ class HeRepository(private val heClient: HeClient) : Repository {
     val response = heClient.getNowWeather(
       lon, lat
     )
-
     response.suspendOnSuccess(SuccessNowWeatherMapper) {
       emit(this)
     }.suspendOnFailure {

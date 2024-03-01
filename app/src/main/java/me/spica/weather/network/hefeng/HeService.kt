@@ -76,7 +76,7 @@ interface HeService {
 
 
   // 聚合接口
-  @GET("http://spica27.skyman.cloud:24040/api/weather/all")
+  @GET("http://106.54.25.152:4040/api/weather/all")
   suspend fun getAllWeather(
     @Query("location")
     location: String,
